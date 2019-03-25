@@ -40,25 +40,6 @@ navbar = html.Nav([
     ]),
 ], className="navbar navbar-light navbar-expand-md bg-light sticky-top")
 
-stepbar = dbc.Container([
-    dbc.Nav([
-        dbc.NavItem(dbc.NavLink("Introduction", href="/introduction")),
-        dbc.NavItem(dbc.NavLink("Hull", href="/hull")),
-        dbc.NavItem(dbc.NavLink("Optimization", href="/optimizationhull")),
-        dbc.NavItem(dbc.NavLink("Results I", href="/resultshull")),
-    ], pills=True, justified=True),
-], className="mt-4")
-
-progressbar = html.Div([
-    dcc.Slider(
-        min=0,
-        max=5,
-        value=0,
-        marks={i: ''.format(i + 1) for i in range(6)},
-        id='slider'
-    ),
-], style={'margin-bottom': '10px'}),
-
 bottombar = html.Nav([
     dbc.Container([
         dbc.Row([
@@ -69,6 +50,16 @@ bottombar = html.Nav([
     ]),
 ], className="navbar")
 
+stepbar = dbc.Container([
+    dbc.Nav([
+        dbc.NavItem(dbc.NavLink("Introduction", href="/introduction")),
+        dbc.NavItem(dbc.NavLink("Hull", href="/hull")),
+        dbc.NavItem(dbc.NavLink("Optimization", href="/optimizationhull")),
+        dbc.NavItem(dbc.NavLink("Results I", href="/resultshull")),
+    ], pills=True, justified=True),
+], className="mt-4")
+
+
 app.title = 'App Name'
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -77,7 +68,7 @@ app.layout = html.Div([
     html.Link(href='/assets/static/favicon.ico'),
     navbar,
     stepbar,
-    progressbar,
+    dbc.DropdownMenuItem(divider=True),
     html.Div(id='page-content'),
     html.Br(), html.Br(), html.Br(),
     dbc.DropdownMenuItem(divider=True),
