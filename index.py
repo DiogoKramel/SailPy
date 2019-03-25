@@ -79,9 +79,9 @@ app.layout = html.Div([
 def display_page(pathname):
     print(pathname)
     if pathname == '/':
-        return introduction
-    elif pathname == '/main' or pathname == '/index' or pathname == '/layouts/introduction':
-        return introduction
+        return introduction.introduction
+    elif pathname == '/main' or pathname == '/index' or pathname == '/layouts/introduction' or pathname == '/introduction':
+        return introduction.introduction
     elif pathname == '/hull':
         return hull
     elif pathname == '/optimizationhull':
@@ -89,7 +89,7 @@ def display_page(pathname):
     elif pathname == '/resultshull':
         return resultshull, resultsplus
     else:
-        return introduction#'404'
+        return '404'
 
 
 external_css = ["https://use.fontawesome.com/releases/v5.7.2/css/all.css", "assets/fonts/et-line-font/style.css"]
