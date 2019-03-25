@@ -80,7 +80,7 @@ def display_page(pathname):
     print(pathname)
     if pathname == '/':
         return introduction.introduction
-    elif pathname == '/layouts/introduction':
+    elif pathname == '/introduction':
         return introduction.introduction
     elif pathname == '/hull':
         return hull
