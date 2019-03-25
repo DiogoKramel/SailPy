@@ -127,7 +127,7 @@ def resistance(lwl, bwl, tc, scb, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel
         idind = csvreader.line_num
     
     fields=[idind, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), format((np.round(Rt,4)-20000*np.round(CR,4)), '.4f'), constraint1, constraint2, constraint3, constraint4, valid]
-    with open("data/"+savefile+".csv", "a") as file:
+    with open("temp/"+savefile+".csv", "a") as file:
         writer = csv.writer(file, delimiter=',')
         writer.writerow(fields)
     
