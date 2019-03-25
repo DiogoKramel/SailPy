@@ -78,8 +78,6 @@ def display_page(pathname):
     print(pathname)
     if pathname == '/':
         return introduction
-    elif pathname == 'https://sailapp.herokuapp.com/main' or pathname == '/index' or pathname == '/introduction':
-        return introduction
     elif pathname == '/main' or pathname == '/index' or pathname == '/introduction':
         return introduction
     elif pathname == '/hull':
