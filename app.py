@@ -25,5 +25,20 @@ app.layout = html.Div([
 def display_value(value):
     return 'You have selected "{}"'.format(value)
 
+app.title = 'App Name'
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Meta(name='viewport', content='width=device-width, initial-scale=1.0',
+              title='Swellow Application. Developed by Diogo Kramel.'),
+    html.Link(href='/assets/static/favicon.ico'),
+    navbar,
+    stepbar,
+    dbc.DropdownMenuItem(divider=True),
+    html.Div(id='page-content'),
+    html.Br(), html.Br(), html.Br(),
+    dbc.DropdownMenuItem(divider=True),
+    bottombar
+])
+
 if __name__ == '__main__':
     app.run_server(debug=True)
