@@ -4,6 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 
+from introduction import introduction
 
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -78,6 +79,19 @@ app.layout = html.Div([
     dbc.DropdownMenuItem(divider=True),
     bottombar
 ])
+
+@app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/index' or pathname == '/introduction':
+        return introduction
+    elif pathname == '/hull':
+        return hull
+    elif pathname == '/optimizationhull':
+        return optimizationhull
+    elif pathname == '/resultshull':
+        return resultshull, resultsplus
+    else:
+        return '404'
 
 
 if __name__ == '__main__':
