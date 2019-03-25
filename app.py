@@ -1,4 +1,6 @@
 import os
+import sys
+import logging
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -9,6 +11,8 @@ external_stylesheets = [dbc.themes.BOOTSTRAP]
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 server.secret_key = os.environ.get('secret_key', 'secret')
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 app.config['suppress_callback_exceptions'] = True
 
