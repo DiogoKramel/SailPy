@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output, State
 from dash_table_experiments import DataTable
 
 from app import app
-from introduction import introduction
+from layouts import introduction
 
 server = app.server
 
