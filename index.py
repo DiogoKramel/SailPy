@@ -87,4 +87,12 @@ def display_page(pathname):
     elif pathname == '/resultshull':
         return resultshull, resultsplus
     else:
-        return '404'
+        return introduction#'404'
+
+
+external_css = ["https://use.fontawesome.com/releases/v5.7.2/css/all.css", "assets/fonts/et-line-font/style.css"]
+for css in external_css:
+    app.css.append_css({"external_url": css})
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
