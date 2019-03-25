@@ -205,8 +205,8 @@ def callback_feasibility(awp, bwl, lwl, disp, tc):
 @app.callback(
     Output('output-submit-dimensions', 'children'),
     [Input('export-dimensions', 'n_clicks'), Input('output-bwlsac', 'children')],
-    [State('boat-category', 'value'), State('loa', 'value'), State('lwl', 'value'), State('disp', 'value'), State('awp', 'value'), State('lcf', 'value'), State('lcb', 'value'), State('beamtransom', 'value'), State('tc', 'value'), State('alpha_f_sac', 'value'), State('alpha_i_sac', 'value'), State('beta_n', 'value')])
-def update_output(n_clicks, bwlsac, boatcategory, loa, lwl, disp, awp, lcf, lcb, beamtransom, tc, alpha_f_sac, alpha_i_sac, beta_n):
+    [State('boat-category', 'value'), State('loa', 'value'), State('lwl','value'), State('disp', 'value'), State('awp', 'value'), State('lcf', 'value'), State('lcb', 'value'), State('beamtransom', 'value'), State('tc', 'value'), State('alpha_f_sac', 'value'), State('alpha_i_sac', 'value'), State('beta_n', 'value')])
+def update_output(n_clicks, bwlsac, boatcategory,loa,lwl,disp, awp, lcf, lcb, beamtransom, tc, alpha_f_sac, alpha_i_sac, beta_n):
     sac_obj = codecs.open('data/sacsolution.json', 'r', encoding='utf-8').read()
     sac_solution = json.loads(sac_obj)
     sn_sections = np.asarray(sac_solution["sn_sections"])
