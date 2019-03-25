@@ -60,11 +60,11 @@ stepbar = dbc.Container([
 ], className="mt-4")
 
 
-app.title = 'App Name'
+app.title = 'Application Name'
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Meta(name='viewport', content='width=device-width, initial-scale=1.0',
-              title='Swellow Application. Developed by Diogo Kramel.'),
+              title='Application name. Developed by Diogo Kramel. 2019.'),
     html.Link(href='/assets/static/favicon.ico'),
     navbar,
     stepbar,

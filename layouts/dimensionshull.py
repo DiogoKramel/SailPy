@@ -5,7 +5,7 @@ import dash_html_components as html
 import plotly.graph_objs as go
 import dash_daq as daq
 
-from callbacks import dimensionshullcb
+from callbacks import dimensionshullcall
 from callbacks import dimensionshullplots
 
 hull = dbc.Container([

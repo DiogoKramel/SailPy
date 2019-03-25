@@ -11,13 +11,13 @@ introduction = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H2("Introduction"),
-            html.P("""This application provides a comprehensive tool that allows the user to design a sailboat oriented to performance from the very beginning. For doing so, the application operates with a parametric model of the hull that allows easy manipulation through a small number of parameters. At the first stage, the hull is optimized towards the minimum resistance computed in several heel angles. An NSGA II algorithm is responbile to carry out the optimization phase, displaying in the end the most suitable hulls for the user. Based on the best hull, the optimization process is repeated for all the appendages, namely keel and rudder, and sails. At this phase, a Velocity Prediction Program is applied to compute and estimation for velocity."""),
+            html.P("""This application provides a comprehensive tool that allows the user to design a sailboat oriented to its performance from the very beginning. For doing so, the application operates through a parametric model of the hull that allows easy manipulation through a small number of parameters. At the first stage, the hull is optimized towards the minimum resistance computed in several heel angles and velocities. An NSGA II algorithm is responsible to carry out the optimization phase, displaying, in the end, the most suitable hulls for the user. Based on one hull selected by the user, the optimization process is repeated for appendages, namely keel and rudder, and sails. At this phase, a Velocity Prediction Program is applied to compute an estimation for velocity that will guide the optimization process. After the analysis is completed, the user may view and export the dimensions set for the entire sailboat."""),
             html.Div([
                 html.A('Read More', download='Thesis.pdf',
                        href='/assets/Thesis.pdf'),
                 html.Br(), html.Br(),
-                dbc.Button(dcc.Link(html.Div("Start the simulation >"),
-                                    href=f"/hull", style={'color': 'white'})),
+                dbc.Button(dcc.Link(html.Div("Start the analysis >"),
+                                    href=f"/dimensionshull", style={'color': 'white'})),
             ]),
         ], md=6, className="justify"),
         dbc.Col([
@@ -34,11 +34,11 @@ introduction = dbc.Container([
             ]),
             dbc.Row([
                 dbc.Col(html.P(
-                    "Set the hull dimensions that will serve as starting point"), md=4, className='update'),
+                    "Set the hull dimensions that will serve as a starting point"), md=4, className='update'),
                 dbc.Col(html.P(
                     "Configure the genetic algorithm and the parameters to be optimized"), md=4, className='update'),
                 dbc.Col(html.P(
-                    "Run the optimization. It might take some time depending on your machine"), md=4, className='update'),
+                    "Run the optimization. It might take some time"), md=4, className='update'),
 
             ]),
             html.Br(),
@@ -52,9 +52,9 @@ introduction = dbc.Container([
             ]),
             dbc.Row([
                 dbc.Col(html.P(
-                    "Choose one hull based on least resistance performance"), md=4, className='update'),
+                    "Choose one hull based on the least resistance performance"), md=4, className='update'),
                 dbc.Col(html.P(
-                    "Repeat the optimization proccess, but now for appendages and the sailset"), md=4, className='update'),
+                    "Repeat the optimization process, but now for appendages and sails"), md=4, className='update'),
                 dbc.Col(html.P(
                     "View the outcome results and export the best individuals"), md=4, className='update'),
             ]),
