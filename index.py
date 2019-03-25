@@ -9,6 +9,8 @@ from dash_table_experiments import DataTable
 from app import app
 from introduction import introduction
 
+server = app.server
+
 logo = html.Img(src="/assets/static/logoapp.png", height="80px")
 logocapes = html.Img(src="/assets/static/logocapes.png", height="60px")
 logopoli = html.Img(src="/assets/static/logopolitecnica.png", height="60px")
