@@ -10,36 +10,6 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 server = app.server
 
-app.layout = html.Div([
-    html.H2('Hello World'),
-    dcc.Dropdown(
-        id='dropdown',
-        options=[{'label': i, 'value': i} for i in ['LA', 'NYC', 'MTL']],
-        value='LA'
-    ),
-    html.Div(id='display-value')
-])
-
-@app.callback(dash.dependencies.Output('display-value', 'children'),
-              [dash.dependencies.Input('dropdown', 'value')])
-def display_value(value):
-    return 'You have selected "{}"'.format(value)
-
-app.title = 'App Name'
-app.layout = html.Div([
-    dcc.Location(id='url', refresh=False),
-    html.Meta(name='viewport', content='width=device-width, initial-scale=1.0',
-              title='Swellow Application. Developed by Diogo Kramel.'),
-    html.Link(href='/assets/static/favicon.ico'),
-    navbar,
-    stepbar,
-    dbc.DropdownMenuItem(divider=True),
-    html.Div(id='page-content'),
-    html.Br(), html.Br(), html.Br(),
-    dbc.DropdownMenuItem(divider=True),
-    bottombar
-])
-
 logo = html.Img(src="/assets/static/logoapp.png", height="80px")
 logocapes = html.Img(src="/assets/static/logocapes.png", height="60px")
 logopoli = html.Img(src="/assets/static/logopolitecnica.png", height="60px")
@@ -87,6 +57,23 @@ stepbar = dbc.Container([
         dbc.NavItem(dbc.NavLink("Results I", href="/resultshull")),
     ], pills=True, justified=True),
 ], className="mt-4")
+
+
+app.title = 'App Name'
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Meta(name='viewport', content='width=device-width, initial-scale=1.0',
+              title='Swellow Application. Developed by Diogo Kramel.'),
+    html.Link(href='/assets/static/favicon.ico'),
+    navbar,
+    stepbar,
+    dbc.DropdownMenuItem(divider=True),
+    html.Div(id='page-content'),
+    html.Br(), html.Br(), html.Br(),
+    dbc.DropdownMenuItem(divider=True),
+    bottombar
+])
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
