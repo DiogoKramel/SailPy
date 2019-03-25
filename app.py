@@ -82,7 +82,7 @@ app.layout = html.Div([
 
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/index' or pathname == '/introduction':
+    if pathname == '/main' or pathname == '/index' orpathname == '/introduction':
         return introduction
     elif pathname == '/hull':
         return hull
