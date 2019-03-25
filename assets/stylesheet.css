@@ -1,0 +1,45 @@
+
+/* Links
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.limits {
+  font-size: 8pt;
+  color: #808080,
+}
+
+.start-btn {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  margin-right: auto;
+}
+
+g.pointtext {
+  display: none;
+  }
+
+.tabsheight {
+  height: 55px;
+}
+
+P {
+  font-size:10pt;
+}
+
+.regularfont {
+  font-size: 10pt;
+}
+
+.update{
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.justify {
+  text-align: justify;
+}
