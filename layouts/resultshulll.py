@@ -130,21 +130,13 @@ resultsplus = dbc.Container([
 					{'label': "Hull #{}".format(i), 'value': i} for i in df.index.unique()
 				],
 				placeholder='Select one hull to be optimised',
-				style={'width': '100%'}),
+				style={'width': '100%', 'font-size': '10pt'}),
 				html.Br(),html.Br(),html.Br(),
 		]),
-		
-		#dbc.Row(dbc.Col(html.H4("Genealogy"))),
-		#dbc.Row(
-		#	dbc.Col(html.Details([
-		#		html.Img(src="assets/network.png", height="400px")
-		#	])
-		#)),
-		#html.Br(),
-		
 		dbc.Row([
 			html.Br(),html.Br(),
 			dbc.Button(dcc.Link("< Start again", href=f"/parametrichull", style={'color': 'white'})),
+			html.P(" ", style={'display': 'inline-block', 'padding': '10px'}),
 			dbc.Button(dcc.Link("Optimize appendages >", href=f"/appendage", style={'color': 'white'})),
 			html.Br(), html.Br()
 		], justify="center"),
