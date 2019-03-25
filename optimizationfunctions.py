@@ -5,8 +5,8 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import networkx                   # genealogic tree
-from networkx.drawing.nx_agraph import graphviz_layout
+#import networkx                   # genealogic tree
+#from networkx.drawing.nx_agraph import graphviz_layout
 from math import sqrt
 from deap import algorithms, base, creator, gp, benchmarks, tools
 from deap.benchmarks.tools import diversity, convergence, hypervolume
