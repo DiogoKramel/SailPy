@@ -31,13 +31,13 @@ app.layout = html.Div([
 
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/index' or pathname == '/introduction':
+    if pathname == 'index' or pathname == 'introduction':
         return introduction
-    elif pathname == '/hull':
+    elif pathname == 'hull':
         return hull
-    elif pathname == '/optimizationhull':
+    elif pathname == 'optimizationhull':
         return optimizationhull
-    elif pathname == '/resultshull':
+    elif pathname == 'resultshull':
         return resultshull, resultsplus
     else:
         return '404'
