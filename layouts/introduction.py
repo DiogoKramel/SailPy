@@ -5,6 +5,7 @@ import dash_html_components as html
 import plotly.graph_objs as go
 import dash_daq as daq
 
+from app import app
 
 introduction = dbc.Container([
     dbc.Row([
