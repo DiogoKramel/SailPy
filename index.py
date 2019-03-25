@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output, State
 from dash_table_experiments import DataTable
 
 from app import app
-from layouts import introduction, optimizationhull, resultshulll
+from layouts import introduction, optimizationhull, resultshulll, dimensionshull
 
 server = app.server
 
@@ -81,8 +81,8 @@ def display_page(pathname):
         return introduction.introduction
     elif pathname == '/introduction':
         return introduction.introduction
-    elif pathname == '/hull':
-        return hull
+    elif pathname == '/dimensionshull':
+        return dimensionshull.hull
     elif pathname == '/optimizationhull':
         return optimizationhull.optimizationhull
     elif pathname == '/resultshull':
