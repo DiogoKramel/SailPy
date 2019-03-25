@@ -75,7 +75,8 @@ app.layout = html.Div([
 
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/main' or pathname == '/index' orpathname == '/introduction':
+	print(pathname)
+    if pathname == 'https://sailapp.herokuapp.com/main' or pathname == '/index' orpathname == '/introduction':
         return introduction
     elif pathname == '/hull':
         return hull
