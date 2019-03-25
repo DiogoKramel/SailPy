@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output, State
 from dash_table_experiments import DataTable
 
 from app import app
-from layouts import introduction
+from layouts import introduction, resultshulll
 
 server = app.server
 
@@ -77,7 +77,6 @@ app.layout = html.Div([
 
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
 def display_page(pathname):
-    print(pathname)
     if pathname == '/':
         return introduction.introduction
     elif pathname == '/introduction':
@@ -87,7 +86,7 @@ def display_page(pathname):
     elif pathname == '/optimizationhull':
         return optimizationhull
     elif pathname == '/resultshull':
-        return resultshull, resultsplus
+        return resultshulll.resultshull, resultshulll.resultsplus
     else:
         return '404'
 
