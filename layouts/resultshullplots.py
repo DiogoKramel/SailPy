@@ -13,10 +13,9 @@ import csv
 import pandas as pd
 
 
-
 @app.callback(Output('output-optimization', 'figure'), [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value')])
 def update_output(resultshullaxisy, resultshullaxisx):
-    df = pd.read_csv("tmp/optimizationresistance.csv")
+    df = pd.read_csv("data/optimizationresistance.csv")
     dfinit = pd.read_csv("data/initialhull.csv")
     
     # calculate pareto frontier
