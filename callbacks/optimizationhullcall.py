@@ -63,39 +63,51 @@ def callback(childrensize):
             dbc.Col([
                 dbc.Label("Length waterline"), html.Br(),
                 dbc.Input(value="{}".format(round(lwl*0.9,2)), id='lwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                html.P("{} m".format(round(lwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
+                html.P("{}m".format(round(lwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round(loa*0.3048,2)), id='lwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
                 html.Br(), dbc.Label("Beam waterline"), html.Br(),
                 dbc.Input(value="{}".format(round(lwl/5,2)), id='bwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                html.P("{} m".format(round(bwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
+                html.P("{}m".format(round(bwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round(lwl/2.73,2)), id='bwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
                 html.Br(), dbc.Label("Draft"), html.Br(),
                 dbc.Input(value="{}".format(round(bwl/15,2)), type='text', id='tc-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                html.P("{} m".format(round(tc,2)), style={'display': 'inline-block', 'padding': '10px'}),
+                html.P("{}m".format(round(tc,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round(bwl/2.46,2)), type='text', id='tc-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
                 html.Br(),dbc.Label("Displacement"), html.Br(),
                 dbc.Input(value="{}".format(round((lwl/8.50)**3,2)), type='text', id='disp-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                html.P("{} m3".format(round(disp,2)), style={'display': 'inline-block', 'padding': '10px'}),
+                html.P("{}m3".format(round(disp,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round((lwl/4.34)**3,2)), type='text', id='disp-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
             ]),
             dbc.Col([
                 dbc.Label("Area at waterplane"), html.Br(),
                 dbc.Input(value="{}".format(round((disp**(2/3)*3.78),2)), type='text', id='awp-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                html.P("{}".format(round(awp,2)), style={'display': 'inline-block', 'padding': '10px'}),
+                html.P("{}m2".format(round(awp,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round((disp**(2/3)*12.67),2)), type='text', id='awp-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
                 html.Br(), dbc.Label("LCB"), html.Br(),
                 dbc.Input(value="{}".format(round(lwl*0.418,2)), type='text', id='lcb-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                html.P("{}".format(round(lcb,2)), style={'display': 'inline-block', 'padding': '10px'}),
+                html.P("{}m".format(round(lcb,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round(lwl*0.5,2)), type='text', id='lcb-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
                 html.Br(),dbc.Label("LCF"), html.Br(),
                 dbc.Input(value="{}".format(round(lwl*0.405,2)), type='text', id='lcf-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                html.P("{}".format(round(lcf,2)), style={'display': 'inline-block', 'padding': '10px'}),
+                html.P("{}m".format(round(lcf,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round(lwl*0.482,2)), type='text', id='lcf-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
             ])
         ])
     ])
+
+@app.callback(
+    Output('resistance-weight', 'children'),
+    [Input('weight1', 'value')])
+def update_output(value):
+    return dbc.Label('Resistance Weight: {}'.format(value))
+
+@app.callback(
+    Output('comfort-weight', 'children'),
+    [Input('weight2', 'value')])
+def update_output(value):
+    return dbc.Label('Comfort Ratio Weight: {}'.format(value))

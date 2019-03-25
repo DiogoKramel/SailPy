@@ -7,7 +7,7 @@ import dash_daq as daq
 import dash_table
 import pandas as pd
 
-from layouts import resultshullplots
+from callbacks import resultshullplots
 
 resultshull = dbc.Container([
     dbc.Col([

@@ -53,7 +53,7 @@ bottombar = html.Nav([
 stepbar = dbc.Container([
     dbc.Nav([
         dbc.NavItem(dbc.NavLink("Introduction", href="/introduction")),
-        dbc.NavItem(dbc.NavLink("Hull", href="/hull")),
+        dbc.NavItem(dbc.NavLink("Hull", href="/dimensionshull")),
         dbc.NavItem(dbc.NavLink("Optimization", href="/optimizationhull")),
         dbc.NavItem(dbc.NavLink("Results I", href="/resultshull")),
     ], pills=True, justified=True),

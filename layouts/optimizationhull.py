@@ -11,42 +11,43 @@ optimizationhull = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H2("Genetic Algorithm Configuration"),
-            html.P("""The algorithm is the NSGA II - Nondominated Sorting Genetic Algorithm and needs seven parameters to be configures. In case you are not familiar with that, detail are provided when hoving the parameters or you can find more in the link below. In any case, the standard configuration will provide satisfactory results."""),
+            html.P("""The algorithm applied is the NSGA II - Nondominated Sorting Genetic Algorithm developed by Professor Kalyanmoy Deb. It needs seven parameters to be configured. In case you are not familiar with them, more details are provided when hoving the parameters or reading the documentation in the link below. In any case, the standard configuration will provide satisfactory results."""),
             html.Span(dbc.Label("Population size"), id="tooltip-population"),
-            dbc.Tooltip("The number of individuals to start the simulations with.", target="tooltip-population"),
+            dbc.Tooltip("A set of individuals randomly generated to start the simulation.", target="tooltip-population"),
             dbc.Input(
 				type='number', 
 				id='pop-size', 
 				value='10', 
 				bs_size="sm", 
 				style={'width': 80}),
-            html.Span(dbc.Label("Children size"), id="tooltip-children"),
-            dbc.Tooltip("The number of children to produce at each generation.", target="tooltip-children"),
+            html.Span(dbc.Label("Number of offsprings"), id="tooltip-children"),
+            dbc.Tooltip("The number of children to be produced at each generation as a result of crossover among its parents or mutation.", target="tooltip-children"),
             dbc.Input(
 				type='number', 
 				id='children-size', 
 				value='4', 
 				bs_size="sm", 
 				style={'width': 80}),
-            dbc.Label("Maximum number of generations"),
+			html.Span(dbc.Label("Maximum number of generations"), id="tooltip-generations"),
+			dbc.Tooltip("The number of times parents will produce offsprings before an internal criteria are reached.", target="tooltip-generations"),
             dbc.Input(
 				type='number', 
 				id='max-generation', 
 				value='15', 
 				bs_size="sm", 
 				style={'width': 80}),
-            dbc.Label("Mutation probabitily [%]"),
-            dbc.Input(
-				type='number', 
-				id='mut-prob', 
-				value='20', 
-				bs_size="sm", 
-				style={'width': 80}),
-            dbc.Label("Number of best fitting individuals selected"),
+			dbc.Label("Number of best fitting individuals selected"),
             dbc.Input(
 				type='number', 
 				id='halloffame-number', 
 				value='5', 
+				bs_size="sm", 
+				style={'width': 80}),
+            dbc.Label("Mutation probability for an offspring [%]"),
+            dbc.Input(
+				type='number', 
+				id='mut-prob', 
+				value='20', 
 				bs_size="sm", 
 				style={'width': 80}),
             dbc.Label("Independent probability for each attribute to be mutated [%]"),
@@ -57,7 +58,7 @@ optimizationhull = dbc.Container([
 				bs_size="sm", 
 				style={'width': 80}),
             html.Span(dbc.Label("Crowding degree of the crossover [%]"), id="tooltip-crowding"),
-            dbc.Tooltip("A high value will produce children resembling to their parents, while a small value will produce solutions much more different.", target="tooltip-crowding"),
+            dbc.Tooltip("A high value will produce children resembling their parents, while a small value will produce solutions much more different.", target="tooltip-crowding"),
             dbc.Input(
 				type='number', 
 				id='eta_value', 
@@ -71,11 +72,10 @@ optimizationhull = dbc.Container([
 
         dbc.Col([
 			html.H2("Weighted Objectives"),
-            html.P("""The objectives can be distinguished in terms of importance, which translates to the higher the value, the more prioritized the objective will be. Besides that, it is possible the set wheter minimize (negative values), maximize (positive), or ignore (zero)."""),
+            html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, it is possible the set whether minimize (negative values), maximize (positive), or ignore (zero) each objective."""),
             dbc.Row([
                 dbc.Col([
-					dbc.Label("Total Hull Resistance"),
-                    html.Div(id='weight1-value', style={'display': 'inline-block', 'font-size': '10pt'}),
+                    html.Div(id='resistance-weight', style={'display': 'inline-block'}),
                     daq.Knob(
                         id='weight1',
                         value=-0.9,
@@ -85,8 +85,7 @@ optimizationhull = dbc.Container([
                     ),
                 ]),
                 dbc.Col([
-					dbc.Label("Comfort Ratio"),
-                    html.Div(id='weight2-value', style={'display': 'inline-block', 'font-size': '10pt'}),
+                    html.Div(id='comfort-weight', style={'display': 'inline-block'}),
                     daq.Knob(
                         id='weight2',
                         value=0.7,
@@ -98,7 +97,7 @@ optimizationhull = dbc.Container([
             ]),
 			dbc.Row([
 				dbc.Col([
-					dbc.Label("Velocities analysed"),
+					dbc.Label("Velocities analyzed"),
 					dcc.RangeSlider(
 						id='velocity-range',
 						marks={i: '{} knots'.format(i) for i in range(2, 8)},
@@ -111,7 +110,7 @@ optimizationhull = dbc.Container([
 			]),
 			dbc.Row([
 				dbc.Col([
-					dbc.Label("Heel analysed"),
+					dbc.Label("Heel angles analysed"),
 					dcc.RangeSlider(
 						marks={i: '{} deg'.format(i*10) for i in range(0, 6)},
 						min=0,
@@ -123,7 +122,7 @@ optimizationhull = dbc.Container([
 				])
 			]),
             html.H2("Dimensions optimized"),
-            html.P("""In this last stage, the dimensions to be optimized can be toogled among the options below. Bear in mind that the size of minimum and maximum limits will affect performance (and processing time). """),
+            html.P("""The limits of each dimension optimized at this stage can be set below. Standard values are recommended, but they can be stretched to explore more widely the dimensions space. The algorithm will evaluate which solutions are feasible and automatically exclude the ones that do not fit the criteria. Bear in mind that the values of minimum and maximum may affect performance and convergence. """),
             html.Div(id="dimensions-chosen-optimization")
         ], md=6),
     ]),
