@@ -68,7 +68,7 @@ optimizationhull = dbc.Container([
             html.Br(),
             html.A('Read More about DEAP', href='https://deap.readthedocs.io/en/master/', target="_blank"),
             html.Br(), html.Br()
-        ], md=6),
+        ], className = "justify", md=6),
 
         dbc.Col([
 			html.H2("Weighted Objectives"),
@@ -124,7 +124,7 @@ optimizationhull = dbc.Container([
             html.H2("Dimensions optimized"),
             html.P("""The limits of each dimension optimized at this stage can be set below. Standard values are recommended, but they can be stretched to explore more widely the dimensions space. The algorithm will evaluate which solutions are feasible and automatically exclude the ones that do not fit the criteria. Bear in mind that the values of minimum and maximum may affect performance and convergence. """),
             html.Div(id="dimensions-chosen-optimization")
-        ], md=6),
+        ], className = "justify", md=6),
     ]),
     dbc.Row([
         dbc.Col([

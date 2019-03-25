@@ -14,11 +14,11 @@ resultshull = dbc.Container([
         dbc.Row(dbc.Col(html.H2("Results"))),
         dbc.Row([
             dbc.Col([
-                html.P("""The main results are displayed below. First, you can view the evolutionary process described in the objectives plot. Colors will indicate how the individual evolved towards the optimal solution. The same plot also allows to perceive any paretro-frontiers, in which improvement is not possible."""),
-            ]),
+                html.P("""The main results are displayed below. First, you can view the evolutionary process in the first main plot. Colors will indicate how the individual evolved towards the optimal solution. It includes individuals that are not valid, and the constraint disrespected can be seen in the smaller plots below. The same plot also allows visualizing and understanding the Pareto frontier, in which further improvement is not possible."""),
+            ], className = "justify"),
             dbc.Col([
-                html.P("""Besides that, a list with all the individuals generated is displayed in the following table. Below this table, the evolutionary tree for the best individual is shown to illustrate the effectiveness of the method. You can also find the how the dimensionions are connected and the dominator and dominance plot."""),
-            ]),
+                html.P("""Besides that, a list with all the individuals generated is displayed in the following table. In this table, the user can sort the values combining ascending and descending sorting in each column. Another import asset is the parallel dimensions plot. It shows how the dimension set of the hull evolved throughout the optimization process. The concentration at one of the extremes may indicate space for further exploration."""),
+            ], className = "justify"),
             
         ]),
 		html.Br(),
@@ -122,14 +122,14 @@ resultsplus = dbc.Container([
     		)],
 		)),
 		html.Br(),
-		dbc.Row(dbc.Col(html.H4("Select and individual"))),
+		dbc.Row(dbc.Col(html.H4("Select one individual"))),
 		dbc.Row([
 			dcc.Dropdown(
 				id='dropdown', 
 				options=[
 					{'label': "Hull #{}".format(i), 'value': i} for i in df.index.unique()
 				],
-				placeholder='Select one hull to be optimised',
+				placeholder='Select one hull to be optimised in the next phase',
 				style={'width': '100%', 'font-size': '10pt'}),
 				html.Br(),html.Br(),html.Br(),
 		]),

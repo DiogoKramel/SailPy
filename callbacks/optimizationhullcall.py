@@ -61,12 +61,12 @@ def callback(childrensize):
     return html.Div([
         dbc.Row([
             dbc.Col([
-                dbc.Label("Length waterline"), html.Br(),
+                dbc.Label("Waterline length"), html.Br(),
                 dbc.Input(value="{}".format(round(lwl*0.9,2)), id='lwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 html.P("{}m".format(round(lwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round(loa*0.3048,2)), id='lwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
-                html.Br(), dbc.Label("Beam waterline"), html.Br(),
+                html.Br(), dbc.Label("Waterline beam"), html.Br(),
                 dbc.Input(value="{}".format(round(lwl/5,2)), id='bwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 html.P("{}m".format(round(bwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round(lwl/2.73,2)), id='bwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
@@ -82,7 +82,7 @@ def callback(childrensize):
                 dbc.Input(value="{}".format(round((lwl/4.34)**3,2)), type='text', id='disp-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
             ]),
             dbc.Col([
-                dbc.Label("Area at waterplane"), html.Br(),
+                dbc.Label("Waterplane area"), html.Br(),
                 dbc.Input(value="{}".format(round((disp**(2/3)*3.78),2)), type='text', id='awp-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 html.P("{}m2".format(round(awp,2)), style={'display': 'inline-block', 'padding': '10px'}),
                 dbc.Input(value="{}".format(round((disp**(2/3)*12.67),2)), type='text', id='awp-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
