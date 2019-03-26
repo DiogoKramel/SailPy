@@ -72,8 +72,6 @@ app.layout = html.Div([
     stepbar,
     dbc.DropdownMenuItem(divider=True),
     html.Div(id='page-content'),
-    html.Br(), html.Br(), html.Br(),
-    dbc.DropdownMenuItem(divider=True),
     bottombar
 ])
 
