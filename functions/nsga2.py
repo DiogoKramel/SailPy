@@ -28,11 +28,13 @@ def optimize_nsgaII():
     weight2 = np.float(gaconfig["weight2"])  # weight objectives (values) and whether minimized (negative) or maximized (positive)
     bound_low1, bound_up1 = 10, 11                                  # lwl
     bound_low2, bound_up2 = 2, 3.6                                 # bwl
-    bound_low3, bound_up3 = 3, 14                               # disp
+    bound_low3, bound_up3 = 0.3, 0.4                               	# cb
     bound_low4, bound_up4 = 0.4, 0.8                               # tcan
-    bound_low5, bound_up5 = 15, 40                                 # awp
+    bound_low5, bound_up5 = 0.68, 0.71                                 # awp
     bound_low6, bound_up6 = 4, 5                                   # lcf
     bound_low7, bound_up7 = 4, 5                                   # lcb
+    bound_low8, bound_up8 = 0.52, 0.6                                   # cp
+    bound_low9, bound_up9 = 0.65, 0.78                                   # cm
     pop_size = np.int(gaconfig["popsize"])                         # number of the population
     children_size = np.int(gaconfig["childrensize"])               # number of children to produce at each generation
     max_gen = np.int(gaconfig["maxgeneration"])                    # number of times the algorithm is run
@@ -45,26 +47,27 @@ def optimize_nsgaII():
     
     savefile="optimizationresistance"
     ### BUILD MODEL
-    def uniform(low1, up1, low2, up2, low3, up3, low4, up4, low5, up5, low6, up6, low7, up7, size=None):         # function to generate the attributes of the initial population
-        return [random.uniform(low1, up1), random.uniform(low2, up2), random.uniform(low3, up3), random.uniform(low4, up4), random.uniform(low5, up5), random.uniform(low6, up6), random.uniform(low7, up7)]
+    def uniform(low1, up1, low2, up2, low3, up3, low4, up4, low5, up5, low6, up6, low7, up7, low8, up8, low9, up9, size=None):         # function to generate the attributes of the initial population
+        return [random.uniform(low1, up1), random.uniform(low2, up2), random.uniform(low3, up3), random.uniform(low4, up4), random.uniform(low5, up5), random.uniform(low6, up6), random.uniform(low7, up7), random.uniform(low8, up8), random.uniform(low9, up9)]
     def evaluate(individual):       # calculate the evaluating functions (objetive 1 = f1 and objective = f2)  
         lwl = individual[0]
         bwl = individual[1]
-        divcan = individual[2]
+        cb = individual[2]
         tcan = individual[3]
-        awp = individual[4]
+        cwp = individual[4]
         lcf = individual[5]
         lcb = individual[6]
+        cp = individual[7]
+        cm = individual[8]
+        divcan = lwl*bwl*tcan*cb
+        awp = bwl*lwl*cwp
         dimensions = codecs.open('data/dimensions.json', 'r', encoding='utf-8').read()
         dim = json.loads(dimensions)
-        scb = np.float(dim["scb"])
         alcb = np.float(dim["alcb"])
         loa = np.float(dim["loa"])*0.3048
-        cp = np.float(dim["cp"])
-        cm = np.float(dim["cm"])
         vboat = 3
         heel = 20
-        resist = resistance(lwl, bwl, tcan, scb, alcb, cp, cm, awp, divcan, lcb, lcf, vboat, heel, savefile)
+        resist = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, vboat, heel, savefile)
         f1 = resist[0]
         f2 = divcan/(0.65*(0.7*lwl+0.3*loa)*bwl**1.33)
         return f1, f2
@@ -75,9 +78,11 @@ def optimize_nsgaII():
     # adicionar um counter para cada violacao
         lwl = individual[0]
         bwl = individual[1]
-        disp = individual[2]
+        cb = individual[2]
         tc = individual[3]
-        awp = individual[4]
+        cwp = individual[4]
+        disp = lwl*bwl*tc*cb
+        awp = bwl*lwl*cwp
         if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
            if (bwl/tc) > 19.39 or (bwl/tc) < 2.46:
                 if (lwl/disp**(1/3)) > 8.5 or (lwl/disp**(1/3)) < 4.34:
@@ -96,12 +101,12 @@ def optimize_nsgaII():
     creator.create("Individual", array.array, typecode='d', fitness=creator.FitnessMulti) # define the type of each individual (array, list, ...) and inherit the Fitness attributes
 
     toolbox = base.Toolbox()
-    toolbox.register("attr_float", uniform, bound_low1, bound_up1, bound_low2, bound_up2, bound_low3, bound_up3, bound_low4, bound_up4, bound_low5, bound_up5, bound_low6, bound_up6, bound_low7, bound_up7)               # defines how to create an individual with attributes within the bounds
+    toolbox.register("attr_float", uniform, bound_low1, bound_up1, bound_low2, bound_up2, bound_low3, bound_up3, bound_low4, bound_up4, bound_low5, bound_up5, bound_low6, bound_up6, bound_low7, bound_up7, bound_low8, bound_up8, bound_low9, bound_up9)               # defines how to create an individual with attributes within the bounds
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.attr_float)       # create the individual
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)                      # create the population in a list
     toolbox.register("evaluate", evaluate)                                                          # defines what is the evaluating function
-    toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7], eta=eta_value)
-    toolbox.register("mutate", tools.mutPolynomialBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7], eta=eta_value, indpb=indpb_value)
+    toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7, bound_low8, bound_low9], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7, bound_up8, bound_up9], eta=eta_value)
+    toolbox.register("mutate", tools.mutPolynomialBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7, bound_low8, bound_low9], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7, bound_up8, bound_up9], eta=eta_value, indpb=indpb_value)
     toolbox.register("select", tools.selNSGA2)
     #toolbox.decorate("evaluate", tools.DeltaPenalty(feasible, 0))      # constraint handler, function and result that is returned
 
@@ -166,7 +171,7 @@ def optimize_nsgaII():
     #plt.title("Genealogy of the best individual")
     #plt.savefig("data/network.png", bbox_inches='tight',dpi=500)
 
-	###########cmaps names https://matplotlib.org/examples/color/colormaps_reference.html
+    ###########cmaps names https://matplotlib.org/examples/color/colormaps_reference.html
 
 
     ### SENSITIVITY
@@ -188,7 +193,6 @@ def optimize_nsgaII():
     
     flength=len(history.genealogy_history)
     f1, f2, index = np.zeros(flength), np.zeros(flength), np.zeros(flength)
-    x1, x2, x3, x4, x5, x6, x7 = np.zeros(len(res)), np.zeros(len(res)), np.zeros(len(res)), np.zeros(len(res)), np.zeros(len(res)), np.zeros(len(res)), np.zeros(len(res))
     for i in range (1, flength):
         f1[i]=np.float(evaluate(history.genealogy_history[i+1])[0])
         f2[i]=np.float(evaluate(history.genealogy_history[i+1])[1])

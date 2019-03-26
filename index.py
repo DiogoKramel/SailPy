@@ -15,7 +15,7 @@ logo = html.Img(src="/assets/static/logoapp.png", height="80px")
 logocapes = html.Img(src="/assets/static/logocapes.png", height="60px")
 logopoli = html.Img(src="/assets/static/logopolitecnica.png", height="60px")
 logousp = html.Img(src="/assets/static/logousp.png", height="60px")
-title = dcc.Link("A sailing boat preliminary design tool", className="navbar-brand")
+title = dcc.Link("A preliminary design tool for sailboats", className="navbar-brand")
 
 navitems = html.Ul([
     dbc.NavItem(dbc.NavLink("Home", href="/introduction")),

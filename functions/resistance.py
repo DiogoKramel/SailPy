@@ -2,7 +2,7 @@ import numpy as np
 from scipy import interpolate
 import csv
 
-def resistance(lwl, bwl, tc, scb, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, savefile):
+def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, savefile):
     # coeficientes da serie de delft
     coeffDelf = [['FroudeNo' 'a0' 'a1' 'a2' 'a3' 'a4' 'a5' 'a6' 'a7' 'a8'], [0.10, -0.0014, 0.0403, 0.047, -0.0227, -0.0119, 0.0061, -0.0086, -0.0307, -0.0553], [0.15, 0.0004, -0.1808, 0.1793, -0.0004, 0.0097, 0.0118, -0.0055, 0.1721, -0.1728], [0.20, 0.0014, -0.1071, 0.0637, 0.009, 0.0153, 0.0011, 0.0012,0.1021, -0.0648], [0.25, 0.0027, 0.0463, -0.1263, 0.015, 0.0274, -0.0299, 0.011, -0.0595, 0.122], [0.30, 0.0056, -0.8005, 0.4891, 0.0269, 0.0519, -0.0313, 0.0292, 0.7314, -0.3619], [0.35, 0.0032, -0.1011, -0.0813, -0.0382, 0.032, -0.1481, 0.0837, 0.0233, 0.1587], [0.40, -0.0064, 2.3095, -1.5152, 0.0751, -0.0858, -0.5349, 0.1715, -2.455, 1.1865], [0.45, -0.0171, 3.4017, -1.9862, 0.3242, -0.145, -0.8043, 0.2952, -3.5284, 1.3575], [0.50, -0.0201, 7.1576, -6.3304, 0.5829, 0.163, -0.3966, 0.5023, -7.1579, 5.2534], [0.55, 0.0495, 1.5618, -6.0661, 0.8641, 1.1702, 1.761, 0.9176, -2.1191, 5.4281], [0.60, 0.0808, -5.3233, -1.1513, 0.9663, 1.6084, 2.7459, 0.8491, 4.7129, 1.1089]]
     coeffIncli = [['FroudeNo' 'u0' 'u1' 'u2' 'u3' 'u4' 'u5'], [0.25, -0.0268, -0.0014, -0.0057, 0.0016, -0.007, -0.0017], [0.30, 0.6628, -0.0632, -0.0699, 0.0069, 0.0459, -0.0004], [0.35, 1.6433, -0.2144, -0.164, 0.0199, -0.054, -0.0268], [0.40,-0.8659, -0.0354, 0.2226, 0.0188, -0.58, -0.1133], [0.45, -3.2715, 0.1372, 0.5547, 0.0268, -1.0064, 0.2026], [0.50, -0.1976, -0.148, -0.6593, 0.1862, -0.7489, -0.1648], [0.55, 1.5873, -0.3749, -0.7105, 0.2146, -0.4818, -0.1174]]
@@ -26,6 +26,7 @@ def resistance(lwl, bwl, tc, scb, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel
     Recb = (0.7*lwl*(vboat))/ni
     Cfcb = (0.075/((np.log(Recb)/np.log(10))-2)**2)-(1800/Recb)
     kcb = 0.09
+    scb=(1.97+0.171*(bwl/tc))*((0.65/cm)**(1/3))*(disp*lwl)**0.5
     Rvcb = 0.5*rho*vboat**2*Cfcb*(1+kcb)*scb
 
     # 2 RESISTENCIA INDUZIDA
@@ -106,6 +107,7 @@ def resistance(lwl, bwl, tc, scb, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel
     constraint2 = False
     constraint3 = False
     constraint4 = False
+    constraint5 = False
     valid = False
     if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
         constraint1 = True
@@ -115,7 +117,9 @@ def resistance(lwl, bwl, tc, scb, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel
         constraint3 = True
     if (awp/disp**(2/3)) > 12.67 or (awp/disp**(2/3)) < 3.78:
         constraint4 = True
-    if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False:
+    if (disp/(lwl*bwl*tc)) > 0.4 or (disp/(lwl*bwl*tc)) < 0.3:
+        constraint5 = True
+    if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False:
         valid = True
 
     # 5 EXPORT TO CSV
@@ -126,7 +130,7 @@ def resistance(lwl, bwl, tc, scb, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel
             rows.append(row)
         idind = csvreader.line_num
     
-    fields=[idind, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), format((np.round(Rt,4)-20000*np.round(CR,4)), '.4f'), constraint1, constraint2, constraint3, constraint4, valid]
+    fields=[idind, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), format((np.round(Rt,4)-20000*np.round(CR,4)), '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, valid]
     with open("data/"+savefile+".csv", "a") as file:
         writer = csv.writer(file, delimiter=',')
         writer.writerow(fields)

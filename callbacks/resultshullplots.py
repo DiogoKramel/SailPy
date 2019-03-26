@@ -604,3 +604,27 @@ def update_output(resultshullaxisy, resultshullaxisx):
         font=dict(size=12),
         )
     }
+
+@app.callback(Output("plot-dimensions", "children"), [Input("resultshullaxisx", "value")])
+def update_graph(resultshullaxisx):
+    return html.Div([
+            dcc.Graph(
+                id=column,
+                figure={
+                    "data": [{
+                            "x": df["id"],
+                            "y": df[column] if column in df else [],
+                            "type": "bar",
+                        }],
+                    "layout": {
+                        "xaxis": {"automargin": True},
+                        "yaxis": {"automargin": True},
+                        "height": 150,
+                        "margin": {"t": 15, "l": 10, "r": 10, "b":0},
+						"title": column,
+                    },
+                },
+            )
+            for column in ["LWL", "BWL", "Draft", "Resistance", "Comfort"]
+        ]
+    )

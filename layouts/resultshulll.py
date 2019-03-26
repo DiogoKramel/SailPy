@@ -2,12 +2,14 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import dash_daq as daq
 import dash_table
 import pandas as pd
 
 from callbacks import resultshullplots
+from app import app
 
 resultshull = dbc.Container([
     dbc.Col([
@@ -91,6 +93,7 @@ resultshull = dbc.Container([
     ], className="mt-4")
 ])
 
+
 df = pd.read_csv("data/optimizationresistance.csv")
 datatable = pd.read_csv("data/optimizationresistance.csv")
 datatable = datatable.loc[datatable['valid']==True]
@@ -101,17 +104,21 @@ resultsplus = dbc.Container([
 		dbc.Row(dbc.Col(html.H4("Dimensions Parallel Plot"))),
 		dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
 		html.Br(),
+
 		dbc.Row(dbc.Col([
 			html.H4("List of all individuals"),
+			html.Div(
 			dash_table.DataTable(
 				id='datatable-interactivity',
 				columns=[{"name": i, "id": i, "deletable": True} for i in datatable.columns],
 				data=datatable.to_dict("rows"),
-				#editable=True,
+				editable=True,
 				sorting=True,
 				sorting_type="multi",
-				#row_deletable=True,
+				row_selectable="multi",
+				row_deletable=True,
 				selected_rows=[],
+				#n_fixed_rows=1,
 				pagination_mode="fe",
 				pagination_settings={
 					"displayed_pages": 1,
@@ -119,8 +126,13 @@ resultsplus = dbc.Container([
 					"page_size": 10,
 				},
 				navigation="page",
-    		)],
-		)),
+    		),
+		)])),
+		#html.Br(),
+		#dbc.Row(dbc.Col(
+		#	html.Div(id="plot-dimensions"),
+		#)),
+
 		html.Br(),
 		dbc.Row(dbc.Col(html.H4("Select one individual"))),
 		dbc.Row([
@@ -143,4 +155,3 @@ resultsplus = dbc.Container([
 
     ], className="mt-4")
 ])
-

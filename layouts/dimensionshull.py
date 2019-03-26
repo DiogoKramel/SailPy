@@ -41,7 +41,7 @@ hull = dbc.Container([
             html.Div(id="output-primary"),
             html.Div(id="output-secondary"),
             html.Br(), html.Br(), html.Br(),
-        ], md=4),
+        ], className = "justify", md=4),
         dbc.Col(
             [html.H2("Lines Drawing"),
              html.Div(style={'width': '100vh'}, children=dcc.Graph(

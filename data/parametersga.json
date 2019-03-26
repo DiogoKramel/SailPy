@@ -1,1 +1,1 @@
-{"childrensize": "4", "eta": "20", "halloffamenumber": "5", "heelrange": [2, 3], "indpb": "20", "maxgeneration": "15", "mutprob": "20", "popsize": "10", "velocityrange": [3, 5], "weight1": -0.9, "weight2": 0.7}
+{"childrensize": 10, "eta": "20", "halloffamenumber": "5", "heelrange": [2, 3], "indpb": "20", "maxgeneration": 300, "mutprob": "20", "popsize": 50, "velocityrange": [3, 5], "weight1": -0.9, "weight2": 0.7}

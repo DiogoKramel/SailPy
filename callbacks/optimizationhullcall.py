@@ -35,7 +35,7 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         vboat = np.float((velocityrange[1]+velocityrange[0])/2)
         heel = np.float((heelrange[1]+heelrange[0])/2)
         savefile = "extracalculations"
-        results = resistance(lwl, bwl, tc, scb, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, savefile)
+        results = resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, savefile)
         fields=[0, np.round(results[0],4), np.round(results[1],4), np.round(results[2],4), np.round(results[3],4), np.round(results[4],4), np.round(results[5],4), np.round(lwl,4), np.round(bwl,4), np.round(tc,4), np.round(disp,4), np.round(awp,4), np.round(lcb,4), np.round(lcf,4), np.round(results[0],4)-20000*np.round(results[5],4)]
         
         with open('data/initialhull.csv','w') as fd:
@@ -43,7 +43,7 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
             writer = csv.writer(fd, delimiter=',')
             writer.writerow(fields)
         with open('data/optimizationresistance.csv','w') as fd:
-            fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,best,constraint1,constraint2,constraint3,constraint4,valid"+"\n")
+            fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,best,constraint1,constraint2,constraint3,constraint4,constraint5,valid"+"\n")
         optimize_nsgaII()
         return html.Div(dbc.Button(dcc.Link("See results >", href="/resultshull", style={'color': 'white'})))
 
