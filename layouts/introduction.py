@@ -16,7 +16,7 @@ introduction = dbc.Container([
                 html.A('Read More', download='Thesis.pdf',
                        href='/assets/Thesis.pdf'),
                 html.Br(), html.Br(),
-                dbc.Button(dcc.Link(html.Div("Start the analysis >"),
+                dbc.Button(dcc.Link(html.Div("Start the analysis"),
                                     href=f"/dimensionshull", style={'color': 'white'})),
             ]),
         ], md=6, className="justify"),

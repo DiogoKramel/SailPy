@@ -5,7 +5,7 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 
 
-external_stylesheets = [dbc.themes.BOOTSTRAP]
+external_stylesheets = [dbc.themes.COSMO]
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 

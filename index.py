@@ -42,7 +42,7 @@ navbar = html.Nav([
     ]),
 ], className="navbar navbar-light navbar-expand-md bg-light sticky-top")
 
-bottombar = html.Nav([
+footer = html.Nav([
     dbc.Container([
         dbc.Row([
             dbc.Col(logousp, width="auto"),
@@ -72,7 +72,7 @@ app.layout = html.Div([
     stepbar,
     dbc.DropdownMenuItem(divider=True),
     html.Div(id='page-content'),
-    bottombar
+    footer
 ])
 
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])

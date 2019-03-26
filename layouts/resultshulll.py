@@ -147,11 +147,10 @@ resultsplus = dbc.Container([
 		]),
 		dbc.Row([
 			html.Br(),html.Br(),
-			dbc.Button(dcc.Link("< Start again", href=f"/parametrichull", style={'color': 'white'})),
+			dbc.Button(dcc.Link("Start again", href=f"/parametrichull", style={'color': 'white'})),
 			html.P(" ", style={'display': 'inline-block', 'padding': '10px'}),
-			dbc.Button(dcc.Link("Optimize appendages >", href=f"/appendage", style={'color': 'white'})),
-			html.Br(), html.Br()
+			dbc.Button(dcc.Link("Optimize appendages", href=f"/appendage", style={'color': 'white'})),
 		], justify="center"),
-
+	html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
     ], className="mt-4")
 ])

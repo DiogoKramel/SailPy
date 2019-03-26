@@ -74,9 +74,9 @@ hull = dbc.Container([
             html.Br(),
             html.Div(id='output-submit-dimensions',
                      children='Enter a value and press submit', style={'display': 'none'}),
-            dbc.Button(dcc.Link("Submit dimensions and calculate preliminary results >",
+            dbc.Button(dcc.Link("Submit dimensions and calculate preliminary results",
                                 href=f"/optimizationhull", style={'color': 'white'}), id="export-dimensions"),
-            html.Br(), html.Br(), html.Br(),
+            html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
         ], width=5),
     ], justify="center"),
 ], className="mt-4",)
