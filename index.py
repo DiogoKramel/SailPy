@@ -2,41 +2,43 @@ import dash
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
-import plotly.graph_objs as go
 from dash.dependencies import Input, Output, State
 from dash_table_experiments import DataTable
+import plotly.graph_objs as go
 
 from app import app
-from layouts import introduction, optimizationhull, resultshulll, dimensionshull
+from layouts import introduction, dimensionshull, optimizationhull, resultshulll
 
 server = app.server
 
-logo = html.Img(src="/assets/static/logoapp.png", height="80px")
-logocapes = html.Img(src="/assets/static/logocapes.png", height="60px")
-logopoli = html.Img(src="/assets/static/logopolitecnica.png", height="60px")
-logousp = html.Img(src="/assets/static/logousp.png", height="60px")
-title = dcc.Link("A preliminary design tool for sailboats", className="navbar-brand")
+logoapp = html.Img(src = "/assets/static/logoapp.png", height = "80px")
+logousp = html.Img(src = "/assets/static/logousp.png", height = "40px")
+logopoli = html.Img(src = "/assets/static/logopolitecnica.png", height = "40px")
+logocapes = html.Img(src = "/assets/static/logocapes.png", height = "40px")
+title = dcc.Link("A preliminary design tool for sailboats", className = "navbar-brand")
 
 navitems = html.Ul([
-    dbc.NavItem(dbc.NavLink("Home", href="/introduction")),
+    dbc.NavItem(dbc.NavLink("Home", href = "/introduction")),
     dbc.DropdownMenu(
-        nav=True, in_navbar=True, label="Menu",
-        children=[
+        nav = True, 
+        in_navbar = True, 
+        label = "Menu",
+        children = [
             dbc.DropdownMenuItem("About"),
-            dbc.DropdownMenuItem(divider=True),
+            dbc.DropdownMenuItem(divider = True),
             dbc.DropdownMenuItem("Authors"),
             dbc.DropdownMenuItem("Contact"),
         ],
     ),
-], className="navbar-nav")
+], className = "navbar-nav")
 
 navbar = html.Nav([
     dbc.Container([
         dbc.Row([
-            dbc.Col(logo, width="auto"),
-            dbc.Col(title, width="auto"),
-            dbc.Col(navitems, width="auto"),
-        ], justify="between", align="center", style={"width": "100%"}),
+            dbc.Col(logoapp, width = "auto"),
+            dbc.Col(title, width = "auto"),
+            dbc.Col(navitems, width = "auto"),
+        ], justify = "between", align = "center", style={"width": "100%"}),
     ]),
 ], className="navbar navbar-light navbar-expand-md bg-light sticky-top")
 
@@ -48,7 +50,7 @@ bottombar = html.Nav([
             dbc.Col(logocapes, width="auto"),
         ], align="center", style={"width": "100%"}),
     ]),
-], className="navbar")
+], className="navbar footer")
 
 stepbar = dbc.Container([
     dbc.Nav([

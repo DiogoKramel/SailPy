@@ -43,3 +43,13 @@ P {
 .justify {
   text-align: justify;
 }
+
+.footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: white;
+	text-align: center;
+	border-top: 1px solid rgba(128, 128, 128, 0.15)
+}
