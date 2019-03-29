@@ -87,26 +87,26 @@ optimizationhull = dbc.Container([
 
         dbc.Col([
             html.H2("Weighted Objectives"),
-            html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, it is possible the set whether minimize (negative values), maximize (positive), or ignore (zero) each objective."""),
+            html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
             dbc.Row([
                 dbc.Col([
                     html.Div(id='resistance-weight', style={'display': 'inline-block'}),
                     daq.Knob(
                         id='weight1',
-                        value=-0.9,
-                        min=-1,
-                        max=1,
-                        scale={'start':-1, 'interval': 0.25, 'labelInterval': 0.5},
+                        value=9,
+                        min=0,
+                        max=10,
+                        scale={'start':0, 'interval': 1, 'labelInterval': 2},
                     ),
                 ]),
                 dbc.Col([
                     html.Div(id='comfort-weight', style={'display': 'inline-block'}),
                     daq.Knob(
                         id='weight2',
-                        value=0.7,
-                        min=-1,
-                        max=1,
-                        scale={'start':-1, 'interval': 0.25, 'labelInterval': 0.5},
+                        value=6.5,
+                        min=0,
+                        max=10,
+                        scale={'start':0, 'interval': 1, 'labelInterval': 2},
                     ),
                 ]),
             ]),

@@ -1,1 +1,1 @@
-{"childrensize": "4", "eta": "20", "halloffamenumber": "5", "heelrange": [2, 3], "indpb": "20", "maxgeneration": "15", "mutprob": "20", "popsize": "10", "velocityrange": [3, 5], "weight1": -0.9, "weight2": 0.7}
+{"bound_low1": "9.87", "bound_low2": "2.19", "bound_low4": "0.22", "bound_up1": "12.19", "bound_up2": "4.02", "bound_up4": "1.32", "childrensize": "4", "eta": "20", "halloffamenumber": "5", "heelrange": [2, 3], "indpb": "20", "maxgeneration": "15", "mutprob": "20", "popsize": "10", "velocityrange": [3, 5], "weight1": 9, "weight2": 6.5}

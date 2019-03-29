@@ -24,8 +24,8 @@ def optimize_nsgaII():
     ### PARAMATERS
     gaconfig_obj = codecs.open('data/parametersga.json', 'r', encoding='utf-8').read()
     gaconfig = json.loads(gaconfig_obj)     
-    weight1 = np.float(gaconfig["weight1"])
-    weight2 = np.float(gaconfig["weight2"])  # weight objectives (values) and whether minimized (negative) or maximized (positive)
+    weight1 = np.float(gaconfig["weight1"])*(-1)/10		# resistance wight - multiplied by one to be minimized
+    weight2 = np.float(gaconfig["weight2"])/10  # weight objectives (values) and whether minimized (negative) or maximized (positive)
     bound_low1, bound_up1 = 10, 11                                  # lwl
     bound_low2, bound_up2 = 2, 3.6                                 # bwl
     bound_low3, bound_up3 = 0.3, 0.4                               	# cb
