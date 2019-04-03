@@ -49,7 +49,7 @@ stepbar = dbc.Container([
         dbc.NavItem(dbc.NavLink("Hull", href="/dimensionshull")),
         dbc.NavItem(dbc.NavLink("Optimization", href="/optimizationhull")),
         dbc.NavItem(dbc.NavLink("Results I", href="/resultshull")),
-		dbc.NavItem(dbc.NavLink("Dimensions", href="/dimensionsappendages")),
+		dbc.NavItem(dbc.NavLink("Dimensions [WIP]", href="/dimensionsappendages")),
     ], pills=True, justified=True),
 ], className="mt-4")
 
