@@ -21,7 +21,6 @@ resultshull = dbc.Container([
             dbc.Col([
                 html.P("""Besides that, a list with all the individuals generated is displayed in the following table. In this table, the user can sort the values combining ascending and descending sorting in each column. Another import asset is the parallel dimensions plot. It shows how the dimension set of the hull evolved throughout the optimization process. The concentration at one of the extremes may indicate space for further exploration."""),
             ], className = "justify"),
-            
         ]),
 		html.Br(),
         dbc.Row(dbc.Col(html.H4("What do you want to view?"))),
@@ -67,16 +66,11 @@ resultshull = dbc.Container([
             ]),
         ]),
         dbc.Row([
-			dbc.Col(
-				html.Div(dcc.Graph(id='output-optimization')), width=10
-				),
-			dbc.Col(
-				html.Div(dcc.Graph(id='plot-resistance-individual')), width=2
-			),
+			dbc.Col(html.Div(dcc.Graph(id='output-optimization')), width=10),
+			dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
 		]),
 		html.Br(),
 		dbc.Row([
-			
 			dbc.Col(
 				html.Div(dcc.Graph(id='plot-limits-lwl-bwl')), width=3
 			),
@@ -90,6 +84,13 @@ resultshull = dbc.Container([
 				html.Div(dcc.Graph(id='plot-limits-awp-disp'))
 			),
 		]),
+		html.Br(), html.Br(),
+		dbc.Row(
+			dbc.Col(
+				html.Div(html.A('Export results', download='optimizationresistance.csv', href='/data/optimizationresistance.csv'))
+			)
+		),
+		html.Br(),
     ], className="mt-4")
 ])
 

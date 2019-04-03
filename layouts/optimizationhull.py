@@ -96,7 +96,7 @@ optimizationhull = dbc.Container([
                         value=9,
                         min=0,
                         max=10,
-                        scale={'start':0, 'interval': 1, 'labelInterval': 2},
+                        scale={'start':0, 'interval': 1, 'labelInterval': 1},
                     ),
                 ]),
                 dbc.Col([
@@ -106,7 +106,7 @@ optimizationhull = dbc.Container([
                         value=6.5,
                         min=0,
                         max=10,
-                        scale={'start':0, 'interval': 1, 'labelInterval': 2},
+                        scale={'start':0, 'interval': 1, 'labelInterval': 1},
                     ),
                 ]),
             ]),

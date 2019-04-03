@@ -7,7 +7,7 @@ from dash_table_experiments import DataTable
 import plotly.graph_objs as go
 
 from app import app
-from layouts import introduction, dimensionshull, optimizationhull, resultshulll
+from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages
 
 server = app.server
 
@@ -49,6 +49,7 @@ stepbar = dbc.Container([
         dbc.NavItem(dbc.NavLink("Hull", href="/dimensionshull")),
         dbc.NavItem(dbc.NavLink("Optimization", href="/optimizationhull")),
         dbc.NavItem(dbc.NavLink("Results I", href="/resultshull")),
+		dbc.NavItem(dbc.NavLink("Dimensions", href="/dimensionsappendages")),
     ], pills=True, justified=True),
 ], className="mt-4")
 
@@ -57,7 +58,7 @@ footer = html.Nav([
         dbc.Row([
             dbc.Col(logousp, width="auto"),
             dbc.Col(logopoli, width="auto"),
-			dbc.Col(logopnv, width="auto"),
+            dbc.Col(logopnv, width="auto"),
             dbc.Col(logocapes, width="auto"),
         ], align="center", style={"width": "100%"}),
     ]),
@@ -88,6 +89,8 @@ def display_page(pathname):
         return optimizationhull.optimizationhull
     elif pathname == '/resultshull':
         return resultshulll.resultshull, resultshulll.resultsplus
+    elif pathname == '/dimensionsappendages':
+        return dimensionsappendages.appendages
     else:
         return '404'
 
