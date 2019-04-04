@@ -15,8 +15,8 @@ import pandas as pd
 
 @app.callback(Output('output-optimization', 'figure'), [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value')])
 def update_output(resultshullaxisy, resultshullaxisx):
-    df = pd.read_csv("data/optimizationresistance.csv")
-    dfinit = pd.read_csv("data/initialhull.csv")
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    dfinit = pd.read_csv("assets/data/initialhull.csv")
     
     # calculate pareto frontier
     def pareto_frontier(Xs, Ys, maxX = True, maxY = True):
@@ -141,7 +141,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
     Output('plot-resistance-individual', 'figure'),
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
-    df = pd.read_csv("data/optimizationresistance.csv")
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
     hover = np.int(hoverData["points"][0]['text'])
     row = df.loc[df['id']==hover]
     return {
@@ -202,8 +202,8 @@ def update_y_timeseries(hoverData):
     dash.dependencies.Output('plot-limits-lwl-bwl', 'figure'),
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
-    df = pd.read_csv("data/optimizationresistance.csv")
-    dfinit = pd.read_csv("data/initialhull.csv")
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    dfinit = pd.read_csv("assets/data/initialhull.csv")
     xmin = min(df["BWL"])
     xmax = max(df["BWL"])
     hover = np.int(hoverData["points"][0]['text'])
@@ -293,8 +293,8 @@ def update_y_timeseries(hoverData):
     dash.dependencies.Output('plot-limits-bwl-tc', 'figure'),
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
-    df = pd.read_csv("data/optimizationresistance.csv")
-    dfinit = pd.read_csv("data/initialhull.csv")
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    dfinit = pd.read_csv("assets/data/initialhull.csv")
     xmin = min(df["BWL"])
     xmax = max(df["BWL"])
     hover = np.int(hoverData["points"][0]['text'])
@@ -384,8 +384,8 @@ def update_y_timeseries(hoverData):
     dash.dependencies.Output('plot-limits-lwl-disp', 'figure'),
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
-    df = pd.read_csv("data/optimizationresistance.csv")
-    dfinit = pd.read_csv("data/initialhull.csv")
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    dfinit = pd.read_csv("assets/data/initialhull.csv")
     xmin = min(df["LWL"])
     xmax = max(df["LWL"])
     hover = np.int(hoverData["points"][0]['text'])
@@ -475,8 +475,8 @@ def update_y_timeseries(hoverData):
     dash.dependencies.Output('plot-limits-awp-disp', 'figure'),
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
-    df = pd.read_csv("data/optimizationresistance.csv")
-    dfinit = pd.read_csv("data/initialhull.csv")
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    dfinit = pd.read_csv("assets/data/initialhull.csv")
     xmin = min(df["AWP"])
     xmax = max(df["AWP"])
     hover = np.int(hoverData["points"][0]['text'])
@@ -567,7 +567,7 @@ def update_y_timeseries(hoverData):
      Output('plot-parallel-dimensions', 'figure'),
     [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value')])
 def update_output(resultshullaxisy, resultshullaxisx):
-    df = pd.read_csv("data/optimizationresistance.csv")
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
     return {
         'data': [
             go.Parcoords(

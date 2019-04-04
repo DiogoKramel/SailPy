@@ -72,10 +72,10 @@ def callback_tc_limits(loa_value, boat_category):    # Source: DELFT series
 @app.callback(Output('output-bwlsac', 'children'),
     [Input('awp', 'value'), Input('disp', 'value'), Input('lwl', 'value'), Input('lcf', 'value'), Input('beamtransom', 'value'), Input('tc', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value')])
 def callback_bwl(awp_value, disp_value, lwl_value, lcf_value, beamtransom_value, tc_value, lcb_value, alpha_f_sac_value, alpha_i_sac_value):
-    sac_obj = codecs.open('data/sacsolution.json', 'r', encoding='utf-8').read()
+    sac_obj = codecs.open('assets/data/sacsolution.json', 'r', encoding='utf-8').read()
     sac_solution = json.loads(sac_obj)
     maxsac = np.asarray(sac_solution["maxsac"])
-    wl_obj = codecs.open('data/wlsolution.json', 'r', encoding='utf-8').read()
+    wl_obj = codecs.open('assets/data/wlsolution.json', 'r', encoding='utf-8').read()
     wl_solution = json.loads(wl_obj)
     bn_sections = np.asarray(wl_solution["bn_sections"])
     bwl = np.asarray(wl_solution["bwlmax"])
@@ -165,14 +165,14 @@ def callback_bwl(awp, lwl, bwl):
     Output('output-conc', 'children'),
     [ Input('awp', 'value')])
 def callback_bwl(awp_value):
-    sac_obj = codecs.open('data/sacsolution.json', 'r', encoding='utf-8').read()
+    sac_obj = codecs.open('assets/data/sacsolution.json', 'r', encoding='utf-8').read()
     sac_solution = json.loads(sac_obj)
     sn_sections = np.asarray(sac_solution["sn_sections"])
-    wl_obj = codecs.open('data/wlsolution.json', 'r', encoding='utf-8').read()
+    wl_obj = codecs.open('assets/data/wlsolution.json', 'r', encoding='utf-8').read()
     wl_solution = json.loads(wl_obj)
     bn_sections = np.asarray(wl_solution["bn_sections"])
     y_i_wl = np.asarray(wl_solution["y_i_wl"])
-    keel_obj = codecs.open('data/keelsolution.json', 'r', encoding='utf-8').read()
+    keel_obj = codecs.open('assets/data/keelsolution.json', 'r', encoding='utf-8').read()
     keel_solution = json.loads(keel_obj)
     tn_sections = np.asarray(keel_solution["tn_sections"])
     convex_count=0
@@ -207,16 +207,16 @@ def callback_feasibility(awp, bwl, lwl, disp, tc):
     [Input('export-dimensions', 'n_clicks'), Input('output-bwlsac', 'children')],
     [State('boat-category', 'value'), State('loa', 'value'), State('lwl','value'), State('disp', 'value'), State('awp', 'value'), State('lcf', 'value'), State('lcb', 'value'), State('beamtransom', 'value'), State('tc', 'value'), State('alpha_f_sac', 'value'), State('alpha_i_sac', 'value'), State('beta_n', 'value')])
 def update_output(n_clicks, bwlsac, boatcategory,loa,lwl,disp, awp, lcf, lcb, beamtransom, tc, alpha_f_sac, alpha_i_sac, beta_n):
-    sac_obj = codecs.open('data/sacsolution.json', 'r', encoding='utf-8').read()
+    sac_obj = codecs.open('assets/data/sacsolution.json', 'r', encoding='utf-8').read()
     sac_solution = json.loads(sac_obj)
     sn_sections = np.asarray(sac_solution["sn_sections"])
-    wl_obj = codecs.open('data/wlsolution.json', 'r', encoding='utf-8').read()
+    wl_obj = codecs.open('assets/data/wlsolution.json', 'r', encoding='utf-8').read()
     wl_solution = json.loads(wl_obj)
     bn_sections = np.asarray(wl_solution["bn_sections"])
     bwl = np.asarray(wl_solution["bwlmax"])
     y_i_wl = np.asarray(wl_solution["y_i_wl"])
     x_i_wl = np.asarray(wl_solution["x_i_wl"])
-    keel_obj = codecs.open('data/keelsolution.json', 'r', encoding='utf-8').read()
+    keel_obj = codecs.open('assets/data/keelsolution.json', 'r', encoding='utf-8').read()
     keel_solution = json.loads(keel_obj)
     tn_sections = np.asarray(keel_solution["tn_sections"])
     y_i_keel = np.asarray(keel_solution["y_i_keel"])
@@ -264,7 +264,7 @@ def update_output(n_clicks, bwlsac, boatcategory,loa,lwl,disp, awp, lcf, lcb, be
     gmt = kb+bmt-kg
     gmlong = kb+bmlong-kg
 
-    json.dump({'alcb': alcb, 'category': boatcategory, 'loa': loa, 'lwl': lwl, 'disp': disp, 'awp': awp, 'lcf': lcf, 'lcb': lcb, 'beamtransom': beamtransom, 'tc': tc, 'alpha_f_sac': alpha_f_sac, 'alpha_i_sac': alpha_i_sac, 'beta_n': beta_n, 'cwp': cwp, 'cb': cb, 'cm': cm, 'cp': cp, 'bwl': bwl, 'scb': scb, 'am': am, 'itwp': itwp, 'bmt': bmt, 'kb': kb, 'kg': kg, 'gmt': gmt, 'gmlong': gmlong}, codecs.open('data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    json.dump({'alcb': alcb, 'category': boatcategory, 'loa': loa, 'lwl': lwl, 'disp': disp, 'awp': awp, 'lcf': lcf, 'lcb': lcb, 'beamtransom': beamtransom, 'tc': tc, 'alpha_f_sac': alpha_f_sac, 'alpha_i_sac': alpha_i_sac, 'beta_n': beta_n, 'cwp': cwp, 'cb': cb, 'cm': cm, 'cp': cp, 'bwl': bwl, 'scb': scb, 'am': am, 'itwp': itwp, 'bmt': bmt, 'kb': kb, 'kg': kg, 'gmt': gmt, 'gmlong': gmlong}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     
     return 'Data ready.'
 

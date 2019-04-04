@@ -87,7 +87,7 @@ resultshull = dbc.Container([
 		html.Br(), html.Br(),
 		dbc.Row(
 			dbc.Col(
-				html.Div(html.A('Export all individuals generated', download='optimizationresistance.csv', href='/assets/data/optimizationresistance.csv'))
+				html.Div(html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'))
 			)
 		),
 		html.Br(),
@@ -95,8 +95,8 @@ resultshull = dbc.Container([
 ])
 
 
-df = pd.read_csv("data/optimizationresistance.csv")
-datatable = pd.read_csv("data/optimizationresistance.csv")
+df = pd.read_csv("assets/data/optimizationresistance.csv")
+datatable = pd.read_csv("assets/data/optimizationresistance.csv")
 datatable = datatable.loc[datatable['valid']==True]
 datatable = datatable.loc[:,"id":"LCB"]
 

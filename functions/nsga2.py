@@ -22,7 +22,7 @@ from functions import resistance
 
 def optimize_nsgaII():
     ### PARAMATERS
-    gaconfig_obj = codecs.open('data/parametersga.json', 'r', encoding='utf-8').read()
+    gaconfig_obj = codecs.open('assets/data/parametersga.json', 'r', encoding='utf-8').read()
     gaconfig = json.loads(gaconfig_obj)     
     weight1 = np.float(gaconfig["weight1"])*(-1)/10		# resistance wight - multiplied by one to be minimized
     weight2 = np.float(gaconfig["weight2"])/10  # weight objectives (values) and whether minimized (negative) or maximized (positive)
@@ -61,7 +61,7 @@ def optimize_nsgaII():
         cm = individual[8]
         divcan = lwl*bwl*tcan*cb
         awp = bwl*lwl*cwp
-        dimensions = codecs.open('data/dimensions.json', 'r', encoding='utf-8').read()
+        dimensions = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
         dim = json.loads(dimensions)
         alcb = np.float(dim["alcb"])
         loa = np.float(dim["loa"])*0.3048

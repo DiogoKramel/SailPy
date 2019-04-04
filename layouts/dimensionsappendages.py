@@ -9,7 +9,7 @@ import numpy as np
 
 from callbacks import dimensionsappendagescall, dimensionsappendagesplots
 
-dimensions = pd.read_csv("data/initialhull.csv")
+dimensions = pd.read_csv("assets/data/initialhull.csv")
 lwl = np.float(min(dimensions["LWL"]))
 bwl = np.float(min(dimensions["BWL"]))
 disp = np.float(min(dimensions["Displacement"]))

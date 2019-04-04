@@ -86,7 +86,7 @@ def sac_solve(lwl, disp, lcb, alpha_f, alpha_i, b0, bwl, tc, cm):
     sn_sections = interpolation_sac(x_sections)
     sn = max(y_i)
     
-    json.dump({'x_sac': x.tolist(), 'y_sac': y.tolist(), 'x_i_sac': x_i.tolist(), 'y_i_sac': y_i.tolist(), 'maxsac': maxsac.tolist(), 'maxsac_x': maxsac_x.tolist(), 'sn_sections': sn_sections.tolist()}, codecs.open('data/sacsolution.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    json.dump({'x_sac': x.tolist(), 'y_sac': y.tolist(), 'x_i_sac': x_i.tolist(), 'y_i_sac': y_i.tolist(), 'maxsac': maxsac.tolist(), 'maxsac_x': maxsac_x.tolist(), 'sn_sections': sn_sections.tolist()}, codecs.open('assets/data/sacsolution.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     
     return x, y, x_i, y_i, maxsac, maxsac_x, sn_sections
 
@@ -156,7 +156,7 @@ def wl_solve(lcf, awp, lwl, b0, bwl):
     interpolation_wl = si.interp1d(x_i, y_i, kind='cubic')
     bn_sections = interpolation_wl(x_sections)*2
 
-    json.dump({'x_wl': x.tolist(), 'y_wl': y.tolist(), 'x_i_wl': x_i.tolist(), 'y_i_wl': y_i.tolist(), 'bwlmax': bwlmax.tolist(), 'bwlmax_x': bwlmax_x.tolist(), 'bn_sections': bn_sections.tolist()}, codecs.open('data/wlsolution.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    json.dump({'x_wl': x.tolist(), 'y_wl': y.tolist(), 'x_i_wl': x_i.tolist(), 'y_i_wl': y_i.tolist(), 'bwlmax': bwlmax.tolist(), 'bwlmax_x': bwlmax_x.tolist(), 'bn_sections': bn_sections.tolist()}, codecs.open('assets/data/wlsolution.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
 
     return x, y, x_i, y_i, bwlmax, bwlmax_x, bn_sections
 
@@ -221,7 +221,7 @@ def keel_solve(lwl, tc):
     tn_sections[0] = 0
     tn_sections[len(tn_sections)-1] = 0
 
-    json.dump({'x_keel': x.tolist(), 'y_keel': y.tolist(), 'x_i_keel': x_i.tolist(), 'y_i_keel': y_i.tolist(), 'tnx': tnx.tolist(), 'tn_sections': tn_sections.tolist()}, codecs.open('data/keelsolution.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    json.dump({'x_keel': x.tolist(), 'y_keel': y.tolist(), 'x_i_keel': x_i.tolist(), 'y_i_keel': y_i.tolist(), 'tnx': tnx.tolist(), 'tn_sections': tn_sections.tolist()}, codecs.open('assets/data/keelsolution.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
 
     return x, y, x_i, y_i, tnx, tn_sections
 
