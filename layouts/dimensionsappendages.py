@@ -71,6 +71,17 @@ appendages = dbc.Container([
 				style={'width': '100%', 'font-size': '10pt'},
 			),
 			html.Div(id='dimensions-sail'),
+			dbc.Label("Mizzen"),
+			dcc.Dropdown(
+				id='mzn-check',
+				options=[
+					{"label": "Do not include", "value": '0'},
+					{"label": "Include", "value": '1'},
+				],
+				value='0',
+				style={'width': '100%', 'font-size': '10pt'},
+			),
+			html.Div(id='dimensions-mizzen')
 		], width=3),
 		dbc.Col([
 			html.H4("Rudder"),
@@ -78,6 +89,41 @@ appendages = dbc.Container([
 			html.Br(),
 			html.H4("Keel"),
 			html.Div(id='dimensions-keel'),
+			html.Br(),
+			html.H4("Extra data"),
+			dbc.Label("Crew mass [kg]"),
+			dbc.Input(type='text', id='crewmass', bs_size="sm", value='280'),
+			dbc.Label("Keel Naca Profile"),
+			dcc.Dropdown(
+				id='keel-naca',
+				options=[
+					{"label": "4 digits", "value": '1'},
+					{"label": "6 digits", "value": '2'},
+				],
+				value='1',
+				style={'width': '100%', 'font-size': '10pt'},
+			),
+			dbc.Label("Rudder Naca Profile"),
+			dcc.Dropdown(
+				id='rudder-naca',
+				options=[
+					{"label": "4 digits", "value": '1'},
+					{"label": "6 digits", "value": '2'},
+				],
+				value='1',
+				style={'width': '100%', 'font-size': '10pt'},
+			),
+			dbc.Label("Bulb keel"),
+			dcc.Dropdown(
+				id='bulbo-check',
+				options=[
+					{"label": "Do not include", "value": '0'},
+					{"label": "Include", "value": '1'},
+				],
+				value='0',
+				style={'width': '100%', 'font-size': '10pt'},
+			),
+			html.Div(id="dimensions-bulbo")
 		], width=3),
 		dbc.Col([
 			html.H4("Side plan view"),

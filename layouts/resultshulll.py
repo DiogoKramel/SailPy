@@ -87,7 +87,7 @@ resultshull = dbc.Container([
 		html.Br(), html.Br(),
 		dbc.Row(
 			dbc.Col(
-				html.Div(html.A('Export results', download='optimizationresistance.csv', href='/data/optimizationresistance.csv'))
+				html.Div(html.A('Export all individuals generated', download='optimizationresistance.csv', href='/assets/data/optimizationresistance.csv'))
 			)
 		),
 		html.Br(),

@@ -98,6 +98,10 @@ def dimensionsrudder(lwl, disp):
         dbc.Input(type='text', id='heightsurface-rudder', bs_size="sm", value=-0.05),
         dbc.Label("Root Centerline"),
         dbc.Input(type='text', id='pos-rudder', bs_size="sm", value=1),
+        dbc.Label("Root Chord Thickness"),
+        dbc.Input(type='text', id='rootchord-rudder-tcks', bs_size="sm", value=0.175),
+        dbc.Label("Tip Chord Thickness"),
+        dbc.Input(type='text', id='tipchord-rudder-tcks', bs_size="sm", value=0.105),
     ])
 
 @app.callback(Output('dimensions-keel', 'children'),
@@ -114,16 +118,57 @@ def dimensionskeel(lwl, tc, disp):
     rootkeel=1.2*surfacekeel/spankeel
     return html.Div([
         dbc.Label("Root Chord"),
-            dbc.Input(type='text', id='rootchord-keel', bs_size="sm", value=round(rootkeel,2)),
-			dbc.Label("Tip chord"),
-            dbc.Input(type='text', id='tipchord-keel', bs_size="sm", value=round(tipkeel,2)),
-			dbc.Label("Span"),
-            dbc.Input(type='text', id='span-keel', bs_size="sm", value=round(spankeel,2)),
-			dbc.Label("Sweep angle [degrees]"),
-            dbc.Input(type='text', id='sweep-keel', bs_size="sm", value=20),
-			dbc.Label("Root Centerline"),
-            dbc.Input(type='text', id='pos-keel', bs_size="sm", value=round(cekeel,2)),
+        dbc.Input(type='text', id='rootchord-keel', bs_size="sm", value=round(rootkeel,2)),
+        dbc.Label("Tip Chord"),
+        dbc.Input(type='text', id='tipchord-keel', bs_size="sm", value=round(tipkeel,2)),
+        dbc.Label("Span"),
+        dbc.Input(type='text', id='span-keel', bs_size="sm", value=round(spankeel,2)),
+        dbc.Label("Sweep angle [degrees]"),
+        dbc.Input(type='text', id='sweep-keel', bs_size="sm", value=20),
+        dbc.Label("Root Centerline"),
+        dbc.Input(type='text', id='pos-keel', bs_size="sm", value=round(cekeel,2)),
+        dbc.Label("Root Chord Thickness"),
+        dbc.Input(type='text', id='rootchord-keel-tcks', bs_size="sm", value=0.175),
+        dbc.Label("Tip Chord Thickness"),
+        dbc.Input(type='text', id='tipchord-keel-tcks', bs_size="sm", value=0.105),
     ])
+
+@app.callback(Output('dimensions-mizzen', 'children'),
+    [Input('mzn-check', 'value')])
+def dimensionskeel(mzncheck):
+    if mzncheck == '0':
+        return html.Div([
+            dbc.Label("Mizzen Hoist"),
+            dbc.Input(type='text', id='pmz', bs_size="sm", value=0),
+            dbc.Label("Mizzen Foot"),
+            dbc.Input(type='text', id='emz', bs_size="sm", value=0),
+            dbc.Label("Boom height"),
+            dbc.Input(type='text', id='badmz', bs_size="sm", value=0)
+        ])
+    if mzncheck == '1':
+        return html.Div([
+            dbc.Label("Mizzen Hoist"),
+            dbc.Input(type='text', id='pmz', bs_size="sm", value=5),
+            dbc.Label("Mizzen Foot"),
+            dbc.Input(type='text', id='emz', bs_size="sm", value=3),
+            dbc.Label("Boom height"),
+            dbc.Input(type='text', id='badmz', bs_size="sm", value=1)
+        ])
+
+@app.callback(Output('dimensions-bulbo', 'children'),
+    [Input('bulbo-check', 'value')])
+def dimensionskeel(bulbocheck):
+    if bulbocheck == '0':
+        return html.Div([html.P("")])
+    if bulbocheck == '1':
+        return html.Div([
+            dbc.Label("Keel bulbous length"),
+            dbc.Input(type='text', id='lbk', bs_size="sm", value=0),
+            dbc.Label("Keel bulbous lateral area"),
+            dbc.Input(type='text', id='abk', bs_size="sm", value=0),
+            dbc.Label("Keel bulbous wetted area"),
+            dbc.Input(type='text', id='sbk', bs_size="sm", value=0)
+        ])
 
 @app.callback(Output('dimension-loa', 'children'),
     [Input('overhang', 'value'), Input('boa', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value')])#, Input('jsail', 'value'), Input('lpg', 'value'), Input('spl', 'value'), Input('mast-diameter', 'value'), Input('boom-height', 'value'), Input('mast-height', 'value'), Input('rootchord-keel', 'value'), Input('tipchord-keel', 'value'), Input('span-keel', 'value'), Input('sweep-keel', 'value'), Input('pos-keel', 'value'), Input('rootchord-rudder', 'value'), Input('tipchord-rudder', 'value'), Input('span-rudder', 'value'), Input('sweep-rudder', 'value'), Input('pos-rudder', 'value'), Input('heightsurface-rudder', 'value')])

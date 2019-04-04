@@ -16,10 +16,9 @@ def create_sac(tcnew, lwlnew, dispnew, bwlnew, lcbnew, lcfnew, sailset):
     json.dump({'tc': tcnew, 'lwl': lwlnew, 'bwl': bwlnew, 'disp': dispnew, 'lcb': lcbnew, 'lcf': lcfnew, 'sailset': sailset}, codecs.open('data/dimensions-new.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     return "ok"
 
-
 @app.callback(Output('plot-appendages', 'figure'),
-    [Input('overhang', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value'), Input('pos-keel', 'value'), Input('sweep-keel', 'value'), Input('span-keel', 'value'), Input('tipchord-keel', 'value'), Input('rootchord-keel', 'value'), Input('heightsurface-rudder', 'value'), Input('span-rudder', 'value'), Input('rootchord-rudder', 'value'), Input('tipchord-rudder', 'value'), Input('sweep-rudder', 'value'), Input('pos-rudder', 'value'), Input('mast-diameter', 'value'), Input('boom-height', 'value'), Input('psail', 'value'), Input('esail', 'value'), Input('isail', 'value'), Input('jsail', 'value'), Input('mastpos', 'value')])
-def create_sac(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tichordkeel, rootchordkeel, heightsurfacerudder, spanrudder, rootchordrudder, tipchordrudder, sweeprudder, posrudder, mastdiameter, boomheight, psail, esail, isail, jsail, mastpos):
+    [Input('overhang', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value'), Input('pos-keel', 'value'), Input('sweep-keel', 'value'), Input('span-keel', 'value'), Input('tipchord-keel', 'value'), Input('rootchord-keel', 'value'), Input('heightsurface-rudder', 'value'), Input('span-rudder', 'value'), Input('rootchord-rudder', 'value'), Input('tipchord-rudder', 'value'), Input('sweep-rudder', 'value'), Input('pos-rudder', 'value'), Input('mast-diameter', 'value'), Input('boom-height', 'value'), Input('psail', 'value'), Input('esail', 'value'), Input('isail', 'value'), Input('jsail', 'value'), Input('mastpos', 'value'), Input('boa', 'value'), Input('rootchord-keel-tcks', 'value'), Input('tipchord-keel-tcks', 'value'), Input('rootchord-rudder-tcks', 'value'), Input('tipchord-rudder-tcks', 'value'), Input('mzn-check', 'value'), Input('pmz', 'value'), Input('emz', 'value'), Input('badmz', 'value')])
+def create_sac(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tipchordkeel, rootchordkeel, heightsurfacerudder, spanrudder, rootchordrudder, tipchordrudder, sweeprudder, posrudder, mastdiameter, boomheight, psail, esail, isail, jsail, mastpos, boa, rootchordkeeltcks, tipchordkeeltcks, rootchordruddertcks, tipchordruddertcks, mzncheck, pmz, emz, badmz):
     dimensionsobj = codecs.open('data/dimensions-new.json', 'r', encoding='utf-8').read()
     dimensions = json.loads(dimensionsobj)
     for item in dimensions:
@@ -31,7 +30,7 @@ def create_sac(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tich
     poskeel = np.float(poskeel)
     sweepkeel = np.radians(np.float(sweepkeel))
     spankeel = np.float(spankeel)
-    tichordkeel = np.float(tichordkeel)
+    tipchordkeel = np.float(tipchordkeel)
     rootchordkeel = np.float(rootchordkeel)
     heightsurfacerudder = np.float(heightsurfacerudder)
     spanrudder = np.float(spanrudder)
@@ -41,11 +40,21 @@ def create_sac(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tich
     posrudder = np.float(posrudder)
     mastdiameter = np.float(mastdiameter)
     boomheight = np.float(boomheight)
+    boa = np.float(boa)
     psail = np.float(psail)
     esail = np.float(esail)
     isail = np.float(isail)
     jsail = np.float(jsail)
     mastpos = np.float(mastpos)
+    rootchordkeeltcks = np.float(rootchordkeeltcks)
+    tipchordkeeltcks = np.float(tipchordkeeltcks)
+    rootchordruddertcks = np.float(rootchordruddertcks)
+    tipchordruddertcks = np.float(tipchordruddertcks)
+    pmz = np.float(pmz)
+    emz = np.float(emz)
+    badmz = np.float(badmz)
+    mzncheck = np.float(mzncheck)
+
     deckx1 = -overhang
     decky1 = overhang*(tc/(lwl/5))
     deckx2 = deckx1*0.9
@@ -68,7 +77,7 @@ def create_sac(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tich
     keely1 = 0
     keelx2 = keelx1-np.tan(sweepkeel)*spankeel
     keely2 = -tc-spankeel
-    keelx3 = keelx2-tichordkeel
+    keelx3 = keelx2-tipchordkeel
     keely3 = -tc-spankeel
     keelx4 = keelx1-rootchordkeel
     keely4 = 0
@@ -104,24 +113,30 @@ def create_sac(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tich
     jibx3 = mastpos-mastdiameter/2
     jiby3 = freeboard+isail
     #centre of effort
+    arearudder = spanrudder*(rootchordrudder+tipchordkeel)/2
+    areakeel = spankeel*(rootchordkeel+tipchordkeel)/2
+    areahull = lwl*tc*0.7
     b=rootchordkeel
-    a=tichordkeel
+    a=tipchordkeel
     cekeely = spankeel/3*((2*a+b)/(a+b))
     cekeelx = -(poskeel-(keelx2+keelx3)/2)/spankeel*cekeely
     d=rootchordkeel
-    c=tichordkeel
+    c=tipchordkeel
     ceruddery = spanrudder/3*((2*c+d)/(c+d))
     cerudderx = -(posrudder-(rudderx2+rudderx3)/2)/spanrudder*ceruddery
+    cehidrox = ((cekeelx+poskeel)*areakeel+(cerudderx+posrudder)*arearudder+lwl/2*(areahull))/(areakeel+arearudder+areahull)
+    cehidroy = (-(cekeely+tc)*areakeel-(ceruddery+heightsurfacerudder)*arearudder-tc*0.25*(areahull))/(areakeel+arearudder+areahull)
+    lr = cehidrox-cerudderx
+
     mainarea = psail*esail/2
-    if sailset == 1:
+    if sailset == 1 or sailset == 3:
         jibarea = isail*jsail/2
         area = mainarea+jibarea
         cesailx = (mainarea*(-esail/3+mastpos)+jibarea*(deckx4-jsail*2/3))/(area)
         cesaily = (mainarea*(psail/3+boomheight+freeboard)+jibarea*(decky4+jsail/3))/(area)
-    if sailset == 4:
+    if sailset == 2 or sailset == 4:
         cesailx = (-esail/3+mastpos)
         cesaily = (psail/3+boomheight+freeboard)
-
 
     return {
         'data': [
@@ -156,15 +171,22 @@ def create_sac(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tich
             go.Scatter(
                 x=[cesailx],
                 y=[cesaily],
-                text=['CE Sail'],
-                name='CE Sail',
+                text=['CE Aero'],
+                name='CE Aero',
+                cliponaxis=False,
+            ),
+            go.Scatter(
+                x=[cehidrox],
+                y=[cehidroy],
+                text=['CE Hydro'],
+                name='CE Hydro',
                 cliponaxis=False,
             ),
         ],
         'layout': go.Layout(
             height=800,
             xaxis= {
-                'range': [deckx1*1.1, deckx5*1.1],
+                'range': [deckx1*1.1-emz, deckx5*1.1+2+boa],
                 'zeroline': False,
                 'title': "Length [m]",
                 'dtick': 1, 
@@ -287,6 +309,58 @@ def create_sac(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tich
                 'y1': jiby2,
                 'layer': 'below',
                 'line': {'width': 1, 'color': 'grey'},
+            },
+            {#keel profile
+                'type': 'path',
+                'path': ' M {},{} L{},{} L{},{} L{},{} Z'.format(deckx4+1+boa/2-rootchordkeel*rootchordkeeltcks/2, 0, deckx4+1+boa/2+rootchordkeel*rootchordkeeltcks/2, 0, deckx4+1+boa/2+tipchordkeel*tipchordkeeltcks/2, -tc-spankeel, deckx4+1+boa/2-tipchordkeel*tipchordkeeltcks/2, -tc-spankeel),
+                'layer': 'below',
+                'line': {'width': 1},
+            },
+            {#rudder profile
+                'type': 'path',
+                'path': ' M {},{} L{},{} L{},{} L{},{} Z'.format(deckx4+1+boa/2-rootchordrudder*rootchordruddertcks/2, 0, deckx4+1+boa/2+rootchordrudder*rootchordruddertcks/2, 0, deckx4+1+boa/2+tipchordrudder*tipchordruddertcks/2, -heightsurfacerudder-spanrudder, deckx4+1+boa/2-tipchordrudder*tipchordruddertcks/2, -heightsurfacerudder-spanrudder),
+                'layer': 'below',
+                'line': {'width': 1},
+            },
+            #{#mast profile
+            #    'type': 'path',
+            #    'path': ' M {},{} L{},{} L{},{} L{},{} Z'.format(deckx4+1+boa*0.5-mastdiameter/2, 0, deckx4+1+boa*0.5+mastdiameter/2, 0, deckx4+1+boa*0.5+mastdiameter/2, masty3, deckx4+1+boa*0.5-mastdiameter/2, masty3),
+            #    'layer': 'below',
+            #    'fillcolor': 'white',
+            #    'line': {'width': 1},
+            #},
+            {#deck profile
+                'type': 'path',
+                'path': 'M {},{} C {},{} {},{} {},{}'.format(deckx4+1, freeboard, deckx4+1+boa*0.05, -1.9*tc, deckx4+1+boa*0.95, -1.9*tc, deckx4+1+boa, freeboard),
+                'line': {'width': 1},
+                'fillcolor': 'white',
+                'layer': 'below',
+            },
+            {#deck upper profile
+                'type': 'path',
+                'path': 'M {},{} Q {},{} {},{}'.format(deckx4+1, freeboard, deckx4+1+boa/2, freeboard*1.2, deckx4+1+boa, freeboard),
+                'line': {'width': 1},
+            },
+            {#mizzen mast
+                'type': 'path',
+                'path': ' M {},{} L{},{} L{},{} L{},{} Z'.format(deckx3, decky3, deckx3+mastdiameter, decky3, deckx3+mastdiameter, decky3+pmz+badmz, deckx3, decky3+pmz+badmz) if mzncheck == 1 else '',
+                'layer': 'above',
+                'fillcolor': 'white',
+                'line': {'width': 1},
+            },
+            {#mizzen sail
+                'type': 'path',
+                'path': ' M {},{} L{},{} L{},{} Z'.format(deckx3, decky3+badmz, deckx3, decky3+pmz+badmz, deckx3-emz, decky3+badmz) if mzncheck == 1 else '',
+                'layer': 'below',
+                'fillcolor': 'rgba(255, 140, 184, 0.1)',
+                'line': {'width': 1},
+            },
+            {#boom
+                'type': 'path',
+                'path': ' M {},{} L{},{} L{},{} L{},{} Z'.format(deckx3, decky3+badmz, deckx3-emz*1.1, decky3+badmz, deckx3-emz*1.1, decky3+badmz-mastdiameter, deckx3, decky3+badmz-mastdiameter) if mzncheck == 1 else '',
+                'layer': 'below',
+                'fillcolor': 'white',
+                'line': {'width': 1},
             },
             {#waterline
             'type': 'line',
