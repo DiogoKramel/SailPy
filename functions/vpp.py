@@ -41,7 +41,7 @@ def vpp_solve(sailset):
     kb = np.float(dimensions["kb"])
     kg = np.float(dimensions["kg"])
     scb = np.float(dimensions["scb"])           # superfície molhada do casco (opcional) [m2]
-    GMlong = np.float(dimensions["kg"])         # Desnecessarion? altura metacêntrica longitudinal (opcional para cálculo do pitch) [m]
+    GMlong = np.float(dimensions["kg"])         # Desnecessario? altura metacêntrica longitudinal (opcional para cálculo do pitch) [m]
     
     ### TO-DO	
     P = 15.1			# altura da vela mestra [m]
