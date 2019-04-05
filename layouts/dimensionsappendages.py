@@ -61,10 +61,10 @@ appendages = dbc.Container([
 			dcc.Dropdown(
 				id='sailset',
 				options=[
-					{"label": "Main sail and jib", "value": '1'},
-					{"label": "Main sail and spinnaker", "value": '2'},
-					{"label": "Main sail, jib, and spinnaker", "value": '3'},
-					{"label": "Main sail only", "value": '4'},
+					{"label": "Mainsail and foresail", "value": '1'},
+					{"label": "Mainsail and spinnaker", "value": '2'},
+					{"label": "Mainsail, foresail, and spinnaker", "value": '3'},
+					{"label": "Mainsail only", "value": '4'},
 				],
 				value='1',
 				placeholder='Choose one saill plan',

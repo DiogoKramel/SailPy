@@ -23,6 +23,12 @@ resultshull = dbc.Container([
             ], className = "justify"),
         ]),
 		html.Br(),
+		dbc.Row(
+			dbc.Col(
+				html.Div(html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'))
+			)
+		),
+		html.Br(),
         dbc.Row(dbc.Col(html.H4("What do you want to view?"))),
         dbc.Row([
             dbc.Col([
@@ -84,12 +90,7 @@ resultshull = dbc.Container([
 				html.Div(dcc.Graph(id='plot-limits-awp-disp'))
 			),
 		]),
-		html.Br(), html.Br(),
-		dbc.Row(
-			dbc.Col(
-				html.Div(html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'))
-			)
-		),
+		html.Br(), 
 		html.Br(),
     ], className="mt-4")
 ])
