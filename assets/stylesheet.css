@@ -53,3 +53,36 @@ P {
 	text-align: center;
 	border-top: 1px solid rgba(128, 128, 128, 0.15)
 }
+
+.backgroundlanding {
+	background-image: url('/assets/landing/landing3v3.jpg');
+	height: 100%;
+	width: 100%;
+  	background-position: center;
+	background-size: cover;
+	position: fixed;
+	margin-right: 0;
+	overflow: auto;
+	color: rgb(77, 76, 76);
+}
+
+.landingjumbo {
+	background-color: rgba(255, 255, 255, 0.0);
+	width: 80%;
+	margin: auto;
+}
+
+.middle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.stepbarheight {
+	height: 30px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 12pt;
+}

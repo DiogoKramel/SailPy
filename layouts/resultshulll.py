@@ -143,10 +143,12 @@ resultsplus = dbc.Container([
 				options=[
 					{'label': "Hull #{}".format(i), 'value': i} for i in df.index.unique()
 				],
+				value='1',
 				placeholder='Select one hull to be optimised in the next phase',
-				style={'width': '100%', 'font-size': '10pt'}),
-				html.Br(),html.Br(),html.Br(),
+				style={'width': '75%', 'font-size': '10pt'}
+			),
 		]),
+		html.Br(),
 		dbc.Row([
 			html.Br(),html.Br(),
 			dbc.Button(dcc.Link("Start again", href=f"/parametrichull", style={'color': 'white'})),

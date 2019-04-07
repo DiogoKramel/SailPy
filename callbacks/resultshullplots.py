@@ -6,8 +6,7 @@ import dash_bootstrap_components as dbc
 import dash_html_components as html
 from app import app
 import plotly.graph_objs as go
-import json
-import codecs
+import json, codecs
 from scipy.integrate import simps
 import csv
 import pandas as pd
@@ -628,3 +627,4 @@ def update_graph(resultshullaxisx):
             for column in ["LWL", "BWL", "Draft", "Resistance", "Comfort"]
         ]
     )
+    
