@@ -139,7 +139,7 @@ resultsplus = dbc.Container([
 		dbc.Row(dbc.Col(html.H4("Select one individual"))),
 		dbc.Row([
 			dcc.Dropdown(
-				id='dropdown', 
+				id='dropdown-hull-dimensions', 
 				options=[
 					{'label': "Hull #{}".format(i), 'value': i} for i in df.index.unique()
 				],

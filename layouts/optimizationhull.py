@@ -144,9 +144,9 @@ optimizationhull = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.Br(), html.Br(),
-            dbc.Button(dcc.Link("Run optimization",style={'color': 'white'}), id="export-ga"),
+			html.Button(id='export-ga', type='submit', children='Run optimization'),
             html.Br(), html.Br(),
-            html.P(id='output-container-button'),
+            html.Div(id='output-button'),
 			html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
         ], style={'textAlign': 'center'}),
     ]),

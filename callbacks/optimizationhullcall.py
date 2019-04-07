@@ -84,11 +84,11 @@ def update_output(value):
     return dbc.Label('Comfort Ratio Weight: {}'.format(value))
 
 @app.callback(
-    Output('output-container-button', 'children'),
-    [Input('export-ga', 'n_clicks'), Input('pop-size', 'value'), Input('children-size', 'value'), Input('max-generation', 'value'), Input('mut-prob', 'value'), Input('halloffame-number', 'value'), Input('indpb-value', 'value'), Input('eta_value', 'value'), Input('weight1', 'value'), Input('weight2', 'value'), Input('velocity-range', 'value'), Input('heel-range', 'value')])
+    Output('output-button', 'children'),
+    [Input('export-ga', 'n_clicks')], [State('pop-size', 'value'), State('children-size', 'value'), State('max-generation', 'value'), State('mut-prob', 'value'), State('halloffame-number', 'value'), State('indpb-value', 'value'), State('eta_value', 'value'), State('weight1', 'value'), State('weight2', 'value'), State('velocity-range', 'value'), State('heel-range', 'value')])
 def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, halloffamenumber, indpb, eta, weight1, weight2, velocityrange, heelrange):
-    if n_clicks == 0:
-        json.dump({'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
+    #if n_clicks == 0  or n_clicks is None:
+    #    json.dump({'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
     if n_clicks == 1:
         json.dump({'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
         dimensionsobj = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()

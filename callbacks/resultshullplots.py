@@ -621,7 +621,7 @@ def update_graph(resultshullaxisx):
                         "yaxis": {"automargin": True},
                         "height": 150,
                         "margin": {"t": 15, "l": 10, "r": 10, "b":0},
-						"title": column,
+                        "title": column,
                     },
                 },
             )
