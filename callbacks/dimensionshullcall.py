@@ -278,7 +278,7 @@ def callback_secondary(boatcategory):
                 marks={0.68: '0.65', 0.69: '0.69', 0.70: '0.71', 0.71: '0.71'}
             ),
             html.Br(), html.Br(),
-        ]),
+        ], className="regularfont"),
     ])
 
 @app.callback(Output('output-tertiary', 'children'), [Input('boat-category', 'value'), Input('loa', 'value')])
