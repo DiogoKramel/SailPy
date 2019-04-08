@@ -20,7 +20,7 @@ lcf = np.float(min(dimensions["LCF"]))
 appendages = dbc.Container([
 	dbc.Row(
 		dbc.Col(
-			html.H2("Dimensions")
+			html.H4("Dimensions")
 		),
 	),
 	dbc.Row([
@@ -53,10 +53,10 @@ appendages = dbc.Container([
 	html.Div(id="save-new-dim", style={'display': 'none'}),
 	dbc.Row([
 		dbc.Col([
-			html.H4("Hull"),
+			html.H5("Hull"),
 			html.Div(id='dimensions-hull'),
 			html.Br(),
-			html.H4("Sail"),
+			html.H5("Sail"),
 			dbc.Label("Sail configuration"),
 			dcc.Dropdown(
 				id='sailset',
@@ -84,13 +84,13 @@ appendages = dbc.Container([
 			html.Div(id='dimensions-mizzen')
 		], width=3),
 		dbc.Col([
-			html.H4("Rudder"),
+			html.H5("Rudder"),
 			html.Div(id='dimensions-rudder'),
 			html.Br(),
-			html.H4("Keel"),
+			html.H5("Keel"),
 			html.Div(id='dimensions-keel'),
 			html.Br(),
-			html.H4("Extra data"),
+			html.H5("Extra data"),
 			dbc.Label("Crew mass [kg]"),
 			dbc.Input(type='text', id='crewmass', bs_size="sm", value='280'),
 			dbc.Label("Keel Naca Profile"),
@@ -126,7 +126,7 @@ appendages = dbc.Container([
 			html.Div(id="dimensions-bulbo")
 		], width=3),
 		dbc.Col([
-			html.H4("Side plan view"),
+			html.H5("Side plan view"),
             html.Div(dcc.Graph(id='plot-appendages', style={'width': 'inherit'})),
 			html.Br(),
 			#html.Div(id="dimension-loa"),

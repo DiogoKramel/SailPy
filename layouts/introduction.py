@@ -10,7 +10,7 @@ from app import app
 introduction = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.H2("Introduction"),
+            html.H4("Introduction"),
             html.P("""This application provides a comprehensive tool that allows the user to design a sailboat oriented to its performance from the very beginning. For doing so, the application operates through a parametric model of the hull that allows easy manipulation through a small number of parameters. At the first stage, the hull is optimized towards the minimum resistance computed in several heel angles and velocities. An NSGA II algorithm is responsible to carry out the optimization phase, displaying, in the end, the most suitable hulls for the user. Based on one hull selected by the user, the optimization process is repeated for appendages, namely keel and rudder, and sails. At this phase, a Velocity Prediction Program is applied to compute an estimation for velocity that will guide the optimization process. After the analysis is completed, the user may view and export the dimensions set for the entire sailboat."""),
             html.Div([
                 html.A('Read More', download='Thesis.pdf', href='/assets/Thesis.pdf'),
@@ -19,7 +19,7 @@ introduction = dbc.Container([
             ]),
         ], md=6, className="justify"),
         dbc.Col([
-            html.H2("How it works"),
+            html.H4("How it works"),
             html.Br(),
             dbc.Row([
                 dbc.Col(html.I(className="icon-tools fa-3x"),

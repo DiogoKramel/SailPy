@@ -13,7 +13,7 @@ from app import app
 
 resultshull = dbc.Container([
     dbc.Col([
-        dbc.Row(dbc.Col(html.H2("Results"))),
+        dbc.Row(dbc.Col(html.H4("Results"))),
         dbc.Row([
             dbc.Col([
                 html.P("""The main results are displayed below. First, you can view the evolutionary process in the first main plot. Colors will indicate how the individual evolved towards the optimal solution. It includes individuals that are not valid, and the constraint disrespected can be seen in the smaller plots below. The same plot also allows visualizing and understanding the Pareto frontier, in which further improvement is not possible."""),
@@ -29,7 +29,7 @@ resultshull = dbc.Container([
 			)
 		),
 		html.Br(),
-        dbc.Row(dbc.Col(html.H4("What do you want to view?"))),
+        dbc.Row(dbc.Col(html.H5("What do you want to view?"))),
         dbc.Row([
             dbc.Col([
                 dcc.Dropdown(
@@ -103,12 +103,12 @@ datatable = datatable.loc[:,"id":"LCB"]
 
 resultsplus = dbc.Container([
     dbc.Col([
-		dbc.Row(dbc.Col(html.H4("Dimensions Parallel Plot"))),
+		dbc.Row(dbc.Col(html.H5("Dimensions Parallel Plot"))),
 		dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
 		html.Br(),
 
 		dbc.Row(dbc.Col([
-			html.H4("List of all individuals"),
+			html.H5("List of all individuals"),
 			html.Div(
 			dash_table.DataTable(
 				id='datatable-interactivity',
@@ -136,7 +136,7 @@ resultsplus = dbc.Container([
 		#)),
 
 		html.Br(),
-		dbc.Row(dbc.Col(html.H4("Select one individual"))),
+		dbc.Row(dbc.Col(html.H5("Select one individual"))),
 		dbc.Row([
 			dcc.Dropdown(
 				id='dropdown-hull-dimensions', 

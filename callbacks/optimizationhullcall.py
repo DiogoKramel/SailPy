@@ -105,7 +105,7 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         with open('assets/data/optimizationresistance.csv','w') as fd:
             fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,best,constraint1,constraint2,constraint3,constraint4,constraint5,valid"+"\n")
         optimize_nsgaII()
-        return html.Div(dbc.Alert("Done", color="success"))
+        return html.Div(dbc.Alert("Done", color="success", style={'padding': '5px'}))
 
 @app.callback(
     Output('save-limits', 'children'),

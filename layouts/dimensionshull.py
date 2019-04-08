@@ -11,7 +11,7 @@ from callbacks import dimensionshullplots
 hull = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.H2("Main parameters"),
+            html.H4("Main parameters"),
             html.P("""Set the category and length that will serve as the basis to build the regressions for the primary and secondary dimensions found below. You can follow how your choices affect the hull through the plots."""),
             dbc.FormGroup([
                 dbc.Label("Category"),
@@ -43,7 +43,7 @@ hull = dbc.Container([
             html.Br(), html.Br(), html.Br(),
         ], className = "justify", md=4),
         dbc.Col([
-            html.H2("Lines Drawing"),
+            html.H4("Lines Drawing"),
             html.Div(dcc.Graph(id='insert-sac', style={'width': 'inherit'})),
             html.Br(),
             html.Div(dcc.Graph(id='insert-wl', style={'width': 'inherit'})),
@@ -52,7 +52,7 @@ hull = dbc.Container([
             html.Br(),
             html.Div(dcc.Graph(id='insert-section', style={'width': 'inherit'})),
             html.Br(),
-            html.H2("Testing fitness"),
+            html.H4("Testing fitness"),
             html.H5("DELFT Series"),
             html.Div(id='output-bwlsac', style={'display': 'none'}),
             html.Div(id="output-lwlbwl", className="regularfont"),
