@@ -166,8 +166,8 @@ def create_wl(lcf_value, cwp, lwl_value, beamtransom_value, bwl):
     }
 
 @app.callback(Output('insert-keel', 'figure'), [Input('lwl', 'value'), Input('tc', 'value')])
-def create_keel(loa_value, tc_value):
-    keel_solution=keel_solve(np.float(loa_value), np.float(tc_value)),
+def create_keel(lwl, tc):
+    keel_solution=keel_solve(np.float(lwl), np.float(tc)),
     return {
         'data': [
             go.Scatter(
@@ -188,7 +188,7 @@ def create_keel(loa_value, tc_value):
             ),
             go.Scatter(
                 x = [keel_solution[0][4]],
-                y = [-np.float(tc_value)],
+                y = [-np.float(tc)],
                 text = ["Tc max"],
                 textposition = ["top center"],
                 mode = "markers+text",
@@ -213,7 +213,7 @@ def create_keel(loa_value, tc_value):
                 "showline": True,
                 "mirror": True,
                 "title": "Length [m]",
-                "range": [-1, np.float(loa_value)*1.1],
+                "range": [-1, np.float(lwl)*1.1],
                 "zeroline": False,
             },
             yaxis = {
@@ -226,7 +226,6 @@ def create_keel(loa_value, tc_value):
                 "range": [keel_solution[0][1][1]*1.2, 0],
             },
             legend=dict(x=0, y=-0.65, orientation="h"),
-            #legend=dict(x=0.8, y=0.0),
             font=dict(size=10),
         )
     }
