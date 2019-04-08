@@ -13,9 +13,9 @@ from functions import keel_solve, sac_solve, section_solve, wl_solve
 
 
 @app.callback(Output('insert-sac', 'figure'),
-    [Input('lwl', 'value'), Input('disp', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value')])
-def create_sac(loa_value, disp_value, lcb_value, alpha_f_sac_value, alpha_i_sac_value, beamtransom, bwl, tc, cm):
-    sac_solution=sac_solve(np.float(loa_value), np.float(disp_value), np.float(lcb_value), np.float(alpha_f_sac_value), np.float(alpha_i_sac_value), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
+    [Input('lwl', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value')])
+def create_sac(loa_value, cb, lcb_value, alpha_f_sac_value, alpha_i_sac_value, beamtransom, bwl, tc, cm):
+    sac_solution=sac_solve(np.float(loa_value), np.float(cb), np.float(lcb_value), np.float(alpha_f_sac_value), np.float(alpha_i_sac_value), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
     return {
         'data': [
             go.Scatter(
@@ -84,16 +84,16 @@ def create_sac(loa_value, disp_value, lcb_value, alpha_f_sac_value, alpha_i_sac_
                 "title": "Sectional area [m<sup>2</sup>]",
                 "range": [0, sac_solution[0][1][2]*1.2],
             },
-			legend=dict(x=0, y=-0.3, orientation="h"),
+            legend=dict(x=0, y=-0.3, orientation="h"),
             font=dict(size=10),
             
         )
     }
 
 @app.callback(Output('insert-wl', 'figure'),
-    [Input('lcf', 'value'), Input('awp', 'value'), Input('lwl', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value')])
-def create_wl(lcf_value, awp_value, lwl_value, beamtransom_value, bwl):
-    wl_solution=wl_solve(np.float(lcf_value), np.float(awp_value), np.float(lwl_value), np.float(beamtransom_value), np.float(bwl),),
+    [Input('lcf', 'value'), Input('cwp', 'value'), Input('lwl', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value')])
+def create_wl(lcf_value, cwp, lwl_value, beamtransom_value, bwl):
+    wl_solution=wl_solve(np.float(lcf_value), np.float(cwp), np.float(lwl_value), np.float(beamtransom_value), np.float(bwl),),
     return {
         'data': [
             go.Scatter(
@@ -161,7 +161,7 @@ def create_wl(lcf_value, awp_value, lwl_value, beamtransom_value, bwl):
                 "zeroline": False,
                 "range": [0, max(wl_solution[0][1])*1.2],
             },
-			legend=dict(x=0, y=-0.45, orientation="h"),
+            legend=dict(x=0, y=-0.45, orientation="h"),
             font=dict(size=10),
         )
     }
@@ -234,11 +234,11 @@ def create_keel(loa_value, tc_value):
     }
 
 @app.callback(Output('insert-section', 'figure'),
-    [Input('lwl', 'value'), Input('beta_n', 'value'), Input('disp', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('lcf', 'value'), Input('awp', 'value')])
-def create_section(lwl, beta_n, disp, lcb, alpha_f_sac, alpha_i_sac, beamtransom, bwl, tc, cm, lcf, awp):
-    sn_sections_sol = sac_solve(np.float(lwl), np.float(disp), np.float(lcb), np.float(alpha_f_sac), np.float(alpha_i_sac), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
+    [Input('lwl', 'value'), Input('beta_n', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('lcf', 'value'), Input('cwp', 'value')])
+def create_section(lwl, beta_n, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, bwl, tc, cm, lcf, cwp):
+    sn_sections_sol = sac_solve(np.float(lwl), np.float(cb), np.float(lcb), np.float(alpha_f_sac), np.float(alpha_i_sac), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
     sn_sections = sn_sections_sol[0][6]
-    bn_sections_sol = wl_solve(np.float(lcf), np.float(awp), np.float(lwl), np.float(beamtransom), np.float(bwl))
+    bn_sections_sol = wl_solve(np.float(lcf), np.float(cwp), np.float(lwl), np.float(beamtransom), np.float(bwl))
     bn_sections = bn_sections_sol[6]
     tn_sections_sol = keel_solve(np.float(lwl), np.float(tc))
     tn_sections = tn_sections_sol[5]

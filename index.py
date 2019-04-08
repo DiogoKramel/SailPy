@@ -17,7 +17,7 @@ logousp = html.Img(src = "/assets/static/logousp.png", height = "35px")
 logopoli = html.Img(src = "/assets/static/logopolitecnica.png", height = "35px")
 logopnv = html.Img(src = "/assets/static/pnv.png", height = "35px")
 logocapes = html.Img(src = "/assets/static/logocapes.png", height = "35px")
-title = dcc.Link("A preliminary design tool for sailboats", className = "navbar-brand")
+title = dcc.Link("A preliminary design tool for sailboats", className = "navbar-brand", style={"color": "white"})
 
 navitems = html.Ul([
     dbc.NavItem(dbc.NavLink("Home", href = "/introduction")),
@@ -37,12 +37,12 @@ navitems = html.Ul([
 navbar = html.Nav([
     dbc.Container([
         dbc.Row([
-            dbc.Col(logoapp, width = "auto"),
+            dbc.Col(logoappwhite, width = "auto"),
             dbc.Col(title, width = "auto"),
             dbc.Col(navitems, width = "auto"),
         ], justify = "between", align = "center", style={"width": "100%"}),
     ]),
-], className="navbar navbar-light navbar-expand-md bg-light sticky-top")
+], className="navbar navbar-expand-lg navbar-dark bg-dark")		# bg-dark or bg-primary
 
 footer = html.Nav([
     dbc.Container([
@@ -69,7 +69,7 @@ landpage = html.Div([
             html.H3("App Name", className="display-3"),
             html.P("A preliminary design tool for sailboats", className="lead"),
             html.Hr(className="my-2"),
-            html.P("Application Name is an opensource Python application for conceptual sailboat design with an object-oriented framework. The vessel is simulated in different conditions, applying optimization tools to evaluate its design, assisting the choice of the best set of dimensions in order to meet the user's needs.", className="justify"), #The library is developed by Ship Design and Operation Lab at Norwegian University of Science and Technology (NTNU) in Ålesund.
+            html.P("Application Name is an opensource Python application for conceptual sailboat design with an object-oriented approach. The sailboat is simulated in different conditions, to which optimization tools are applied to evaluate its performance, assisting the definition of the best set of dimensions in order to meet the user's needs. This library encourages suggestions, new features, improvements, and report of bugs.", className="justify"),
             html.Hr(className="my-2"),
             html.Br(),
             html.P(dbc.Button(dcc.Link(html.Div(html.Div("Start the analysis", className="btnupdate"), className='fa fa-arrow-circle-right btnupdate'), href=f"/application", style={'color': 'white'})))
@@ -77,34 +77,16 @@ landpage = html.Div([
     ], className='middle'),
 ], className="backgroundlanding")
 
-tabs_styles = {
-    'height': '35px',
-    'font-size': '11pt'
-}
-tab_style = {
-    'borderBottom': '1px solid #d6d6d6',
-    'padding': '8px',
-    'backgroundColor': 'white',
-}
-
-tab_selected_style = {
-    'borderTop': '1px solid #d6d6d6',
-    'borderBottom': '1px solid #d6d6d6',
-    'backgroundColor': '#119DFF',
-    'color': 'white',
-    'padding': '8px'
-}
-
 tabs = html.Div([
     dcc.Tabs(id="tabs-styled-with-inline", value='tab-1', children=[
-        dcc.Tab(label='Introduction', value='tab-1', style=tab_style, selected_style=tab_selected_style),
-        dcc.Tab(label='Hull Dimensions', value='tab-2', style=tab_style, selected_style=tab_selected_style),
-        dcc.Tab(label='Optimization I', value='tab-3', style=tab_style, selected_style=tab_selected_style),
-        dcc.Tab(label='Results I', value='tab-4', style=tab_style, selected_style=tab_selected_style),
-        dcc.Tab(label='Appendages Dimensions', value='tab-5', style=tab_style, selected_style=tab_selected_style),
-		dcc.Tab(label='Optimization II', value='tab-6', style=tab_style, selected_style=tab_selected_style),
-        dcc.Tab(label='Results II', value='tab-7', style=tab_style, selected_style=tab_selected_style),
-    ], style=tabs_styles),
+        dcc.Tab(label='Introduction', value='tab-1'),
+        dcc.Tab(label='Hull Dimensions', value='tab-2'),
+        dcc.Tab(label='Optimization I', value='tab-3'),
+        dcc.Tab(label='Results I', value='tab-4'),
+        dcc.Tab(label='Appendages & Sail', value='tab-5'),
+		dcc.Tab(label='Optimization II', value='tab-6'),
+        dcc.Tab(label='Results II', value='tab-7'),
+    ], style={'height': '30pt', 'font-size': '11pt', 'line-height': '11pt', 'margin-bottom': '5pt'}),
 ])
 
 app.title = 'Application Name'

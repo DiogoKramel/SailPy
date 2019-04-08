@@ -9,7 +9,8 @@ import json, codecs                             # export as json
 ################################################################################################################
 # 1. SAC CURVE
 ################################################################################################################
-def sac_solve(lwl, disp, lcb, alpha_f, alpha_i, b0, bwl, tc, cm):
+def sac_solve(lwl, cb, lcb, alpha_f, alpha_i, b0, bwl, tc, cm):
+    disp =cb*lwl*bwl*tc
     alpha_i_sac = np.radians(np.float(alpha_i))       # controls volume distribution inside the ship at the stern
     alpha_f_sac = np.radians(np.float(alpha_f))      # controls volume distribution inside the ship at the bow
     xp0, xp4, yp0, yp4, = 0, lwl, b0, 0
@@ -94,7 +95,8 @@ def sac_solve(lwl, disp, lcb, alpha_f, alpha_i, b0, bwl, tc, cm):
 ################################################################################################################
 # 2. WATERLINE CURVE
 ################################################################################################################
-def wl_solve(lcf, awp, lwl, b0, bwl):
+def wl_solve(lcf, cwp, lwl, b0, bwl):
+    awp=cwp*bwl*lwl
     xp0, yp0, xp1, xp3, yp3 = 0, b0, 0, lwl, 0
     def wl(p):
         yp1_wl, yp2_wl, xp2_wl = p

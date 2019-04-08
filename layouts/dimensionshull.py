@@ -40,6 +40,7 @@ hull = dbc.Container([
             ]),
             html.Div(id="output-primary"),
             html.Div(id="output-secondary"),
+            html.Div(id="output-tertiary"),
             html.Br(), html.Br(), html.Br(),
         ], className = "justify", md=4),
         dbc.Col([
@@ -60,16 +61,16 @@ hull = dbc.Container([
             html.Div(id="output-lwldisp", className="regularfont"),
             html.Div(id="output-loadingfactor", className="regularfont"),
             html.Div(id="output-prismatic", className="regularfont"),
-            html.Div(id="output-midship", className="regularfont"),
+            #html.Div(id="output-midship", className="regularfont"),
             html.H5("Other evaluations"),
-            html.Div(id="output-cb", className="regularfont"),
-            html.Div(id="output-cwp", className="regularfont"),
+            #html.Div(id="output-cb", className="regularfont"),
+            #html.Div(id="output-cwp", className="regularfont"),
             html.Div(id="output-conc", className="regularfont"),
             html.Br(),
             html.Div(id="output-feasibility"),
         ], className = "justify", md=8)
     ]),
-	html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
+    html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
     #dbc.Row([
     #    dbc.Col([
     #        html.Br(),
