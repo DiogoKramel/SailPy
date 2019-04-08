@@ -51,17 +51,17 @@ def callback_bwl(boat_category):
     output=np.array([bwl,maxsac])
     return output
 
-@app.callback(Output('output-lwlbwl', 'children'), [Input('lwl', 'value'), Input('output-bwlsac', 'children')])
-def callback_bwl(lwl_value, bwlsac):
-    lwlbwl=np.float(lwl_value)/np.float(bwlsac[0]*2)
+@app.callback(Output('output-lwlbwl', 'children'), [Input('lwl', 'value'), Input('bwl', 'value')])
+def callback_bwl(lwl, bwl):
+    lwlbwl=np.float(lwl)/np.float(bwl)
     if lwlbwl > 5 or lwlbwl < 2.73:
         return dbc.Row([dbc.Col('1) Length/Beam Ratio: {}'.format(round(lwlbwl,2)), width=5), dbc.Col('Limits: [2.73-5.00]'), dbc.Col(dbc.Alert("Out of limits", color="danger", style={'padding': '2px', 'display': 'inline-block'}))])
     else:
         return dbc.Row([dbc.Col('1) Length/Beam Ratio: {}'.format(round(lwlbwl,2)), width=5), dbc.Col('Limits: [2.73-5.00]'), dbc.Col(dbc.Alert("Within limits", color="success", style={'padding': '2px', 'display': 'inline-block'}))])
 
-@app.callback(Output('output-bwltc', 'children'), [Input('tc', 'value'), Input('output-bwlsac', 'children')])
-def callback_bwl(tc_value, bwlsac):
-    bwltc=np.float(bwlsac[0]*2)/np.float(tc_value)
+@app.callback(Output('output-bwltc', 'children'), [Input('tc', 'value'), Input('bwl', 'value')])
+def callback_bwl(tc, bwl):
+    bwltc=np.float(bwl)/np.float(tc)
     if bwltc > 19.38 or bwltc < 2.46:
         return dbc.Row([dbc.Col('2) Beam/Draft Ratio: {}'.format(round(bwltc,2)), width=5), dbc.Col('Limits: [2.46-19.38]'), dbc.Col(dbc.Alert("Out of limits", color="danger", style={'padding': '2px', 'display': 'inline-block'}))])
     else:
@@ -109,9 +109,9 @@ def callback_bwl(boat_category):
         if (bn_sections[i]*tn_sections[i]/2) <= sn_sections[i]:
             convex_count=convex_count+1
     if convex_count==10:
-        return dbc.Row([dbc.Col('3) Convexity of sections: {}/10'.format(convex_count), width=5), dbc.Col(''), dbc.Col(dbc.Alert("Convex hull", color="success", style={'padding': '2px', 'display': 'inline-block'}))])
+        return dbc.Row([dbc.Col('1) Convexity of sections: {}/10'.format(convex_count), width=5), dbc.Col(''), dbc.Col(dbc.Alert("Convex hull", color="success", style={'padding': '2px', 'display': 'inline-block'}))])
     else:
-        return dbc.Row([dbc.Col('3) Convexity of sections: {}/10'.format(convex_count), width=5), dbc.Col(''), dbc.Col(dbc.Alert("Concave hull", color="danger", style={'padding': '2px', 'display': 'inline-block'}))])
+        return dbc.Row([dbc.Col('1) Convexity of sections: {}/10'.format(convex_count), width=5), dbc.Col(''), dbc.Col(dbc.Alert("Concave hull", color="danger", style={'padding': '2px', 'display': 'inline-block'}))])
 
 @app.callback(Output('output-feasibility', 'children'), [Input('cwp', 'value'), Input('bwl', 'value'), Input('lwl', 'value'), Input('cb', 'value'), Input('tc', 'value')])
 def callback_feasibility(cwp, bwl, lwl, cb, tc):
@@ -129,9 +129,9 @@ def callback_feasibility(cwp, bwl, lwl, cb, tc):
     bwltc=bwl/tc
     lwlbwl=lwl/bwl
     if prismatic > 0.6 or prismatic < 0.52 or lwlbwl > 5 or lwlbwl < 2.73 or bwltc > 19.38 or bwltc < 2.46 or lwldisp > 8.5 or lwldisp < 4.34 or loadingfactor > 12.67 or loadingfactor < 3.78:
-        return dbc.Alert("The study sailboat may not be feasible. Consider changing its dimensions.", color="danger", style={'width': '80%'}),
+        return dbc.Alert("The study sailboat may not be feasible. Consider changing its dimensions.", color="danger", style={'padding': '5pt', 'display': 'inline-block'}),
     else:
-        return dbc.Alert("The study sailboat is feasible. You can proceed.", color="success"),
+        return dbc.Alert("The study sailboat is feasible. You can proceed.", color="success", style={'padding': '5pt', 'display': 'inline-block'}),
 
 @app.callback(
     Output('output-submit-dimensions', 'children'),
@@ -214,7 +214,7 @@ def callback_primary(boatcategory, loa):
         lcb = (50-2.29)/100*lwl
         lcf = (50-3.33)/100*lwl
     return html.Details([
-        html.Summary('Main dimensions'),
+        html.Summary('Main Dimensions'),
         html.Div([
             dbc.Label("Length Waterline [m]"),
             dbc.Input(type="text", id='lwl', bs_size="sm", value="{}".format(round(lwl,2))),
@@ -249,18 +249,35 @@ def callback_secondary(boatcategory):
         html.Summary('Form Coefficients'),
         html.Div([
             dbc.Label("Midsection Coefficient"),
-            dbc.Input(type='text', id='cm', bs_size="sm", value="{}".format(round(cm,2))),
+            dcc.Slider(
+                id='cm',
+                min=0.65,
+                max=0.78,
+                value=cm,
+                step=0.01,
+                marks={0.65: '0.65', 0.68: '0.68', 0.71: '0.71', 0.74: '0.74', 0.78: '0.78'}
+            ),
+            html.Br(),
             dbc.Label("Block Coefficient"),
-            dbc.Input(type='text', id='cb', bs_size="sm", value="{}".format(round(cb,2))),
-            #dcc.Slider(
-            #    id='cb',
-            #    min=0.3,
-            #    max=0.4,
-            #    value=0.35,
-            #    step=0.01,
-            #),
+            dcc.Slider(
+                id='cb',
+                min=0.3,
+                max=0.4,
+                value=cb,
+                step=0.01,
+                marks={0.3: '0.3', 0.32: '0.32', 0.34: '0.34', 0.36: '0.36', 0.38: '0.38', 0.4: '0.4'}
+            ),
+            html.Br(),
             dbc.Label("Waterplane Area Coefficient"),
-            dbc.Input(type='text', id='cwp', bs_size="sm", value="{}".format(round(cwp,2))),
+            dcc.Slider(
+                id='cwp',
+                min=0.68,
+                max=0.71,
+                value=cwp,
+                step=0.01,
+                marks={0.68: '0.65', 0.69: '0.69', 0.70: '0.71', 0.71: '0.71'}
+            ),
+            html.Br(), html.Br(),
         ]),
     ])
 
@@ -283,7 +300,6 @@ def callback_secondary(boatcategory, loa):
     return html.Details([
                 html.Summary('Hull Adjustments'),
                 html.Div([
-                    html.Br(),
                     dbc.Label("Fore SAC [degree]"),
                     dbc.Input(type='text', id='alpha_f_sac', bs_size="sm", value="{}".format(round(angforesac,2))),
                     dbc.Label("Rear SAC [degree]"),

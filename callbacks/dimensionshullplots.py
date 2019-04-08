@@ -12,8 +12,7 @@ from scipy.integrate import simps
 from functions import keel_solve, sac_solve, section_solve, wl_solve
 
 
-@app.callback(Output('insert-sac', 'figure'),
-    [Input('lwl', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value')])
+@app.callback(Output('insert-sac', 'figure'), [Input('lwl', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value')])
 def create_sac(loa_value, cb, lcb_value, alpha_f_sac_value, alpha_i_sac_value, beamtransom, bwl, tc, cm):
     sac_solution=sac_solve(np.float(loa_value), np.float(cb), np.float(lcb_value), np.float(alpha_f_sac_value), np.float(alpha_i_sac_value), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
     return {
@@ -81,7 +80,7 @@ def create_sac(loa_value, cb, lcb_value, alpha_f_sac_value, alpha_i_sac_value, b
                 "showgrid": True,
                 "showline": True,
                 "mirror": True,
-                "title": "Sectional area [m<sup>2</sup>]",
+                "title": "Sectional Area [m<sup>2</sup>]",
                 "range": [0, sac_solution[0][1][2]*1.2],
             },
             legend=dict(x=0, y=-0.3, orientation="h"),
@@ -166,8 +165,7 @@ def create_wl(lcf_value, cwp, lwl_value, beamtransom_value, bwl):
         )
     }
 
-@app.callback(Output('insert-keel', 'figure'),
-    [Input('lwl', 'value'), Input('tc', 'value')])
+@app.callback(Output('insert-keel', 'figure'), [Input('lwl', 'value'), Input('tc', 'value')])
 def create_keel(loa_value, tc_value):
     keel_solution=keel_solve(np.float(loa_value), np.float(tc_value)),
     return {
@@ -233,8 +231,7 @@ def create_keel(loa_value, tc_value):
         )
     }
 
-@app.callback(Output('insert-section', 'figure'),
-    [Input('lwl', 'value'), Input('beta_n', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('lcf', 'value'), Input('cwp', 'value')])
+@app.callback(Output('insert-section', 'figure'), [Input('lwl', 'value'), Input('beta_n', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('lcf', 'value'), Input('cwp', 'value')])
 def create_section(lwl, beta_n, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, bwl, tc, cm, lcf, cwp):
     sn_sections_sol = sac_solve(np.float(lwl), np.float(cb), np.float(lcb), np.float(alpha_f_sac), np.float(alpha_i_sac), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
     sn_sections = sn_sections_sol[0][6]
