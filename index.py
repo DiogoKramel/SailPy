@@ -12,7 +12,7 @@ from layouts import introduction, dimensionshull, optimizationhull, resultshulll
 server = app.server
 
 logoapp = html.Img(src = "/assets/static/logoapp.png", height = "45px")
-logoappwhite = html.Img(src = "/assets/landing/logoappwhite.png", height = "80px")
+logoappwhite = html.Img(src = "/assets/landing/logoappwhite.png", height = "50px")
 logousp = html.Img(src = "/assets/static/logousp.png", height = "35px")
 logopoli = html.Img(src = "/assets/static/logopolitecnica.png", height = "35px")
 logopnv = html.Img(src = "/assets/static/pnv.png", height = "35px")
@@ -44,16 +44,6 @@ navbar = html.Nav([
     ]),
 ], className="navbar navbar-light navbar-expand-md bg-light sticky-top")
 
-stepbar = dbc.Container([
-    dbc.Nav([
-        dbc.NavItem(dbc.NavLink("Introduction", href="/introduction")),
-        dbc.NavItem(dbc.NavLink("Hull", href="/dimensionshull")),
-        dbc.NavItem(dbc.NavLink("Optimization", href="/optimizationhull")),
-        dbc.NavItem(dbc.NavLink("Results I", href="/resultshull")),
-        dbc.NavItem(dbc.NavLink("Dimensions", href="/dimensionsappendages")),
-    ], pills=True, justified=True),
-], className="stepbarheight")
-
 footer = html.Nav([
     dbc.Container([
         dbc.Row([
@@ -66,14 +56,14 @@ footer = html.Nav([
                 dcc.Link('MIT license', href='https://opensource.org/licenses/MIT', style={ 'display': 'inline-block'}),
                 html.P(". Website and documentation licensed under", style={ 'display': 'inline-block', 'margin-right': '3px'}), 
                 dcc.Link('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', style={ 'display': 'inline-block'}), 
-                html.P(".", style={ 'display': 'inline-block', 'margin-top':'10px',}),
+                html.P(".", style={ 'display': 'inline-block', 'margin-top':'10px'}),
             ], style={ 'display': 'inline-block'}),
         ]),
     ]),
 ], className="navbar footer footerbottom")
 
 landpage = html.Div([
-    dbc.Row(dbc.Col(logoappwhite, width="auto")),
+    dbc.Row(dbc.Col(logoappwhite, width="auto", style={ 'padding-top': '10pt', 'padding-left':'20pt'})),
     dbc.Row([
         dbc.Jumbotron([
             html.H3("App Name", className="display-3"),
@@ -89,7 +79,7 @@ landpage = html.Div([
 
 tabs_styles = {
     'height': '35px',
-    'font-size': '10pt'
+    'font-size': '11pt'
 }
 tab_style = {
     'borderBottom': '1px solid #d6d6d6',
@@ -109,10 +99,10 @@ tabs = html.Div([
     dcc.Tabs(id="tabs-styled-with-inline", value='tab-1', children=[
         dcc.Tab(label='Introduction', value='tab-1', style=tab_style, selected_style=tab_selected_style),
         dcc.Tab(label='Hull Dimensions', value='tab-2', style=tab_style, selected_style=tab_selected_style),
-        dcc.Tab(label='Optimization Parameters', value='tab-3', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='Optimization I', value='tab-3', style=tab_style, selected_style=tab_selected_style),
         dcc.Tab(label='Results I', value='tab-4', style=tab_style, selected_style=tab_selected_style),
         dcc.Tab(label='Appendages Dimensions', value='tab-5', style=tab_style, selected_style=tab_selected_style),
-		dcc.Tab(label='Optimization Parameters', value='tab-6', style=tab_style, selected_style=tab_selected_style),
+		dcc.Tab(label='Optimization II', value='tab-6', style=tab_style, selected_style=tab_selected_style),
         dcc.Tab(label='Results II', value='tab-7', style=tab_style, selected_style=tab_selected_style),
     ], style=tabs_styles),
 ])
