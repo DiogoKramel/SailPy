@@ -133,12 +133,11 @@ appendages = dbc.Container([
 			html.Br(),html.Br(),html.Br(),html.Br(),html.Br()
 		], width=6),
 	]),
-	html.Br(),html.Br(),
-	dbc.Row([
-		dbc.Button(dcc.Link("Go back", href=f"/parametrichull", style={'color': 'white'})),
-		html.P(" ", style={'display': 'inline-block', 'padding': '10px'}),
-		dbc.Button(dcc.Link("Set optimization parameters", href=f"/optimizationappendages", style={'color': 'white'})),
-	], justify="center"),
+	#dbc.Row([
+	#	dbc.Button(dcc.Link("Go back", href=f"/parametrichull", style={'color': 'white'})),
+	#	html.P(" ", style={'display': 'inline-block', 'padding': '10px'}),
+	#	dbc.Button(dcc.Link("Set optimization parameters", href=f"/optimizationappendages", style={'color': 'white'})),
+	#], justify="center"),
 	html.Br(),html.Br(),html.Br(),html.Br(),html.Br(),
 ], className="mt-4",)
 

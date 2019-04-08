@@ -11,7 +11,7 @@ from layouts import introduction, dimensionshull, optimizationhull, resultshulll
 
 server = app.server
 
-logoapp = html.Img(src = "/assets/static/logoapp.png", height = "60px")
+logoapp = html.Img(src = "/assets/static/logoapp.png", height = "45px")
 logoappwhite = html.Img(src = "/assets/landing/logoappwhite.png", height = "80px")
 logousp = html.Img(src = "/assets/static/logousp.png", height = "35px")
 logopoli = html.Img(src = "/assets/static/logopolitecnica.png", height = "35px")
@@ -82,36 +82,72 @@ landpage = html.Div([
             html.P("Application Name is an opensource Python application for conceptual sailboat design with an object-oriented framework. The vessel is simulated in different conditions, applying optimization tools to evaluate its design, assisting the choice of the best set of dimensions in order to meet the user's needs.", className="justify"), #The library is developed by Ship Design and Operation Lab at Norwegian University of Science and Technology (NTNU) in Ålesund.
             html.Hr(className="my-2"),
             html.Br(),
-            html.P(dbc.Button(dcc.Link(html.Div("Start the analysis"), href=f"/introduction", style={'color': 'white'}))),
+            html.P(dbc.Button(dcc.Link(html.Div(html.Div("Start the analysis", className="btnupdate"), className='fa fa-arrow-circle-right btnupdate'), href=f"/application", style={'color': 'white'})))
         ], className='landingjumbo'),
     ], className='middle'),
 ], className="backgroundlanding")
 
+tabs_styles = {
+    'height': '35px',
+    'font-size': '10pt'
+}
+tab_style = {
+    'borderBottom': '1px solid #d6d6d6',
+    'padding': '8px',
+    'backgroundColor': 'white',
+}
+
+tab_selected_style = {
+    'borderTop': '1px solid #d6d6d6',
+    'borderBottom': '1px solid #d6d6d6',
+    'backgroundColor': '#119DFF',
+    'color': 'white',
+    'padding': '8px'
+}
+
+tabs = html.Div([
+    dcc.Tabs(id="tabs-styled-with-inline", value='tab-1', children=[
+        dcc.Tab(label='Introduction', value='tab-1', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='Hull Dimensions', value='tab-2', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='Optimization Parameters', value='tab-3', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='Results I', value='tab-4', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='Appendages Dimensions', value='tab-5', style=tab_style, selected_style=tab_selected_style),
+		dcc.Tab(label='Optimization Parameters', value='tab-6', style=tab_style, selected_style=tab_selected_style),
+        dcc.Tab(label='Results II', value='tab-7', style=tab_style, selected_style=tab_selected_style),
+    ], style=tabs_styles),
+])
 
 app.title = 'Application Name'
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Meta(name='viewport', 
-		content='width=device-width, initial-scale=1.0',
-		title='Application Name. Developed by Diogo Kramel. 2019.'),
+        content='width=device-width, initial-scale=1.0',
+        title='Application Name. Developed by Diogo Kramel. 2019.'),
     html.Link(href='/assets/static/favicon.ico'),
-    html.Div(id='page-content'),
+    html.Div(id='landing-application'),
 ])
 
-@app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
+@app.callback(Output('page-content', 'children'), [Input('tabs-styled-with-inline', 'value')])
+def display_page(tab):
+    if tab == 'tab-1':
+        return introduction.introduction, footer
+    elif tab == 'tab-2':
+        return dimensionshull.hull, footer
+    elif tab == 'tab-3':
+        return optimizationhull.optimizationhull, footer
+    elif tab == 'tab-4':
+        return resultshulll.resultshull, resultshulll.resultsplus, footer
+    elif tab == 'tab-5':
+        return dimensionsappendages.appendages, footer
+    else:
+        return ''
+
+@app.callback(Output('landing-application', 'children'), [Input('url', 'pathname')])
 def display_page(pathname):
     if pathname == '/':
         return landpage, footer
-    elif pathname == '/introduction':
-        return navbar, stepbar, dbc.DropdownMenuItem(divider=True), introduction.introduction, footer
-    elif pathname == '/dimensionshull':
-        return navbar, stepbar, dbc.DropdownMenuItem(divider=True), dimensionshull.hull, footer
-    elif pathname == '/optimizationhull':
-        return navbar, stepbar, dbc.DropdownMenuItem(divider=True), optimizationhull.optimizationhull, footer
-    elif pathname == '/resultshull':
-        return navbar, stepbar, dbc.DropdownMenuItem(divider=True), resultshulll.resultshull, resultshulll.resultsplus, footer
-    elif pathname == '/dimensionsappendages':
-        return navbar, stepbar, dbc.DropdownMenuItem(divider=True), dimensionsappendages.appendages, footer
+    elif pathname == '/application':
+        return navbar, tabs, html.Div(id='page-content')
     else:
         return '404'
 

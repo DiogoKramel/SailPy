@@ -69,14 +69,14 @@ hull = dbc.Container([
             html.Div(id="output-feasibility"),
         ], className = "justify", md=8)
     ]),
-    dbc.Row([
-        dbc.Col([
-            html.Br(),
-            html.Div(id='output-submit-dimensions',
-                     children='Enter a value and press submit', style={'display': 'none'}),
-            dbc.Button(dcc.Link("Submit dimensions and calculate preliminary results",
-                                href=f"/optimizationhull", style={'color': 'white'}), id="export-dimensions"),
-            html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
-        ], width=5),
-    ], justify="center"),
+	html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
+    #dbc.Row([
+    #    dbc.Col([
+    #        html.Br(),
+    #        html.Div(id='output-submit-dimensions',
+    #                 children='Enter a value and press submit', style={'display': 'none'}),
+    #        dbc.Button(dcc.Link("Submit dimensions and calculate preliminary results",
+    #                            href=f"/optimizationhull", style={'color': 'white'}), id="export-dimensions"),
+    #    ], width=5),
+    #], justify="center"),
 ], className="mt-4",)

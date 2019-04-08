@@ -84,7 +84,7 @@ optimizationhull = dbc.Container([
 				style={'width': '80%', 'font-size': '10pt'}
 			),
 			html.Br(),html.Br(),html.Br(),
-        ], className = "justify", md=6),
+        ], className = "justify mt-4", md=6),
 		dbc.Col([
             html.H2("Weighted Objectives"),
             html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
@@ -139,7 +139,7 @@ optimizationhull = dbc.Container([
             html.H2("Dimensions optimized"),
             html.P("""The limits of each dimension optimized at this stage can be set below. Standard values are recommended, but they can be stretched to explore more widely the dimensions space. The algorithm will evaluate which solutions are feasible and automatically exclude the ones that do not fit the criteria. Bear in mind that the values of minimum and maximum may affect performance and convergence. """),
             html.Div(id="dimensions-chosen-optimization")
-        ], className = "justify", md=6),
+        ], className = "justify mt-4", md=6),
     ]),
 	dbc.Row([
 		dbc.Col([
@@ -148,6 +148,6 @@ optimizationhull = dbc.Container([
             html.Br(), html.Br(),
             html.Div(id='output-button'),
 			html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
-		], className="update")
+		], className="update mt-4")
 	])
 ])

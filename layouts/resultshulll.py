@@ -145,16 +145,16 @@ resultsplus = dbc.Container([
 				],
 				value='1',
 				placeholder='Select one hull to be optimised in the next phase',
-				style={'width': '75%', 'font-size': '10pt'}
+				style={'width': '100%', 'font-size': '10pt'}
 			),
 		]),
 		html.Br(),
-		dbc.Row([
-			html.Br(),html.Br(),
-			dbc.Button(dcc.Link("Start again", href=f"/parametrichull", style={'color': 'white'})),
-			html.P(" ", style={'display': 'inline-block', 'padding': '10px'}),
-			dbc.Button(dcc.Link("Optimize appendages", href=f"/appendage", style={'color': 'white'})),
-		], justify="center"),
+		#dbc.Row([
+		#	html.Br(),html.Br(),
+		#	dbc.Button(dcc.Link("Start again", href=f"/parametrichull", style={'color': 'white'})),
+		#	html.P(" ", style={'display': 'inline-block', 'padding': '10px'}),
+		#	dbc.Button(dcc.Link("Optimize appendages", href=f"/appendage", style={'color': 'white'})),
+		#], justify="center"),
 	html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
     ], className="mt-4")
 ])
