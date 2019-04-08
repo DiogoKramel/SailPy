@@ -70,7 +70,7 @@ footer = html.Nav([
             ], style={ 'display': 'inline-block'}),
         ]),
     ]),
-], className="navbar footer")
+], className="navbar footer footerbottom")
 
 landpage = html.Div([
     dbc.Row(dbc.Col(logoappwhite, width="auto")),

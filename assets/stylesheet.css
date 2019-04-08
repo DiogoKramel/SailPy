@@ -96,3 +96,8 @@ P {
 	display: inline-block;
 	margin-left: 6px
 }
+
+.footerbottom {
+	padding-bottom: 0;
+	padding-top: 3pt;
+}
