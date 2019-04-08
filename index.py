@@ -66,9 +66,9 @@ footer = html.Nav([
                 dcc.Link('MIT license', href='https://opensource.org/licenses/MIT', style={ 'display': 'inline-block'}),
                 html.P(". Website and documentation licensed under", style={ 'display': 'inline-block', 'margin-right': '3px'}), 
                 dcc.Link('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', style={ 'display': 'inline-block'}), 
-                html.P(".", style={ 'display': 'inline-block'}),
-            ], style={ 'display': 'inline-block', 'align': 'right', "width": "100%"}),
-        ], align="center", style={"width": "100%"}),
+                html.P(".", style={ 'display': 'inline-block', 'margin-top':'10px',}),
+            ], style={ 'display': 'inline-block'}),
+        ]),
     ]),
 ], className="navbar footer")
 
@@ -82,7 +82,7 @@ landpage = html.Div([
             html.P("Application Name is an opensource Python application for conceptual sailboat design with an object-oriented framework. The vessel is simulated in different conditions, applying optimization tools to evaluate its design, assisting the choice of the best set of dimensions in order to meet the user's needs.", className="justify"), #The library is developed by Ship Design and Operation Lab at Norwegian University of Science and Technology (NTNU) in Ålesund.
             html.Hr(className="my-2"),
             html.Br(),
-            html.P(dbc.Button(dcc.Link(html.Div("Start the analysis"), href=f"/introduction", style={'color': 'white'})),),
+            html.P(dbc.Button(dcc.Link(html.Div("Start the analysis"), href=f"/introduction", style={'color': 'white'}))),
         ], className='landingjumbo'),
     ], className='middle'),
 ], className="backgroundlanding")
@@ -91,8 +91,9 @@ landpage = html.Div([
 app.title = 'Application Name'
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    html.Meta(name='viewport', content='width=device-width, initial-scale=1.0',
-            title='Application Name. Developed by Diogo Kramel. 2019.'),
+    html.Meta(name='viewport', 
+		content='width=device-width, initial-scale=1.0',
+		title='Application Name. Developed by Diogo Kramel. 2019.'),
     html.Link(href='/assets/static/favicon.ico'),
     html.Div(id='page-content'),
 ])
@@ -100,7 +101,7 @@ app.layout = html.Div([
 @app.callback(Output('page-content', 'children'), [Input('url', 'pathname')])
 def display_page(pathname):
     if pathname == '/':
-        return landpage
+        return landpage, footer
     elif pathname == '/introduction':
         return navbar, stepbar, dbc.DropdownMenuItem(divider=True), introduction.introduction, footer
     elif pathname == '/dimensionshull':

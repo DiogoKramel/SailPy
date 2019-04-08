@@ -86,3 +86,13 @@ P {
 	margin-bottom: 10px;
 	font-size: 12pt;
 }
+
+._dash-undo-redo {
+	display: none;
+  }
+
+.btnupdate {
+	font-family: "Segoe UI", "Source Sans Pro";
+	display: inline-block;
+	margin-left: 6px
+}

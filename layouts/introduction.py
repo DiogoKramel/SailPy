@@ -15,7 +15,7 @@ introduction = dbc.Container([
             html.Div([
                 html.A('Read More', download='Thesis.pdf', href='/assets/Thesis.pdf'),
                 html.Br(), html.Br(),
-                dbc.Button(dcc.Link(html.Div("Start the analysis"), href=f"/dimensionshull", style={'color': 'white'})),
+				html.P(dbc.Button(dcc.Link(html.Div(html.Div("Start the analysis", className="btnupdate"), className='fa fa-arrow-circle-right btnupdate'), href=f"/dimensionshull", style={'color': 'white'}))),
             ]),
         ], md=6, className="justify"),
         dbc.Col([
