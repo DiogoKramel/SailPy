@@ -8,6 +8,7 @@ import dash_daq as daq
 from callbacks import dimensionshullcall
 from callbacks import dimensionshullplots
 
+
 hull = dbc.Container([
     dbc.Row([
         dbc.Col([
@@ -53,15 +54,15 @@ hull = dbc.Container([
             html.Div(dcc.Graph(id='insert-section', style={'width': 'inherit'})),
             html.Br(),
             html.H4("Testing fitness according to DELFT Series"),
-            html.Div(id="output-lwlbwl", className="regularfont"),
-            html.Div(id="output-bwltc", className="regularfont"),
-            html.Div(id="output-lwldisp", className="regularfont"),
-            html.Div(id="output-loadingfactor", className="regularfont"),
-            html.Div(id="output-prismatic", className="regularfont"),
-            html.H4("Other dimensions"),
+            html.Div(id="test-lwlbwl", className="regularfont"),
+            html.Div(id="test-bwltc", className="regularfont"),
+            html.Div(id="test-lwldisp", className="regularfont"),
+            html.Div(id="test-loadingfactor", className="regularfont"),
+            html.Div(id="test-prismatic", className="regularfont"),
+            html.H4("Other calculations"),
 			html.Div(id='other-dimensions', className="regularfont"),
             html.Br(),
-            html.Div(id="output-feasibility"),
+            html.Div(id="test-feasibility"),
         ], className = "justify", md=8)
     ]),
 	#dbc.Row([
