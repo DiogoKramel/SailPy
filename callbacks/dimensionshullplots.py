@@ -13,45 +13,45 @@ from functions import keel_solve, sac_solve, section_solve, wl_solve
 
 
 @app.callback(Output('insert-sac', 'figure'), [Input('lwl', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value')])
-def create_sac(loa_value, cb, lcb_value, alpha_f_sac_value, alpha_i_sac_value, beamtransom, bwl, tc, cm):
-    sac_solution=sac_solve(np.float(loa_value), np.float(cb), np.float(lcb_value), np.float(alpha_f_sac_value), np.float(alpha_i_sac_value), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
+def create_sac(lwl, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, bwl, tc, cm):
+    sac_solution = sac_solve(np.float(lwl), np.float(cb), np.float(lcb), np.float(alpha_f_sac), np.float(alpha_i_sac), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
     return {
         'data': [
             go.Scatter(
                 x = sac_solution[0][0],
                 y = sac_solution[0][1],
                 name = "Control points",
-                line = dict(dash = 'dash', color= "rgba(58, 124, 211)"),
-                marker = dict(color= "rgb(46, 117, 211)"),
-                cliponaxis=False,
+                line = dict(dash = 'dash', color = "rgba(58, 124, 211)"),
+                marker = dict(color = "rgb(46, 117, 211)"),
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = sac_solution[0][2],
                 y = sac_solution[0][3],
                 mode = "lines",
                 name = "Spline",
-                line = dict(color= "rgba(236,45,45,0.5)"),
-                fill='tozeroy',
+                line = dict(color = "rgba(236, 45, 45, 0.5)"),
+                fill = 'tozeroy',
             ),
             go.Scatter(
-                x = [np.float(lcb_value)],
+                x = [np.float(lcb)],
                 y = [0],
                 text = "LCB",
                 textposition = ["top center"],
                 mode = "markers+text",
                 name = "LCB",
-                line = dict(color= "rgb(46, 117, 211)"),
+                line = dict(color = "rgb(46, 117, 211)"),
                 cliponaxis=False,
             ),
             go.Scatter(
                 x = [sac_solution[0][5]],
                 y = [sac_solution[0][4]],
-                text = "SAC max",
+                text = "Maximum SAC",
                 textposition = ["top center"],
                 mode = "markers+text",
                 name = "SAC",
-                line = dict(color= "rgb(46, 117, 211)"),
-                cliponaxis=False,
+                line = dict(color = "rgb(46, 117, 211)"),
+                cliponaxis = False,
             ),
         ],
         'layout': go.Layout(
@@ -72,7 +72,7 @@ def create_sac(loa_value, cb, lcb_value, alpha_f_sac_value, alpha_i_sac_value, b
                 "mirror": True,
                 "title": "Length [m]",
                 "zeroline": False,
-                "range": [-1, np.float(loa_value)*1.1],
+                "range": [-1, np.float(lwl)*1.1],
             },
             yaxis = {
                 "autorange": False,
@@ -90,35 +90,35 @@ def create_sac(loa_value, cb, lcb_value, alpha_f_sac_value, alpha_i_sac_value, b
     }
 
 @app.callback(Output('insert-wl', 'figure'), [Input('lcf', 'value'), Input('cwp', 'value'), Input('lwl', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value')])
-def create_wl(lcf_value, cwp, lwl_value, beamtransom_value, bwl):
-    wl_solution=wl_solve(np.float(lcf_value), np.float(cwp), np.float(lwl_value), np.float(beamtransom_value), np.float(bwl),),
+def create_wl(lcf, cwp, lwl, beamtransom, bwl):
+    wl_solution = wl_solve(np.float(lcf), np.float(cwp), np.float(lwl), np.float(beamtransom), np.float(bwl)),
     return {
         'data': [
             go.Scatter(
                 x = wl_solution[0][0],
                 y = wl_solution[0][1],
                 name = "Control points",
-                line = dict(dash = 'dash', color= "rgb(46, 117, 211)"),
-                marker = dict(color= "rgb(46, 117, 211)"),
-                cliponaxis=False,
+                line = dict(dash = 'dash', color = "rgb(46, 117, 211)"),
+                marker = dict(color = "rgb(46, 117, 211)"),
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = wl_solution[0][2],
                 y = wl_solution[0][3],
                 mode = "lines",
                 name = "Spline",
-                line = dict(color= "rgba(236,45,45,0.5)"),
-                fill='tozeroy'
+                line = dict(color = "rgba(236, 45, 45, 0.5)"),
+                fill = 'tozeroy'
             ),
             go.Scatter(
-                x = [np.float(lcf_value)],
+                x = [np.float(lcf)],
                 y = [0],
                 text = ["LCF"],
                 textposition = ["top center"],
                 mode = "markers+text",
-                line = dict(color= "rgb(46, 117, 211)"),
+                line = dict(color = "rgb(46, 117, 211)"),
                 name = "LCF",
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = [wl_solution[0][5]],
@@ -127,8 +127,8 @@ def create_wl(lcf_value, cwp, lwl_value, beamtransom_value, bwl):
                 textposition = ["top center"],
                 mode = "markers+text",
                 line = dict(color= "rgb(46, 117, 211)"),
-                name = "BWL max",
-                cliponaxis=False,
+                name = "Maximum beam at waterline",
+                cliponaxis = False,
             ),
         ],
         'layout': go.Layout(
@@ -148,7 +148,7 @@ def create_wl(lcf_value, cwp, lwl_value, beamtransom_value, bwl):
                 "mirror": True,
                 "title": "Length [m]",
                 "zeroline": False,
-                "range": [-1, np.float(lwl_value)*1.1],
+                "range": [-1, np.float(lwl)*1.1],
             },
             yaxis = {
                 "linewidth": 1,
@@ -159,31 +159,31 @@ def create_wl(lcf_value, cwp, lwl_value, beamtransom_value, bwl):
                 "zeroline": False,
                 "range": [0, max(wl_solution[0][1])*1.2],
             },
-            legend=dict(x=0, y=-0.45, orientation="h"),
+            legend=dict(x=0, y=-0.6, orientation="h"),
             font=dict(size=10),
         )
     }
 
 @app.callback(Output('insert-keel', 'figure'), [Input('lwl', 'value'), Input('tc', 'value')])
 def create_keel(lwl, tc):
-    keel_solution=keel_solve(np.float(lwl), np.float(tc)),
+    keel_solution = keel_solve(np.float(lwl), np.float(tc)),
     return {
         'data': [
             go.Scatter(
                 x = keel_solution[0][0],
                 y = keel_solution[0][1],
                 name = "Control points",
-                line = dict(dash = 'dash', color= "rgb(46, 117, 211)"),
-                marker = dict(color= "rgb(46, 117, 211)"),
-                cliponaxis=False,
+                line = dict(dash = 'dash', color = "rgb(46, 117, 211)"),
+                marker = dict(color = "rgb(46, 117, 211)"),
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = keel_solution[0][2],
                 y = keel_solution[0][3],
                 mode = "lines",
                 name = "Spline",
-                line = dict(color= "rgba(236,45,45,0.5)"),
-                fill='tozeroy'
+                line = dict(color= "rgba(236, 45, 45, 0.5)"),
+                fill = 'tozeroy'
             ),
             go.Scatter(
                 x = [keel_solution[0][4]],
@@ -192,7 +192,7 @@ def create_keel(lwl, tc):
                 textposition = ["top center"],
                 mode = "markers+text",
                 marker = dict(color= "rgb(46, 117, 211)"),
-                name = "Tc max",
+                name = "Maximum canoe body draft",
                 cliponaxis=False,
             ),
         ],
@@ -224,7 +224,7 @@ def create_keel(lwl, tc):
                 "zeroline": False,
                 "range": [keel_solution[0][1][1]*1.2, 0],
             },
-            legend=dict(x=0, y=-0.65, orientation="h"),
+            legend=dict(x=0, y=-0.6, orientation="h"),
             font=dict(size=10),
         )
     }
@@ -237,8 +237,7 @@ def create_section(lwl, beta_n, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, 
     bn_sections = bn_sections_sol[6]
     tn_sections_sol = keel_solve(np.float(lwl), np.float(tc))
     tn_sections = tn_sections_sol[5]
-    section_solution=section_solve(tn_sections, bn_sections, sn_sections, np.float(lwl), np.float(beta_n)),
-
+    section_solution = section_solve(tn_sections, bn_sections, sn_sections, np.float(lwl), np.float(beta_n)),
     return {
         'data': [
             go.Scatter(
@@ -246,70 +245,70 @@ def create_section(lwl, beta_n, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, 
                 y = section_solution[0][2][0],
                 name = "Section 10",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = -section_solution[0][1][1],
                 y = section_solution[0][2][1],
                 name = "Section 9",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = -section_solution[0][1][2],
                 y = section_solution[0][2][2],
                 name = "Section 8",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = -section_solution[0][1][3],
                 y = section_solution[0][2][3],
                 name = "Section 7",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = -section_solution[0][1][4],
                 y = section_solution[0][2][4],
                 name = "Section 6",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][5],
                 y = section_solution[0][2][5],
                 name = "Section 5",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][6],
                 y = section_solution[0][2][6],
                 name = "Section 4",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][7],
                 y = section_solution[0][2][7],
                 name = "Section 3",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][8],
                 y = section_solution[0][2][8],
                 name = "Section 2",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][9],
                 y = section_solution[0][2][9],
                 name = "Section 1",
                 mode = 'lines',
-                cliponaxis=False,
+                cliponaxis = False,
             ),
         ],
         'layout': go.Layout(
