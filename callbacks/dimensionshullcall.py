@@ -41,7 +41,7 @@ def main_dimensions(boatcategory, loa):
             dbc.Label('Draft Canoe Body [m]'),
             dbc.Input(type='text', id='tc', bs_size='sm', value='{}'.format(round(tc,2))),
             html.Div(id='limits-tc', className='limits'),
-            dbc.Label('Longitudinal Centre of Buyoancy (LCB) [m]'),
+            dbc.Label('Longitudinal Centre of Buoyancy (LCB) [m]'),
             dbc.Input(type='text', id='lcb', bs_size='sm', value='{}'.format(round(lcb,2))),
             html.Div(id='limits-lcb', className='limits'),
             dbc.Label('Longitudinal Centre of Flotation (LCF) [m]'),
@@ -280,60 +280,57 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     
     sac_obj = codecs.open('assets/data/sacsolution.json', 'r', encoding='utf-8').read()
     sac_solution = json.loads(sac_obj)
-    sn_sections = np.asarray(sac_solution['sn_sections'])
-    wl_obj = codecs.open('assets/data/wlsolution.json', 'r', encoding='utf-8').read()
+	sac_interpolation_x = np.asarray(sac_solution['x_i_sac'])
+	sac_interpolation_y = np.asarray(sac_solution['y_i_sac'])
+    
+	wl_obj = codecs.open('assets/data/wlsolution.json', 'r', encoding='utf-8').read()
     wl_solution = json.loads(wl_obj)
-    bn_sections = np.asarray(wl_solution['bn_sections'])
-    y_i_wl = np.asarray(wl_solution['y_i_wl'])
-    x_i_wl = np.asarray(wl_solution['x_i_wl'])
-    keel_obj = codecs.open('assets/data/keelsolution.json', 'r', encoding='utf-8').read()
+    waterline_interpolation_y = np.asarray(wl_solution['y_i_wl'])
+    waterline_interpolation_x = np.asarray(wl_solution['x_i_wl'])
+
+	keel_obj = codecs.open('assets/data/keelsolution.json', 'r', encoding='utf-8').read()
     keel_solution = json.loads(keel_obj)
-    tn_sections = np.asarray(keel_solution['tn_sections'])
-    y_i_keel = np.asarray(keel_solution['y_i_keel'])
-    x_i_keel = np.asarray(keel_solution['x_i_keel'])
-    section_solution=section_solve(tn_sections, bn_sections, sn_sections, lwl, np.float(beta_n))
-    section_y_sections=section_solution[1]
-    section_z_sections=section_solution[2]
+	keel_interpolation_y = np.asarray(keel_solution['y_i_keel'])
+    keel_interpolation_x = np.asarray(keel_solution['x_i_keel'])
 
     awp = cwp*lwl*bwl
     disp = cb*lwl*bwl*tc
     am = cm*bwl*tc # mid section area
     cp = disp/(am*lwl)
-    
-    scb_tot = 0        # lateral area of canoe body
-    for z in range(0, 10):
-        for i in range (1, 10):
-            scb_parc = np.sqrt((section_y_sections[z][i]-section_y_sections[z][i-1])**2+(section_z_sections[z][i]-section_z_sections[z][i-1])**2)
-            scb_tot = scb_tot+scb_parc
-    # CORRIGIR POR QUE *2.2??
-    scb = np.float(scb_tot)/10*lwl*2*2.2
-    alcb = -simps(y_i_keel, x_i_keel)
-    '''
-    
-    sum=0
-    for i in range (1,(len(y_i_wl)-1)):
-        if (i%2)==0:
-            sum=sum+y_i_wl[i]**3*2
+	# surface area of canoe body by Larsson pag 33
+    scb = 0        
+    for i in range (1,(len(x_i_sac)-1)):
+        if (i%2) == 0:
+            scb = scb+sac_interpolation_y[i]*2
         else:
-            sum=sum+y_i_wl[i]**3*4
-    itwp=2/3*(np.float(sum)/3*np.float(lwl)/100)
-    #itwp = cwp**2/11.7*lwl*bwl**3   # transversal inertia moment
-    sum=0
-    for i in range (1,(len(y_i_wl)-1)):
+            scb = scb+sac_interpolation_y[i]*4
+    scb = 2*1.03*np.float(scb)*(lwl/(len(sac_interpolation_y)-1))/3
+	# lateral area of canoe body
+    alcb = -simps(keel_interpolation_y, keel_interpolation_x)
+    # transverse moment of inertia according to Larsson pag 39
+    itwp = 0
+    for i in range (1,(len(waterline_interpolation_y)-1)):
         if (i%2)==0:
-            sum=sum+2*y_i_wl[i]*x_i_wl[i]**2
+            itwp = itwp+waterline_interpolation_y[i]**3*2
         else:
-            sum=sum+4*y_i_wl[i]*x_i_wl[i]**2
-    itwplong=2/3*np.float(sum)*lwl/len(y_i_wl)-awp*lcf**2
+            itwp = itwp+waterline_interpolation_y[i]**3*4
+    itwp = 2/9*np.float(itwp)*lwl/(len(waterline_interpolation_y)-1)
+    # itwp = cwp**2/11.7*lwl*bwl**3 # empirical method
+	# longitudinal moment of inertia
+    itwplong=0
+    for i in range (1,(len(waterline_interpolation_y)-1)):
+        if (i%2)==0:
+            itwplong = itwplong+2*waterline_interpolation_y[i]*waterline_interpolation_x[i]**2
+        else:
+            itwplong = itwplong+4*waterline_interpolation_y[i]*waterline_interpolation_x[i]**2
+	itwplong = 2/3*np.float(itwplong)*lwl/(len(waterline_interpolation_y)-1)-awp*lcf**2
     bmt = itwp/disp
     bmlong = itwplong/disp
-    kb = tc*(5/6-cb/(3*cwp))     #source
+    kb = tc*(5/6-cb/(3*cwp))     # source
     kg = 0.1                     # is it a good guess?
     gmt = kb+bmt-kg
     gmlong = kb+bmlong-kg
     
-    json.dump({'alcb': alcb, 'category': boatcategory, 'loa': loa, 'lwl': lwl, 'disp': disp, 'awp': awp, 'lcf': lcf, 'lcb': lcb, 'beamtransom': beamtransom, 'tc': tc, 'alpha_f_sac': alpha_f_sac, 'alpha_i_sac': alpha_i_sac, 'beta_n': beta_n, 'cwp': cwp, 'cb': cb, 'cm': cm, 'cp': cp, 'bwl': bwl, 'scb': scb, 'am': am, 'itwp': itwp, 'bmt': bmt, 'kb': kb, 'kg': kg, 'gmt': gmt, 'gmlong': gmlong}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
-    '''
-    json.dump({'lwl': lwl}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    json.dump({'alcb': alcb, 'lwl': lwl, 'disp': disp, 'awp': awp, 'lcf': lcf, 'lcb': lcb, 'tc': tc, 'beta_n': beta_n, 'cwp': cwp, 'cb': cb, 'cm': cm, 'cp': cp, 'bwl': bwl, 'scb': scb, 'am': am, 'itwp': itwp, 'bmt': bmt, 'kb': kb, 'kg': kg, 'gmt': gmt, 'gmlong': gmlong}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     
-    return 'Displacement: {} m3'.format(round(disp,2)), html.Br(), 'Waterplane Area: {} m2'.format(round(awp,2)), html.Br(), 'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(), 'Canoe Body Surface Area: {} m2'.format(round(scb,2)), html.Br(), 'Itwp: {} m3'.format(round(disp,2)), html.Br(), 'BMt: {} m3'.format(round(disp,2)), html.Br(), 'KB: {} m3'.format(round(disp,2)), html.Br(), 'GMt: {} m3'.format(round(disp,2))
+    return 'Displacement: {} m3'.format(round(disp,2)), html.Br(), 'Waterplane Area: {} m2'.format(round(awp,2)), html.Br(), 'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(), 'Wetted Surface Area: {} m2'.format(round(scb,2)), html.Br(), 'Transverse Moment of Inertia (It): {} m4'.format(round(disp,2)), html.Br(), 'Metacentric Radius (BM): {} m'.format(round(disp,2)), html.Br(), 'Vertical Centre of Buoyancy (KB): {} m'.format(round(disp,2)), html.Br(), 'Metacentric Height(GM): {} m'.format(round(disp,2))
