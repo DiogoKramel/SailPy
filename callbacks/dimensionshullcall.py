@@ -297,7 +297,7 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
 
     awp = cwp*lwl*bwl
     disp = cb*lwl*bwl*tc
-    am = cm*bwl*tc          # mid section area
+    am = cm*bwl*tc # mid section area
     cp = disp/(am*lwl)
     
     scb_tot = 0        # lateral area of canoe body
@@ -340,8 +340,8 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
         html.Col([
             'Displacement: {} m3'.format(round(disp,2)), html.Br(), 
             'Waterplane Area: {} m2'.format(round(awp,2)), html.Br(),
-            'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(),
-            'Canoe Body Surface Area: {} m2'.format(round(scb,2))
+            #'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(),
+            #'Canoe Body Surface Area: {} m2'.format(round(scb,2))
         ]),
         html.Col([
             'Itwp: {} m3'.format(round(disp,2)), html.Br(), 
