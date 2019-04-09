@@ -280,17 +280,17 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     
     sac_obj = codecs.open('assets/data/sacsolution.json', 'r', encoding='utf-8').read()
     sac_solution = json.loads(sac_obj)
-    sn_sections = np.asarray(sac_solution["sn_sections"])
+    sn_sections = np.asarray(sac_solution['sn_sections'])
     wl_obj = codecs.open('assets/data/wlsolution.json', 'r', encoding='utf-8').read()
     wl_solution = json.loads(wl_obj)
-    bn_sections = np.asarray(wl_solution["bn_sections"])
-    y_i_wl = np.asarray(wl_solution["y_i_wl"])
-    x_i_wl = np.asarray(wl_solution["x_i_wl"])
+    bn_sections = np.asarray(wl_solution['bn_sections'])
+    y_i_wl = np.asarray(wl_solution['y_i_wl'])
+    x_i_wl = np.asarray(wl_solution['x_i_wl'])
     keel_obj = codecs.open('assets/data/keelsolution.json', 'r', encoding='utf-8').read()
     keel_solution = json.loads(keel_obj)
-    tn_sections = np.asarray(keel_solution["tn_sections"])
-    y_i_keel = np.asarray(keel_solution["y_i_keel"])
-    x_i_keel = np.asarray(keel_solution["x_i_keel"])
+    tn_sections = np.asarray(keel_solution['tn_sections'])
+    y_i_keel = np.asarray(keel_solution['y_i_keel'])
+    x_i_keel = np.asarray(keel_solution['x_i_keel'])
     section_solution=section_solve(tn_sections, bn_sections, sn_sections, lwl, np.float(beta_n))
     section_y_sections=section_solution[1]
     section_z_sections=section_solution[2]
@@ -336,6 +336,4 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     '''
     json.dump({'lwl': lwl}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     
-    return 'Displacement: {} m3'.format(round(disp,2)), html.Br(), 'Waterplane Area: {} m2'.format(round(awp,2)), html.Br(), 'Itwp: {} m3'.format(round(disp,2)), html.Br(), 'BMt: {} m3'.format(round(disp,2)), html.Br(), 'KB: {} m3'.format(round(disp,2)), html.Br(), 'GMt: {} m3'.format(round(disp,2)), html.Br(), 
-    #'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(),
-    #'Canoe Body Surface Area: {} m2'.format(round(scb,2))
+    return 'Displacement: {} m3'.format(round(disp,2)), html.Br(), 'Waterplane Area: {} m2'.format(round(awp,2)), html.Br(), 'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(), 'Canoe Body Surface Area: {} m2'.format(round(scb,2)), html.Br(), 'Itwp: {} m3'.format(round(disp,2)), html.Br(), 'BMt: {} m3'.format(round(disp,2)), html.Br(), 'KB: {} m3'.format(round(disp,2)), html.Br(), 'GMt: {} m3'.format(round(disp,2))
