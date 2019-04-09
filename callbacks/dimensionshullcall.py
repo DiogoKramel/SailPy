@@ -299,7 +299,7 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     disp = cb*lwl*bwl*tc
     am = cm*bwl*tc # mid section area
     cp = disp/(am*lwl)
-    
+    '''
     scb_tot = 0        # lateral area of canoe body
     for z in range(0, 10):
         for i in range (1, 10):
@@ -309,7 +309,7 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     scb = np.float(scb_tot)/10*lwl*2*2.2
     alcb = -simps(y_i_keel, x_i_keel)
     
-    '''
+    
     sum=0
     for i in range (1,(len(y_i_wl)-1)):
         if (i%2)==0:
@@ -338,15 +338,15 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     
     return html.Div([
         html.Col([
-            'Displacement: {} m3'.format(round(disp,2)), html.Br(), 
-            'Waterplane Area: {} m2'.format(round(awp,2)), html.Br(),
+            html.P('Displacement: {} m3'.format(round(disp,2))), html.Br(), 
+            html.P('Waterplane Area: {} m2'.format(round(awp,2))), html.Br(),
             #'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(),
             #'Canoe Body Surface Area: {} m2'.format(round(scb,2))
         ]),
         html.Col([
-            'Itwp: {} m3'.format(round(disp,2)), html.Br(), 
-            'BMt: {} m3'.format(round(disp,2)), html.Br(), 
-            'KB: {} m3'.format(round(disp,2)), html.Br(), 
-            'GMt: {} m3'.format(round(disp,2)), html.Br(), 
+            html.P('Itwp: {} m3'.format(round(disp,2))), html.Br(), 
+            html.P('BMt: {} m3'.format(round(disp,2))), html.Br(), 
+            html.P('KB: {} m3'.format(round(disp,2))), html.Br(), 
+            html.P('GMt: {} m3'.format(round(disp,2))), html.Br(), 
         ]),
     ])

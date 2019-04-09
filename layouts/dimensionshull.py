@@ -68,8 +68,6 @@ hull = dbc.Container([
 	#dbc.Row([
 	#	dbc.Col([
 			#html.Button(id='export-dimensions', type='submit', children='Save dimensions'),
-			
-	#		html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
 	#	], className="update mt-4")
 	#]),
     #html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
