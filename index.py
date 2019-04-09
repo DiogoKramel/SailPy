@@ -72,7 +72,7 @@ landpage = html.Div([
             html.P("Application Name is an opensource Python application for conceptual sailboat design with an object-oriented approach. The sailboat is simulated in different conditions, to which optimization tools are applied to evaluate its performance, assisting the definition of the best set of dimensions in order to meet the user's needs. This library encourages suggestions, new features, improvements, and report of bugs.", className="justify"),
             html.Hr(className="my-2"),
             html.Br(),
-            html.P(dbc.Button(dcc.Link(html.Div(html.Div("Start the analysis", className="btnupdate"), className='fa fa-arrow-circle-right btnupdate'), href=f"/application", style={'color': 'white'})))
+            html.P(dbc.Button(dcc.Link(html.Div(html.Div("Start the analysis", className="btnupdate"), className='fa fa-arrow-circle-right btnupdate'), href=f"/application", style={'color': 'white'}))),
         ], className='landingjumbo'),
     ], className='middle'),
 ], className="backgroundlanding")

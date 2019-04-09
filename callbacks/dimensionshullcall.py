@@ -4,10 +4,12 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
+import dash_table
 import json, codecs
 import numpy as np
 from scipy.integrate import simps
 import plotly.graph_objs as go  #DELETE
+import pandas as pd
 
 from functions import keel_solve, sac_solve, section_solve, wl_solve
 
@@ -264,10 +266,6 @@ def test_feasibility(cwp, bwl, lwl, cb, tc, cm):
         alert = 'The study sailboat is feasible. You can proceed'
     return dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '5pt', 'display': 'inline-block'})
 
-
-
-
-
 @app.callback(Output('other-dimensions', 'children'), [Input('lwl','value'), Input('bwl','value'), Input('cb', 'value'), Input('cwp', 'value'), Input('lcf', 'value'), Input('lcb', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('beta_n', 'value')])
 def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     cwp = np.float(cwp)
@@ -336,4 +334,14 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     
     json.dump({'alcb': alcb, 'lwl': lwl, 'disp': disp, 'awp': awp, 'lcf': lcf, 'lcb': lcb, 'tc': tc, 'beta_n': beta_n, 'cwp': cwp, 'cb': cb, 'cm': cm, 'cp': cp, 'bwl': bwl, 'scb': scb, 'am': am, 'itwp': itwp, 'bmt': bmt, 'kb': kb, 'kg': kg, 'gmt': gmt, 'gmlong': gmlong, 'alcb_coefficient': alcb_coefficient}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     
-    return 'Displacement: {} m3'.format(round(disp,2)), html.Br(), 'Waterplane Area: {} m2'.format(round(awp,2)), html.Br(), 'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(), 'Wetted Surface Area: {} m2'.format(round(scb,2)), html.Br(), 'Transverse Moment of Inertia (It): {} m4'.format(round(disp,2)), html.Br(), 'Metacentric Radius (BM): {} m'.format(round(disp,2)), html.Br(), 'Vertical Centre of Buoyancy (KB): {} m'.format(round(disp,2)), html.Br(), 'Metacentric Height(GM): {} m'.format(round(disp,2))
+    data = {'Parameters' : ['Displacement', 'Waterplane Area', 'Canoe Body Lateral Area', 'Wetted Surface Area', 'Transverse Moment of Inertia', 'Metacentric Radius', 'Vertical Centre of Buoyancy (KB)', 'Metacentric Height(GM)'], 'Values' : [round(disp,2), round(awp,2), round(alcb,2), round(scb,2), round(itwp,2), round(bmt,2), round(kg,2), round(gmt,2)], 'Unit' : ['m3', 'm2', 'm2', 'm2', 'm4', 'm', 'm', 'm']}
+    df = pd.DataFrame(data)
+
+    return dash_table.DataTable(
+        columns=[{"name": i, "id": i} for i in df.columns],
+        data=df.to_dict("rows"),
+        style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '80px', 'whiteSpace': 'normal'},
+        style_cell_conditional=[{'if': {'column_id': 'Parameters'}, 'textAlign': 'left'}],
+        style_as_list_view=True,
+        style_header={'fontWeight': 'bold'},
+    )

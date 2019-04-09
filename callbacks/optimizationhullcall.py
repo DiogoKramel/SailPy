@@ -32,7 +32,7 @@ def callback(childrensize):
                 dbc.Label("Waterline length"), html.Br(),
                 dbc.Input(value="{}".format(round(lwl*0.9,2)), id='lwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 html.P("{}m".format(round(lwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
-                dbc.Input(value="{}".format(round(loa*0.3048,2)), id='lwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                dbc.Input(value="{}".format(round(lwl*1.1,2)), id='lwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
                 html.Br(), dbc.Label("Waterline beam"), html.Br(),
                 dbc.Input(value="{}".format(round(lwl/5,2)), id='bwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
