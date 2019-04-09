@@ -53,9 +53,9 @@ footer = html.Nav([
             dbc.Col(logocapes, width="auto"),
             dbc.Col([
                 html.P("Source code released under the", style={ 'display': 'inline-block', 'margin-right': '3px'}),
-                dcc.Link('MIT license', href='https://opensource.org/licenses/MIT', style={ 'display': 'inline-block'}),
+                html.A('MIT license', href='https://opensource.org/licenses/MIT', style={ 'display': 'inline-block'}),
                 html.P(". Website and documentation licensed under", style={ 'display': 'inline-block', 'margin-right': '3px'}), 
-                dcc.Link('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', style={ 'display': 'inline-block'}), 
+                html.A('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', style={ 'display': 'inline-block'}), 
                 html.P(".", style={ 'display': 'inline-block', 'margin-top':'10px'}),
             ], style={ 'display': 'inline-block'}),
         ]),
@@ -84,7 +84,7 @@ tabs = html.Div([
         dcc.Tab(label='Optimization I', value='tab-3'),
         dcc.Tab(label='Results I', value='tab-4'),
         dcc.Tab(label='Appendages & Sail', value='tab-5'),
-		dcc.Tab(label='Optimization II', value='tab-6'),
+        dcc.Tab(label='Optimization II', value='tab-6'),
         dcc.Tab(label='Results II', value='tab-7'),
     ], style={'height': '30pt', 'font-size': '11pt', 'line-height': '11pt', 'margin-bottom': '5pt'}),
 ])
@@ -101,16 +101,17 @@ app.layout = html.Div([
 
 @app.callback(Output('page-content', 'children'), [Input('tabs-styled-with-inline', 'value')])
 def display_page(tab):
+    space = html.Div([html.Br(), html.Br(), html.Br(), html.Br(), html.Br()])
     if tab == 'tab-1':
-        return introduction.introduction, footer
+        return introduction.introduction, space, footer
     elif tab == 'tab-2':
-        return dimensionshull.hull, footer
+        return dimensionshull.hull, space, footer
     elif tab == 'tab-3':
-        return optimizationhull.optimizationhull, footer
+        return optimizationhull.optimizationhull, space, footer
     elif tab == 'tab-4':
-        return resultshulll.resultshull, resultshulll.resultsplus, footer
+        return resultshulll.resultshull, resultshulll.resultsplus, space, footer
     elif tab == 'tab-5':
-        return dimensionsappendages.appendages, footer
+        return dimensionsappendages.appendages, space, footer
     else:
         return ''
 

@@ -26,8 +26,8 @@ hull = dbc.Container([
                     className="regularfont"
                 ),
                 html.Br(),
-                dbc.Label("Overall lengt"),
-                html.Div(id='output-loa', style={'display': 'inline-block'}),
+                dbc.Label("Overall length"),
+                html.Div(id='loa-ft', style={'display': 'inline-block'}),
                 dcc.Slider(
                     id='loa',
                     min=20,
@@ -38,10 +38,9 @@ hull = dbc.Container([
                 ),
                 html.Br(),
             ]),
-            html.Div(id="output-primary", style={'width': '50%'}),
-            html.Div(id="output-secondary"),
-            html.Div(id="output-tertiary", style={'width': '50%'}),
-            html.Br(), html.Br(), html.Br(),
+            html.Div(id="main-dimensions", style={'width': '75%'}),
+            html.Div(id="form-coefficients"),
+            html.Div(id="hull-adjustmetns", style={'width': '75%'}),
         ], className = "justify", md=4),
         dbc.Col([
             html.H4("Lines Drawing"),
@@ -53,21 +52,26 @@ hull = dbc.Container([
             html.Br(),
             html.Div(dcc.Graph(id='insert-section', style={'width': 'inherit'})),
             html.Br(),
-            html.H4("Testing fitness"),
-            html.H5("DELFT Series"),
-            html.Div(id='output-bwlsac', style={'display': 'none'}),
+            html.H4("Testing fitness according to DELFT Series"),
             html.Div(id="output-lwlbwl", className="regularfont"),
             html.Div(id="output-bwltc", className="regularfont"),
             html.Div(id="output-lwldisp", className="regularfont"),
             html.Div(id="output-loadingfactor", className="regularfont"),
             html.Div(id="output-prismatic", className="regularfont"),
-            html.H5("Other evaluations"),
-            html.Div(id="output-conc", className="regularfont"),
+            html.H4("Other dimensions"),
+			html.Div(id='other-dimensions', className="regularfont"),
             html.Br(),
             html.Div(id="output-feasibility"),
         ], className = "justify", md=8)
     ]),
-    html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
+	#dbc.Row([
+	#	dbc.Col([
+			#html.Button(id='export-dimensions', type='submit', children='Save dimensions'),
+			
+	#		html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
+	#	], className="update mt-4")
+	#]),
+    #html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
     #dbc.Row([
     #    dbc.Col([
     #        html.Br(),

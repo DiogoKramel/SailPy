@@ -89,8 +89,7 @@ def create_sac(loa_value, cb, lcb_value, alpha_f_sac_value, alpha_i_sac_value, b
         )
     }
 
-@app.callback(Output('insert-wl', 'figure'),
-    [Input('lcf', 'value'), Input('cwp', 'value'), Input('lwl', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value')])
+@app.callback(Output('insert-wl', 'figure'), [Input('lcf', 'value'), Input('cwp', 'value'), Input('lwl', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value')])
 def create_wl(lcf_value, cwp, lwl_value, beamtransom_value, bwl):
     wl_solution=wl_solve(np.float(lcf_value), np.float(cwp), np.float(lwl_value), np.float(beamtransom_value), np.float(bwl),),
     return {
