@@ -299,7 +299,7 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     disp = cb*lwl*bwl*tc
     am = cm*bwl*tc # mid section area
     cp = disp/(am*lwl)
-    '''
+    
     scb_tot = 0        # lateral area of canoe body
     for z in range(0, 10):
         for i in range (1, 10):
@@ -308,7 +308,7 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     # CORRIGIR POR QUE *2.2??
     scb = np.float(scb_tot)/10*lwl*2*2.2
     alcb = -simps(y_i_keel, x_i_keel)
-    
+    '''
     
     sum=0
     for i in range (1,(len(y_i_wl)-1)):
