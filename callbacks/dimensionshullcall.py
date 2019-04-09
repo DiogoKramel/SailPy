@@ -299,7 +299,7 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     cp = disp/(am*lwl)
     # surface area of canoe body by Larsson pag 33
     scb = 0        
-    for i in range (1,(len(x_i_sac)-1)):
+    for i in range (1,(len(sac_interpolation_x)-1)):
         if (i%2) == 0:
             scb = scb+sac_interpolation_y[i]*2
         else:
