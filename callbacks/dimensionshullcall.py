@@ -35,18 +35,18 @@ def main_dimensions(boatcategory, loa):
         html.Div([
             dbc.Label('Waterline Length [m]'),
             dbc.Input(type='text', id='lwl', bs_size='sm', value='{}'.format(round(lwl,2))),
-            html.Div(id='limits-lwl', className="limits"),
+            html.Div(id='limits-lwl', className='limits'),
             dbc.Label('Waterline Beam [m]'),
             dbc.Input(type='text', id='bwl', bs_size='sm', value='{}'.format(round(bwl,2))),
             dbc.Label('Draft Canoe Body [m]'),
             dbc.Input(type='text', id='tc', bs_size='sm', value='{}'.format(round(tc,2))),
-            html.Div(id='limits-tc', className="limits"),
+            html.Div(id='limits-tc', className='limits'),
             dbc.Label('Longitudinal Centre of Buyoancy (LCB) [m]'),
             dbc.Input(type='text', id='lcb', bs_size='sm', value='{}'.format(round(lcb,2))),
-            html.Div(id='limits-lcb', className="limits"),
+            html.Div(id='limits-lcb', className='limits'),
             dbc.Label('Longitudinal Centre of Flotation (LCF) [m]'),
             dbc.Input(type='text', id='lcf', bs_size='sm', value='{}'.format(round(lcf,2))),
-            html.Div(id='limits-lcf', className="limits"),
+            html.Div(id='limits-lcf', className='limits'),
             dbc.Label('Beam at the Transom [m]'),
             dbc.Input(type='text', id='beamtransom', bs_size='sm', value='0'),
             html.Br(),
@@ -336,17 +336,6 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     '''
     json.dump({'lwl': lwl}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     
-    return html.Div([
-        html.Col([
-            html.P('Displacement: {} m3'.format(round(disp,2))), html.Br(), 
-            html.P('Waterplane Area: {} m2'.format(round(awp,2))), html.Br(),
-            #'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(),
-            #'Canoe Body Surface Area: {} m2'.format(round(scb,2))
-        ]),
-        html.Col([
-            html.P('Itwp: {} m3'.format(round(disp,2))), html.Br(), 
-            html.P('BMt: {} m3'.format(round(disp,2))), html.Br(), 
-            html.P('KB: {} m3'.format(round(disp,2))), html.Br(), 
-            html.P('GMt: {} m3'.format(round(disp,2))), html.Br(), 
-        ]),
-    ])
+    return 'Displacement: {} m3'.format(round(disp,2)), html.Br(), 'Waterplane Area: {} m2'.format(round(awp,2)), html.Br(), 'Itwp: {} m3'.format(round(disp,2)), html.Br(), 'BMt: {} m3'.format(round(disp,2)), html.Br(), 'KB: {} m3'.format(round(disp,2)), html.Br(), 'GMt: {} m3'.format(round(disp,2)), html.Br(), 
+    #'Canoe Body Lateral Area: {} m2'.format(round(alcb,2)), html.Br(),
+    #'Canoe Body Surface Area: {} m2'.format(round(scb,2))
