@@ -1,16 +1,56 @@
-## About this application:
+# About SailPy
 
-**App Name** is a Python application for conceptual sailboat design with an object-oriented paradigm. App Name implements several routines in order to optimize the dimensions of the hull and all appendages of a sailboat. 
+**SailPy** is a Python application for conceptual sailboat design with an object-oriented paradigm. **SailPy**  implements several routines in order to optimize the dimensions of the hull and all appendages of a sailboat. 
 
-The application was developed by Diogo Kramel and is maintained by the Polytechnic School of the University of São Paulo in São Paulo. For documentation and other resources, visit our [wiki](https://github.com/AppName/wiki).
+The application was developed by Diogo Kramel as result of his Master Thesis and is maintained by the Polytechnic School of the University of São Paulo in São Paulo.
+
+## Key features
+
+- Calculating and plotting the sections for racer and cruiser sailboats
+- Set the limits of optimization for each dimensions
+- Download all the sailboats dimensions created during the optimization proccess
+- Assistance of dynamic representation to orient the user on chosing the best set of dimensions
 
 ## Contributing
 
-When contributing, fork the repository and send pull requests with your commits. If your modifications are only to files related to examples and you have pull request authorization, you can approve them by yourself. If not, wait for review and approval by the development team.
+When contributing, fork the repository and send pull requests with your commits. Wait for review and approval by the development team.
 
-You are also welcome to create [issues](https://github.com/AppName/issues) reporting bugs or suggesting improvements and features for further development.
+You are also welcome to create [issues] (https://github.com/DiogoKramel/SailPy/issues) reporting bugs or suggesting improvements and features for further development.
 
-##### To run this app locally:
+## What do the files do?
+
+A short summary of the files structure is provided below to encourage users to modify them to their own usage.
+
+[app.py](app.py)
+
+External sources.
+
+[index.py](index.py)
+
+The app itself. It organizes the layout and how each page is called when the user moves one tab next.
+
+[assets/*]()
+
+This folder contains all images displayed in the app layout. It also contains the files to store relevant data between each step.
+
+[callbacks/*]()
+
+Callbacks are all the functions that update the data to the scripts when the user changes an input property. 
+
+[env/*]()
+
+It stores all the libraries imported throughout the application. They are listed at [requirements.txt](requirements.txt) as well.
+
+[functions/*]()
+
+In this folder you can find the scripts for calculating the resistance components, the Velocity Prediction Programme, the parametric hull, and the genetic algorithm.
+
+[layouts/*]()
+
+Contains the layouts for each page in the multi-page structure, connecting the callbacks and functions to the user interface.
+
+
+## To run the app locally
 
 You can clone or download this repo:
 
@@ -51,6 +91,10 @@ Once the dependencies have been installed, run the application:
 python app.py
 ```
 
-Then visit http://127.0.0.1:8050/introduction
-
 More info: https://packaging.python.org/guides/installing-using-pip-and-virtualenv/
+
+## Licensing
+
+SailPy is licensed under [https://opensource.org/licenses/MIT](MIT).
+
+***
