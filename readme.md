@@ -15,7 +15,7 @@ The application was developed by Diogo Kramel as result of his Master Thesis and
 
 When contributing, fork the repository and send pull requests with your commits. Wait for review and approval by the development team.
 
-You are also welcome to create [issues] (https://github.com/DiogoKramel/SailPy/issues) reporting bugs or suggesting improvements and features for further development.
+You are also welcome to create [issues](https://github.com/DiogoKramel/SailPy/issues) reporting bugs or suggesting improvements and features for further development.
 
 ## What do the files do?
 
@@ -29,7 +29,7 @@ External sources.
 
 The app itself. It organizes the layout and how each page is called when the user moves one tab next.
 
-[assets/*]()
+[assets/*](assets/)
 
 This folder contains all images displayed in the app layout. It also contains the files to store relevant data between each step.
 
@@ -37,15 +37,15 @@ This folder contains all images displayed in the app layout. It also contains th
 
 Callbacks are all the functions that update the data to the scripts when the user changes an input property. 
 
-[env/*]()
+[env/*](env/)
 
 It stores all the libraries imported throughout the application. They are listed at [requirements.txt](requirements.txt) as well.
 
-[functions/*]()
+[functions/*](functions/)
 
 In this folder you can find the scripts for calculating the resistance components, the Velocity Prediction Programme, the parametric hull, and the genetic algorithm.
 
-[layouts/*]()
+[layouts/*](layouts/)
 
 Contains the layouts for each page in the multi-page structure, connecting the callbacks and functions to the user interface.
 
