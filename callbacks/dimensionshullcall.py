@@ -21,13 +21,17 @@ def loa_ft(loa):
 @app.callback(Output('main-dimensions', 'children'), [Input('boat-category', 'value'), Input('loa', 'value')])
 def main_dimensions(boatcategory, loa):
     if boatcategory == 'cruiser':
-        lwl = loa*0.3048*0.90
-        bwl = lwl/3.219
-        tc = bwl/4.324
+        lwl = loa*0.3048*0.92
+        #bwl = lwl/3.219
+        bwl = 0.115*lwl+2.1667
+        if lwl < 10:
+            bwl = 0.155*lwl+2.1667
+        #tc = bwl/4.324
+        tc = lwl/18
         lcb = (50-3.29)/100*lwl
         lcf = (50-6.25)/100*lwl
     if boatcategory == 'racer':
-        lwl = loa*0.3048*0.95
+        lwl = loa*0.3048
         bwl = lwl/3.155
         tc = bwl/3.992
         lcb = (50-2.29)/100*lwl

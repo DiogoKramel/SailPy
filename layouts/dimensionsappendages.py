@@ -9,13 +9,13 @@ import numpy as np
 
 from callbacks import dimensionsappendagescall, dimensionsappendagesplots
 
-dimensions = pd.read_csv("assets/data/initialhull.csv")
-lwl = np.float(min(dimensions["LWL"]))
-bwl = np.float(min(dimensions["BWL"]))
-disp = np.float(min(dimensions["Displacement"]))
-tc = np.float(min(dimensions["Draft"]))
-lcb = np.float(min(dimensions["LCB"]))
-lcf = np.float(min(dimensions["LCF"]))
+#dimensions = pd.read_csv("assets/data/initialhull.csv")
+lwl = 10# np.float(min(dimensions["LWL"]))
+bwl = 3#np.float(min(dimensions["BWL"]))
+disp = 8#np.float(min(dimensions["Displacement"]))
+tc = 0.5#np.float(min(dimensions["Draft"]))
+lcb = 5#np.float(min(dimensions["LCB"]))
+lcf = 5#np.float(min(dimensions["LCF"]))
 
 appendages = dbc.Container([
 	dbc.Row(
@@ -61,10 +61,10 @@ appendages = dbc.Container([
 			dcc.Dropdown(
 				id='sailset',
 				options=[
-					{"label": "Mainsail and foresail", "value": '1'},
-					{"label": "Mainsail and spinnaker", "value": '2'},
-					{"label": "Mainsail, foresail, and spinnaker", "value": '3'},
-					{"label": "Mainsail only", "value": '4'},
+					{"label": "Sloop: Mainsail and foresail", "value": '1'},
+					{"label": "Cat: Mainsail and spinnaker", "value": '2'},
+					{"label": "Cutter: Mainsail, foresail, and spinnaker", "value": '3'},
+					{"label": "Cat: Mainsail only", "value": '4'},
 				],
 				value='1',
 				placeholder='Choose one saill plan',

@@ -6,9 +6,17 @@ import plotly.graph_objs as go
 import dash_daq as daq
 from app import app
 from dash.dependencies import Input, Output, State
+import json, codecs
+import numpy as np
 
 from callbacks import optimizationhullcall
 
+dimensionsobj = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
+dimensions = json.loads(dimensionsobj)
+for item in dimensions:
+	item = str(item)
+	if item != "category":
+		globals()[item] = np.float(dimensions[item])
 
 optimizationhull = dbc.Container([
     dbc.Row([
@@ -90,6 +98,7 @@ optimizationhull = dbc.Container([
             html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
             dbc.Row([
                 dbc.Col([
+					dbc.Label('Resistance Weight'),
                     html.Div(id='resistance-weight', style={'display': 'inline-block'}),
                     daq.Knob(
                         id='weight1',
@@ -100,6 +109,7 @@ optimizationhull = dbc.Container([
                     ),
                 ]),
                 dbc.Col([
+					dbc.Label('Comfort Ratio Weight'),
                     html.Div(id='comfort-weight', style={'display': 'inline-block'}),
                     daq.Knob(
                         id='weight2',
@@ -138,7 +148,37 @@ optimizationhull = dbc.Container([
             ]),
             html.H4("Dimensions optimized"),
             html.P("""The limits of each dimension optimized at this stage can be set below. Standard values are recommended, but they can be stretched to explore more widely the dimensions space. The algorithm will evaluate which solutions are feasible and automatically exclude the ones that do not fit the criteria. Bear in mind that the values of minimum and maximum may affect performance and convergence. """),
-            html.Div(id="dimensions-chosen-optimization")
+            html.Div([
+				dbc.Row([
+					dbc.Col([
+						dbc.Label("Waterline length"), html.Br(),
+						dbc.Input(value="{}".format(round(lwl*0.9,2)), id='lwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+						html.P("{}m".format(round(lwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
+						dbc.Input(value="{}".format(round(lwl*1.1,2)), id='lwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+
+						html.Br(), dbc.Label("Waterline beam"), html.Br(),
+						dbc.Input(value="{}".format(round(lwl/5,2)), id='bwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+						html.P("{}m".format(round(bwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
+						dbc.Input(value="{}".format(round(lwl/2.73,2)), id='bwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+
+						html.Br(), dbc.Label("Draft"), html.Br(),
+						dbc.Input(value="{}".format(round(bwl/15,2)), type='text', id='tc-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+						html.P("{}m".format(round(tc,2)), style={'display': 'inline-block', 'padding': '10px'}),
+						dbc.Input(value="{}".format(round(bwl/2.46,2)), type='text', id='tc-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+					]),
+					dbc.Col([
+						html.Br(), dbc.Label("LCB"), html.Br(),
+						dbc.Input(value="{}".format(round(lwl*0.418,2)), type='text', id='lcb-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+						html.P("{}m".format(round(lcb,2)), style={'display': 'inline-block', 'padding': '10px'}),
+						dbc.Input(value="{}".format(round(lwl*0.5,2)), type='text', id='lcb-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+
+						html.Br(),dbc.Label("LCF"), html.Br(),
+						dbc.Input(value="{}".format(round(lwl*0.405,2)), type='text', id='lcf-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+						html.P("{}m".format(round(lcf,2)), style={'display': 'inline-block', 'padding': '10px'}),
+						dbc.Input(value="{}".format(round(lwl*0.482,2)), type='text', id='lcf-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+					])
+				])
+			])
         ], className = "justify mt-4", md=6),
     ]),
 	dbc.Row([
@@ -147,7 +187,6 @@ optimizationhull = dbc.Container([
 			html.Button(id='export-ga', type='submit', children='Run optimization'),
             html.Br(), html.Br(),
             html.Div(id='output-button'),
-			html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
 		], className="update mt-4")
 	])
 ])

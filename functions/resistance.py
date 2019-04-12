@@ -103,12 +103,24 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, sav
     loa = 11
     CR = disp/(0.65*(0.7*lwl+0.3*loa)*bwl**1.33)		# comfort ratio
     
-    constraint1 = False
-    constraint2 = False
-    constraint3 = False
-    constraint4 = False
-    constraint5 = False
+
+    # 5 EXPORT TO CSV
+    rows = []
+    with open("assets/data/"+savefile+".csv", "r") as csvfile:
+        csvreader = csv.reader(csvfile) 
+        for row in csvreader: 
+            rows.append(row)
+        index = csvreader.line_num
+    
+    constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7  = False, False, False, False, False, False, False
     valid = False
+    br = 40		
+    boa = bwl*1.2
+    dispmass = disp*1025
+    ssv = boa**2/(br*tc*disp**(1/3))       
+    avs = 110+(400/(ssv-10))
+    cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
+
     if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
         constraint1 = True
     if (bwl/tc) > 19.39 or (bwl/tc) < 2.46:
@@ -119,20 +131,18 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, sav
         constraint4 = True
     if (disp/(lwl*bwl*tc)) > 0.4 or (disp/(lwl*bwl*tc)) < 0.3:
         constraint5 = True
-    if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False:
+    if avs < 110:
+        constraint6 = True
+    if cs > 2:
+        constraint7 = True
+    if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False and constraint6 == False and constraint7 == False:
         valid = True
 
-    # 5 EXPORT TO CSV
-    rows = []
-    with open("assets/data/"+savefile+".csv", "r") as csvfile:
-        csvreader = csv.reader(csvfile) 
-        for row in csvreader: 
-            rows.append(row)
-        idind = csvreader.line_num
-    
-    fields=[idind, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), format((np.round(Rt,4)-20000*np.round(CR,4)), '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, valid]
+    exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), format((np.round(Rt,4)-20000*np.round(CR,4)), '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid]
+    print(avs)
+    print(cs)
     with open("assets/data/"+savefile+".csv", "a") as file:
         writer = csv.writer(file, delimiter=',')
-        writer.writerow(fields)
+        writer.writerow(exportdata)
     
     return Rt, Rv, Ri, Rr, Rincli, CR

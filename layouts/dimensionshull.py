@@ -13,7 +13,8 @@ hull = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H4('Main parameters'),
-            html.P("""Set the category and length that will serve as the basis to build the regressions for the primary and secondary dimensions found below. You can follow how your choices affect the hull through the plots."""),
+            html.P("""Set the category and overall length that will be the basis hull to build the regressions for each of the dimensions below. Following how the plots beahve, you can understand how your choices affect the hull."""),
+			html.P("""Have in mind that the plots are mere representations and tend not to be accurate for extreme cases. Even if the sections are incongruent, you can advance if the limits are respected."""),
             dbc.FormGroup([
                 dbc.Label('Category'),
                 dbc.RadioItems(
@@ -35,7 +36,7 @@ hull = dbc.Container([
                     max=50,
                     value=40,
                     step=1,
-                    marks={20: '20ft', 25: '25ft', 30: '30ft', 35: '35ft', 40: '40ft', 45: '45ft', 50: '50ft'},
+                    marks={20: '20ft', 25: '25ft', 30: '30ft', 35: '35ft', 40: '40ft', 45: '45ft', 50: '50ft', 55: '55ft'},
                 ),
                 html.Br(),
             ]),
@@ -65,19 +66,4 @@ hull = dbc.Container([
             html.Div(id='test-feasibility'),
         ], className = 'justify', md=8)
     ]),
-	#dbc.Row([
-	#	dbc.Col([
-			#html.Button(id='export-dimensions', type='submit', children='Save dimensions'),
-	#	], className="update mt-4")
-	#]),
-    #html.Br(), html.Br(),html.Br(), html.Br(),html.Br(),
-    #dbc.Row([
-    #    dbc.Col([
-    #        html.Br(),
-    #        html.Div(id='output-submit-dimensions',
-    #                 children='Enter a value and press submit', style={'display': 'none'}),
-    #        dbc.Button(dcc.Link("Submit dimensions and calculate preliminary results",
-    #                            href=f"/optimizationhull", style={'color': 'white'}), id="export-dimensions"),
-    #    ], width=5),
-    #], justify="center"),
 ], className='mt-4',)

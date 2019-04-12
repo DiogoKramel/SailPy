@@ -46,10 +46,10 @@ def create_sac(lwl, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, bwl, tc, cm)
             go.Scatter(
                 x = [sac_solution[0][5]],
                 y = [sac_solution[0][4]],
-                text = "Maximum SAC",
+                text = "SAC max",
                 textposition = ["top center"],
                 mode = "markers+text",
-                name = "SAC",
+                name = "Maximum SAC",
                 line = dict(color = "rgb(46, 117, 211)"),
                 cliponaxis = False,
             ),

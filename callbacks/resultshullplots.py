@@ -67,7 +67,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
                     cmin=1,
                     color=df["id"],
                     colorbar=dict(
-                        title='Generation'
+                        title='Offspring'
                     ),
                     colorscale='Viridis',
                     opacity = 0.5+0.5*df["id"]/max(df["id"]),
@@ -197,9 +197,7 @@ def update_y_timeseries(hoverData):
         )
     }
 
-@app.callback(
-    dash.dependencies.Output('plot-limits-lwl-bwl', 'figure'),
-    [Input('output-optimization', 'hoverData')])
+@app.callback(Output('plot-limits-lwl-bwl', 'figure'), [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
     dfinit = pd.read_csv("assets/data/initialhull.csv")
@@ -561,7 +559,6 @@ def update_y_timeseries(hoverData):
         )
     }
 
-
 @app.callback(
      Output('plot-parallel-dimensions', 'figure'),
     [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value')])
@@ -600,28 +597,53 @@ def update_output(resultshullaxisy, resultshullaxisx):
                 "b": 50,
                 "l": 50
             },
-        font=dict(size=12),
+            font=dict(size=12),
         )
     }
+datatable_all = pd.read_csv("assets/data/optimizationresistance.csv")
+datatable_valid = datatable_all.loc[datatable_all['valid']==True]
+datatable_unvalid = datatable_all.loc[datatable_all['valid']==False]
 
-@app.callback(Output("plot-dimensions", "children"), [Input("resultshullaxisx", "value")])
-def update_graph(resultshullaxisx):
+@app.callback(Output("plot-dimensions", "children"), [Input("resultshullaxisx", "value"), Input('datatable-interactivity', 'selected_rows')])
+def update_graph(resultshullaxisx, selected_row_indices):
+    if selected_row_indices is None:
+        selected_row_indices = []
+
+    print(selected_row_indices)
+    #selected_rows=[rows[i] for i in selected_row_indices]
+    #print(selected_rows)
     return html.Div([
             dcc.Graph(
                 id=column,
                 figure={
-                    "data": [{
-                            "x": df["id"],
-                            "y": df[column] if column in df else [],
-                            "type": "bar",
-                        }],
+                    'data': [
+                        go.Bar(
+                            x=datatable_valid["id"],
+                            y=datatable_valid[column] if column in datatable_valid else [],
+                            name='Valid',
+                        ),
+                        go.Bar(
+                            x=datatable_unvalid["id"],
+                            y=datatable_unvalid[column] if column in datatable_unvalid else [],
+                            marker=dict(color='red'),
+                            name='Not valid',
+                        ),
+                        go.Bar(
+                            x=datatable_all["id"].iloc[selected_row_indices],
+                            y=datatable_all[column].iloc[selected_row_indices] if column in datatable_unvalid else [],
+                            marker=dict(color='green'),
+                            name='Selected',
+                        ),
+                    ],
                     "layout": {
                         "xaxis": {"automargin": True},
                         "yaxis": {"automargin": True},
-                        "height": 150,
-                        "margin": {"t": 15, "l": 10, "r": 10, "b":0},
+                        "height": 100,
+                        "margin": {"t": 30, "l": 10, "r": 10, "b":0},
                         "title": column,
-                    },
+                        'font': dict(size=9),
+                        'barmode': 'overlay'
+                    },	
                 },
             )
             for column in ["LWL", "BWL", "Draft", "Resistance", "Comfort"]
