@@ -53,7 +53,7 @@ footer = html.Nav([
             dbc.Col(logocapes, width="auto"),
             dbc.Col([
                 html.P("Source code released under the", style={ 'display': 'inline-block', 'margin-right': '3px'}),
-                html.A('MIT license', href='https://opensource.org/licenses/MIT', style={ 'display': 'inline-block'}),
+                html.A('MIT license', href='https://opensource.org/licenses/MIT/', style={ 'display': 'inline-block'}),
                 html.P(". Website and documentation licensed under", style={ 'display': 'inline-block', 'margin-right': '3px'}), 
                 html.A('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', style={ 'display': 'inline-block'}), 
                 html.P(".", style={ 'display': 'inline-block', 'margin-top':'10px'}),
