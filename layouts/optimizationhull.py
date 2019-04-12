@@ -79,14 +79,12 @@ optimizationhull = dbc.Container([
             html.Br(),
             html.A('Read More about DEAP', href='https://deap.readthedocs.io/en/master/', target="_blank"),
             html.Br(), html.Br(),
-			html.H4("Selector [pending]"),
+			html.H4("Method of Selection"),
 			dcc.Dropdown(
 				id='ga-method', 
 				options=[
 					{'label': 'NSGA-II', 'value': '1'},
 					{'label': 'SPEA-II', 'value': '2'},
-					{'label': 'Double tournament', 'value': '3'},
-					{'label': 'Static Limit', 'value': '4'},
 				],
 				placeholder='Choose one method for selecting the individuals',
 				style={'width': '80%', 'font-size': '10pt'}
@@ -153,29 +151,32 @@ optimizationhull = dbc.Container([
 					dbc.Col([
 						dbc.Label("Waterline length"), html.Br(),
 						dbc.Input(value="{}".format(round(lwl*0.9,2)), id='lwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-						html.P("{}m".format(round(lwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
+						html.P("{}m".format(round(lwl,2)), style={'display': 'inline-block', 'padding': '5px'}),
 						dbc.Input(value="{}".format(round(lwl*1.1,2)), id='lwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
 						html.Br(), dbc.Label("Waterline beam"), html.Br(),
 						dbc.Input(value="{}".format(round(lwl/5,2)), id='bwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-						html.P("{}m".format(round(bwl,2)), style={'display': 'inline-block', 'padding': '10px'}),
+						html.P("{}m".format(round(bwl,2)), style={'display': 'inline-block', 'padding': '5px'}),
 						dbc.Input(value="{}".format(round(lwl/2.73,2)), id='bwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
 						html.Br(), dbc.Label("Draft"), html.Br(),
 						dbc.Input(value="{}".format(round(bwl/15,2)), type='text', id='tc-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-						html.P("{}m".format(round(tc,2)), style={'display': 'inline-block', 'padding': '10px'}),
+						html.P("{}m".format(round(tc,2)), style={'display': 'inline-block', 'padding': '5px'}),
 						dbc.Input(value="{}".format(round(bwl/2.46,2)), type='text', id='tc-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 					]),
 					dbc.Col([
-						html.Br(), dbc.Label("LCB"), html.Br(),
-						dbc.Input(value="{}".format(round(lwl*0.418,2)), type='text', id='lcb-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-						html.P("{}m".format(round(lcb,2)), style={'display': 'inline-block', 'padding': '10px'}),
-						dbc.Input(value="{}".format(round(lwl*0.5,2)), type='text', id='lcb-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-
-						html.Br(),dbc.Label("LCF"), html.Br(),
-						dbc.Input(value="{}".format(round(lwl*0.405,2)), type='text', id='lcf-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-						html.P("{}m".format(round(lcf,2)), style={'display': 'inline-block', 'padding': '10px'}),
-						dbc.Input(value="{}".format(round(lwl*0.482,2)), type='text', id='lcf-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+						dbc.Row(dbc.Label("LCB")),
+						dbc.Row([
+							dbc.Input(value="{}".format(round(lwl*0.418,2)), type='text', id='lcb-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+							html.P("{}m".format(round(lcb,2)), style={'display': 'inline-block', 'padding': '5px'}),
+							dbc.Input(value="{}".format(round(lwl*0.5,2)), type='text', id='lcb-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+						]),
+						dbc.Row(dbc.Label("LCF")),
+						dbc.Row([
+							dbc.Input(value="{}".format(round(lwl*0.405,2)), type='text', id='lcf-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+							html.P("{}m".format(round(lcf,2)), style={'display': 'inline-block', 'padding': '5px'}),
+							dbc.Input(value="{}".format(round(lwl*0.482,2)), type='text', id='lcf-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+						])
 					])
 				])
 			])
@@ -184,6 +185,7 @@ optimizationhull = dbc.Container([
 	dbc.Row([
 		dbc.Col([
 			html.Br(), html.Br(),
+			dbc.Label('Press the button below and wait for the confirmation', style={'align': 'center', 'text-align': 'center'}), html.Br(),
 			html.Button(id='export-ga', type='submit', children='Run optimization'),
             html.Br(), html.Br(),
             html.Div(id='output-button'),

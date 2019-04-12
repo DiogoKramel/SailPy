@@ -1,4 +1,4 @@
-##### About this application:
+## About this application:
 
 **App Name** is a Python application for conceptual sailboat design with an object-oriented paradigm. App Name implements several routines in order to optimize the dimensions of the hull and all appendages of a sailboat. 
 
@@ -54,14 +54,3 @@ python app.py
 Then visit http://127.0.0.1:8050/introduction
 
 More info: https://packaging.python.org/guides/installing-using-pip-and-virtualenv/
-
-##### To understand this app:
-
-[app.py] - add external CSS and JS scripts
-[index.py] - creates the layout of each page with static components nad dynamic content
- ---[assets] - static content: images, CSS, files
- ---[callbacks] - callbacks and plots design
- ---[data] - data storage 
- ---[functions] - scripts for NSGAII, resistance calculation and VPP
- ---[layouts] - folder with each page design
- 

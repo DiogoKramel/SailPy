@@ -33,7 +33,6 @@ def optimize_nsgaII():
     bound_up4 = np.float(gaconfig["lcfmax"])
     bound_low5 = np.float(gaconfig["lcbmin"])
     bound_up5 = np.float(gaconfig["lcbmax"])
-    print(weight2)
     bound_low6, bound_up6 = 0.3, 0.4                               # cb
     bound_low7, bound_up7 = 0.68, 0.71                             # cwp
     bound_low8, bound_up8 = 0.52, 0.6                              # cp
@@ -47,6 +46,7 @@ def optimize_nsgaII():
     halloffame_number = np.int(gaconfig["halloffamenumber"])       # number of best individuals selected 
     indpb_value = np.int(gaconfig["indpb"])/100                    # independent probability for each attribute to be mutated
     eta_value = np.int(gaconfig["eta"])                            # crowding degree of the crossover. A high eta will produce children resembling to their parents, while a small eta will produce solutions much more different
+    gamethod = np.int(gaconfig["gamethod"])    
     NDIM = 2                            # numero de dimensoes do problema (objetivos?)
     random.seed(a = 42)					# control randomnesss
     savefile="optimizationresistance"
@@ -84,7 +84,6 @@ def optimize_nsgaII():
         resist = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, vboat, heel, savefile)
         f1 = resist[0]
         f2 = divcan*1025*2.20462/((boa*3.28084)**(4/3)*0.65*(0.7*lwl*3.28084+0.3*loa*3.28084))  #motion comfort ratio
-        print(f2)
         #f2 = divcan/(0.65*(0.7*lwl+0.3*loa)*bwl**1.33)
         return f1, f2
     
@@ -111,7 +110,7 @@ def optimize_nsgaII():
            if (bwl/tc) > 19.39 or (bwl/tc) < 2.46:
                 if (lwl/disp**(1/3)) > 8.5 or (lwl/disp**(1/3)) < 4.34:
                     if (awp/disp**(2/3)) > 12.67 or (awp/disp**(2/3)) < 3.78:
-                        if avs > 110:
+                        if avs > 50:	#UPDATE
                             if cs < 2:
                                 return True
                             else:
@@ -142,7 +141,10 @@ def optimize_nsgaII():
     toolbox.register("evaluate", evaluate)                                                          
     toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7, bound_low8, bound_low9], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7, bound_up8, bound_up9], eta=eta_value)
     toolbox.register("mutate", tools.mutPolynomialBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7, bound_low8, bound_low9], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7, bound_up8, bound_up9], eta=eta_value, indpb=indpb_value)
-    toolbox.register("select", tools.selNSGA2)   
+    if gamethod == 1:
+        toolbox.register("select", tools.selNSGA2)
+    elif gamethod == 2:
+        toolbox.register("select", tools.selSPEA2)
 
     history = History()                             # store the data to generate the genealogic diagram
     toolbox.decorate("mate", history.decorator)     # store the mate data
@@ -185,7 +187,7 @@ def optimize_nsgaII():
 
     res, logbook = run_ea(toolbox, stats=mstats)					# res: ultima populacao gerada
     fronts = tools.emo.sortLogNondominated(res, len(res))           # fronts: pareto otimo desta ultima populacao
-    
+
     ### PLOTS
     par1=[]
     for i, inds in enumerate(fronts):       # two set of values, Im getting only one
@@ -200,6 +202,5 @@ def optimize_nsgaII():
         f1[i]=np.float(evaluate(history.genealogy_history[i+1])[0])
         f2[i]=np.float(evaluate(history.genealogy_history[i+1])[1])
         index[i]=i
-        print(i)
 
     return f1, f2, index

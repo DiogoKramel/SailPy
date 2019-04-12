@@ -101,7 +101,8 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, sav
     # 4 RESISTENCIA TOTAL E CONFORTO
     Rt = abs(Rv)+abs(Ri)+abs(Rr)+abs(Rincli)
     loa = 11
-    CR = disp/(0.65*(0.7*lwl+0.3*loa)*bwl**1.33)		# comfort ratio
+    boa = bwl*1.2
+    CR = disp*1025*2.20462/((boa*3.28084)**(4/3)*0.65*(0.7*lwl*3.28084+0.3*loa*3.28084))
     
 
     # 5 EXPORT TO CSV
@@ -115,7 +116,7 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, sav
     constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7  = False, False, False, False, False, False, False
     valid = False
     br = 40		
-    boa = bwl*1.2
+    
     dispmass = disp*1025
     ssv = boa**2/(br*tc*disp**(1/3))       
     avs = 110+(400/(ssv-10))
@@ -131,16 +132,15 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, sav
         constraint4 = True
     if (disp/(lwl*bwl*tc)) > 0.4 or (disp/(lwl*bwl*tc)) < 0.3:
         constraint5 = True
-    if avs < 110:
+    if avs < 50:
         constraint6 = True
     if cs > 2:
         constraint7 = True
     if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False and constraint6 == False and constraint7 == False:
         valid = True
 
-    exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), format((np.round(Rt,4)-20000*np.round(CR,4)), '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid]
-    print(avs)
-    print(cs)
+    exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(avs, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid]
+
     with open("assets/data/"+savefile+".csv", "a") as file:
         writer = csv.writer(file, delimiter=',')
         writer.writerow(exportdata)
