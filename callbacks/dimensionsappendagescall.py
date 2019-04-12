@@ -15,7 +15,7 @@ import pandas as pd
     [Input('bwl-new', 'value'), Input('lwl-new', 'value'), Input('tc-new', 'value')])
 def dimensionshull(bwlnew, lwlnew, tcnew):
     boa = np.float(bwlnew)*1.3
-    freeboard = np.float(tcnew)*1.65
+    freeboard = np.float(tcnew)*2.5
     overhang = np.float(lwlnew)/10
     return html.Div([
         dbc.Label("Free Board [m]"),
@@ -111,7 +111,7 @@ def dimensionskeel(lwl, tc, disp):
     cekeel = lwl/2
     lwl = np.float(lwl)
     t =lwl/(0.19*lwl+4.0533)
-    spankeel = t*np.float(tc)
+    spankeel = t-np.float(tc)
     sa = 18*np.float(disp)**(2/3)
     surfacekeel = 0.03*sa
     tipkeel=0.8*surfacekeel/spankeel
@@ -124,7 +124,7 @@ def dimensionskeel(lwl, tc, disp):
         dbc.Label("Span"),
         dbc.Input(type='text', id='span-keel', bs_size="sm", value=round(spankeel,2)),
         dbc.Label("Sweep angle [degrees]"),
-        dbc.Input(type='text', id='sweep-keel', bs_size="sm", value=20),
+        dbc.Input(type='text', id='sweep-keel', bs_size="sm", value=35),
         dbc.Label("Root Centerline"),
         dbc.Input(type='text', id='pos-keel', bs_size="sm", value=round(cekeel,2)),
         dbc.Label("Root Chord Thickness"),
@@ -170,8 +170,7 @@ def dimensionskeel(bulbocheck):
             dbc.Input(type='text', id='sbk', bs_size="sm", value=0)
         ])
 
-@app.callback(Output('dimension-loa', 'children'),
-    [Input('overhang', 'value'), Input('boa', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value')])#, Input('jsail', 'value'), Input('lpg', 'value'), Input('spl', 'value'), Input('mast-diameter', 'value'), Input('boom-height', 'value'), Input('mast-height', 'value'), Input('rootchord-keel', 'value'), Input('tipchord-keel', 'value'), Input('span-keel', 'value'), Input('sweep-keel', 'value'), Input('pos-keel', 'value'), Input('rootchord-rudder', 'value'), Input('tipchord-rudder', 'value'), Input('span-rudder', 'value'), Input('sweep-rudder', 'value'), Input('pos-rudder', 'value'), Input('heightsurface-rudder', 'value')])
+@app.callback(Output('dimension-loa', 'children'), [Input('overhang', 'value'), Input('boa', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value')])
 def dimensionloa(overhang, boa, bowangle, freeboard):
     lwl =10
     loa = np.float(lwl)+np.float(overhang)+np.tan(np.radians(np.float(bowangle)))*np.float(freeboard)

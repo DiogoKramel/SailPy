@@ -50,7 +50,7 @@ In this folder you can find the scripts for calculating the resistance component
 Contains the layouts for each page in the multi-page structure, connecting the callbacks and functions to the user interface.
 
 
-## To run the app locally
+## How to run the app locally
 
 You can clone or download this repo:
 
