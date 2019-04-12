@@ -33,7 +33,7 @@ The app itself. It organizes the layout and how each page is called when the use
 
 This folder contains all images displayed in the app layout. It also contains the files to store relevant data between each step.
 
-[callbacks/*]()
+[callbacks/*](callbacks/)
 
 Callbacks are all the functions that update the data to the scripts when the user changes an input property. 
 
@@ -64,8 +64,7 @@ Then cd into the repo:
 cd AppNamePath
 ```
 
-Now create and activate a virtual environment:  
-On a mac:
+Now create and activate a virtual environment. On a mac:
 
 ```
 virtualenv -p <python version> venv
@@ -95,6 +94,6 @@ More info: https://packaging.python.org/guides/installing-using-pip-and-virtuale
 
 ## Licensing
 
-SailPy is licensed under [https://opensource.org/licenses/MIT](MIT).
+SailPy is licensed under MIT.
 
 ***
