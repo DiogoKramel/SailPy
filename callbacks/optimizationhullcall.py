@@ -16,7 +16,6 @@ import time
 from functions import resistance
 from functions import optimize_nsgaII
 
-    
 
 @app.callback(
     Output('resistance-weight', 'children'),
@@ -56,7 +55,7 @@ def update_output(n_clicks, lwlmin, popsize, childrensize, maxgeneration, mutpro
         with open('assets/data/optimizationresistance.csv','w') as fd:
             fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,best,constraint1,constraint2,constraint3,constraint4,constraint5,constraint6,constraint7,valid"+"\n")
         start = time.time()
-        result=optimize_nsgaII()
+        result = optimize_nsgaII()
         done = time.time()
         elapsed = done-start
-        return html.Div(dbc.Alert("Done in {} seconds".format(elapsed), color="success", style={'padding': '5px'}))
+        return html.Div(dbc.Alert("Optimization finished in {} seconds".format(round(elapsed, 2)), color="success", style={'padding': '5px', 'display': 'inline-block'}))
