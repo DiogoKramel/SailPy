@@ -112,6 +112,9 @@ resultsplus = dbc.Container([
 				row_deletable=True,
 				selected_rows=[],
 				n_fixed_rows=1,
+				style_cell={'font-size': '8pt'},
+				style_as_list_view=True,
+				style_header={'fontWeight': 'bold'},
 				#pagination_mode="fe",
 				#pagination_settings={
 				#	"displayed_pages": 1,
@@ -126,18 +129,18 @@ resultsplus = dbc.Container([
 			html.Div(id="plot-dimensions"),
 		)),
 		html.Br(),
-		dbc.Row(dbc.Col(html.H5("Select one individual"))),
+		dbc.Row(dbc.Col(html.H4("Select one individual"))),
 		dbc.Row([
 			dcc.Dropdown(
 				id='dropdown-hull-dimensions', 
 				options=[
-					{'label': "Hull #{}".format(i), 'value': i} for i in df.index.unique()
+					{'label': "Hull #{}".format(i), 'value': i} for i in datatable.index.unique()
 				],
 				value='1',
 				placeholder='Select one hull to be optimised in the next phase',
-				style={'width': '50%', 'font-size': '10pt'}
+				style={'width': '300pt', 'font-size': '10pt'}
 			),
+			html.Div(id="export-hull-dimensions", style={'padding-left': '50px'})
 		]),
-		html.Div(id="export-hull-dimensions")
     ], className="mt-4")
 ])

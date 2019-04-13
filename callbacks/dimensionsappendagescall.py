@@ -12,8 +12,7 @@ from scipy.integrate import simps
 import pandas as pd
 
 
-@app.callback(Output('dimension-boa', 'children'),
-    [Input('bwl-new', 'value')])
+@app.callback(Output('dimension-boa', 'children'), [Input('bwl-new', 'value')])
 def dimensionshull(bwlnew):
     boa = np.float(bwlnew)*1.3
     return html.Div([

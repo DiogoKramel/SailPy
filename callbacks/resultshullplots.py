@@ -631,10 +631,6 @@ datatable_unvalid = datatable_all.loc[datatable_all['valid']==False]
 def update_graph(resultshullaxisx, selected_row_indices):
     if selected_row_indices is None:
         selected_row_indices = []
-
-    print(selected_row_indices)
-    #selected_rows=[rows[i] for i in selected_row_indices]
-    #print(selected_rows)
     return html.Div([
             dcc.Graph(
                 id=column,
@@ -676,7 +672,16 @@ def update_graph(resultshullaxisx, selected_row_indices):
 @app.callback(Output("export-hull-dimensions", "children"), [Input("dropdown-hull-dimensions", "value")])
 def update_y_timeseries(id):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
-    row = df.loc[df['id']==np.float(id)]
-    console.log(row)
-    return html.Div(dbc.Alert("Exported hull number {}".format(round(id, 2)), color="success", style={'padding': '5px', 'display': 'inline-block'}))
+    row = df.iloc[np.int(id)]
+    bwl = df.iloc[np.int(id)]['BWL']
+    lwl = df.iloc[np.int(id)]['LWL']
+    tc = df.iloc[np.int(id)]['Draft']
+    lcb = df.iloc[np.int(id)]['LCB']
+    lcf = df.iloc[np.int(id)]['LCF']
+    disp = df.iloc[np.int(id)]['Displacement']
+    json.dump({'lwl': lwl, 'bwl': bwl, 'tc': tc, 'disp': disp, 'lcb': lcb, 'lcf': lcf}, codecs.open('assets/data/dimensions-hull.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    return html.Div([
+            dbc.Alert("Exported hull number {}".format(id), color="success", style={'padding': '5px', 'display': 'inline-block'}),
+            html.P("Waterline Length: {}m -- Waterline Beam: {}m -- Draft: {}m".format(round(np.float(lwl),2), round(np.float(bwl),2), round(np.float(tc),2)), style={'padding-left': '20px', 'display': 'inline-block'})
+        ])
     

@@ -6,16 +6,10 @@ import plotly.graph_objs as go
 import dash_daq as daq
 import pandas as pd
 import numpy as np
+import json, codecs
 
 from callbacks import dimensionsappendagescall, dimensionsappendagesplots
 
-#dimensions = pd.read_csv("assets/data/initialhull.csv")
-lwl = 10# np.float(min(dimensions["LWL"]))
-bwl = 3#np.float(min(dimensions["BWL"]))
-disp = 8#np.float(min(dimensions["Displacement"]))
-tc = 0.5#np.float(min(dimensions["Draft"]))
-lcb = 5#np.float(min(dimensions["LCB"]))
-lcf = 5#np.float(min(dimensions["LCF"]))
 
 appendages = dbc.Container([
 	dbc.Row(
@@ -32,19 +26,19 @@ appendages = dbc.Container([
 			dbc.Row([
 				dbc.Col([
 					dbc.Label("Waterline length [m]"),
-					dbc.Input(type='text', id='lwl-new', bs_size="sm", value=format(round(lwl,2))),
+					dbc.Input(type='text', id='lwl-new', bs_size="sm", value=format(round(json.loads(codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read())["lwl"],2))),
 					dbc.Label("Waterline beam [m]"),
-					dbc.Input(type='text', id='bwl-new', bs_size="sm", value=round(bwl,2)),
+					dbc.Input(type='text', id='bwl-new', bs_size="sm", value=format(round(json.loads(codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read())["bwl"],2))),
 					dbc.Label("Draft [m]"),
-					dbc.Input(type='text', id='tc-new', bs_size="sm", value=format(round(tc,2))),
+					dbc.Input(type='text', id='tc-new', bs_size="sm", value=format(round(json.loads(codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read())["tc"],2))),
 				]),
 				dbc.Col([
 					dbc.Label("Displacement [m3]"),
-					dbc.Input(type='text', id='disp-new', bs_size="sm", value=format(round(disp,2))),
+					dbc.Input(type='text', id='disp-new', bs_size="sm", value=format(round(json.loads(codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read())["disp"],2))),
 					dbc.Label("LCB [m]"),
-					dbc.Input(type='text', id='lcb-new', bs_size="sm", value=format(round(lcb,2))),
+					dbc.Input(type='text', id='lcb-new', bs_size="sm", value=format(round(json.loads(codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read())["lcb"],2))),
 					dbc.Label("LCF [m]"),
-					dbc.Input(type='text', id='lcf-new', bs_size="sm", value=format(round(lcf,2))),
+					dbc.Input(type='text', id='lcf-new', bs_size="sm", value=format(round(json.loads(codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read())["lcf"],2))),
 				]),
 			])
 		]),
