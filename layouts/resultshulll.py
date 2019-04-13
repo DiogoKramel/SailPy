@@ -18,12 +18,12 @@ resultshull = dbc.Container([
         dbc.Row([
             dbc.Col([
                 html.P("""The main results are displayed below. First, you can view the evolutionary process in the first main plot. Colors will indicate how the individual evolved towards the optimal solution after each new generation. When hovering each individual, you can see the plot around updating with its value. The data includes also individuals that are not valid, and the constraints disrespected can be seen in the smaller plots below. The same plot also allows visualizing and understanding the Pareto frontier, in which further improvement is not possible."""),
-			], className = 'justify'),
+            ], className = 'justify'),
             dbc.Col([
                 html.P("""Besides that, a list with all the individuals generated is displayed in the following table. In this table, the user can sort the values combining ascending and descending sorting in each column. Another import asset is the parallel dimensions plot. It shows how the dimension set of the hull evolved throughout the optimization process. The concentration at one of the extremes may indicate space for further exploration."""),
-			], className = 'justify'),
+            ], className = 'justify'),
         ]),
-		html.Br(),
+        html.Br(),
         dbc.Row(dbc.Col(html.H5('What do you want to view?'))),
         dbc.Row([
             dbc.Col([
@@ -31,7 +31,7 @@ resultshull = dbc.Container([
                     id='resultshullaxisy',
                     options=[
                         {'label': 'Resistance', 'value': 'Resistance'},
-						{'label': 'Comfort Ratio', 'value': 'Comfort'},
+                        {'label': 'Comfort Ratio', 'value': 'Comfort'},
                         {'label': 'Waterline length', 'value': 'LWL'},
                         {'label': 'Waterline beam', 'value': 'BWL'},
                         {'label': 'Draft', 'value': 'Draft'},
@@ -41,7 +41,7 @@ resultshull = dbc.Container([
                         {'label': 'LCF', 'value': 'LCF'},
                     ],
                     value='Resistance',
-					className='regularfont',
+                    className='regularfont',
                 ),
                 html.Br()
             ]),
@@ -51,7 +51,7 @@ resultshull = dbc.Container([
                     id='resultshullaxisx',
                     options=[
                         {'label': 'Resistance', 'value': 'Resistance'},
-						{'label': 'Comfort Ratio', 'value': 'Comfort'},
+                        {'label': 'Comfort Ratio', 'value': 'Comfort'},
                         {'label': 'Waterline length', 'value': 'LWL'},
                         {'label': 'Waterline beam', 'value': 'BWL'},
                         {'label': 'Draft', 'value': 'Draft'},
@@ -61,28 +61,28 @@ resultshull = dbc.Container([
                         {'label': 'LCF', 'value': 'LCF'},
                     ],
                     value='Comfort',
-					className='regularfont',
+                    className='regularfont',
                 ),
                 html.Br()
             ]),
         ]),
         dbc.Row([
-			dbc.Col([
-				html.Div(dcc.Graph(id='output-optimization')),
-				html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'),
-				html.Br(),
-				#html.Div(id='plot-constraint-individual'),
-			], width=10),
-			dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
-		]),
-		html.Br(),
-		dbc.Row([
-			dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-bwl')), width=3),
-			dbc.Col(html.Div(dcc.Graph(id='plot-limits-bwl-tc'))),
-			dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-disp'))),
-			dbc.Col(html.Div(dcc.Graph(id='plot-limits-awp-disp'))),
-		]),
-		html.Br(),
+            dbc.Col([
+                html.Div(dcc.Graph(id='output-optimization')),
+                html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'),
+                html.Br(),
+                #html.Div(id='plot-constraint-individual'),
+            ], width=10),
+            dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
+        ]),
+        html.Br(),
+        dbc.Row([
+            dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-bwl')), width=3),
+            dbc.Col(html.Div(dcc.Graph(id='plot-limits-bwl-tc'))),
+            dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-disp'))),
+            dbc.Col(html.Div(dcc.Graph(id='plot-limits-awp-disp'))),
+        ]),
+        html.Br(),
     ], className="mt-4")
 ])
 
@@ -93,54 +93,54 @@ datatable = datatable.loc[:,"id":"LCB"]
 
 resultsplus = dbc.Container([
     dbc.Col([
-		dbc.Row(dbc.Col(html.H5("Dimensions Parallel Plot"))),
-		dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
-		html.Br(),
+        dbc.Row(dbc.Col(html.H5("Dimensions Parallel Plot"))),
+        dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
+        html.Br(),
 
-		dbc.Row(dbc.Col([
-			html.H5("List of all individuals"),
-			html.Div(
-			dash_table.DataTable(
-				id='datatable-interactivity',
-				columns=[{"name": i, "id": i, "deletable": True} for i in datatable.columns],
-				data=datatable.to_dict("rows"),
-				editable=True,
-				#filtering=True,
-				sorting=True,
-				sorting_type="multi",
-				row_selectable="multi",
-				row_deletable=True,
-				selected_rows=[],
-				n_fixed_rows=1,
-				style_cell={'font-size': '8pt'},
-				style_as_list_view=True,
-				style_header={'fontWeight': 'bold'},
-				#pagination_mode="fe",
-				#pagination_settings={
-				#	"displayed_pages": 1,
-				#	"current_page": 0,
-				#	"page_size": 10,
-				#},
-				#navigation="page",
-    		),
-		)])),
-		html.Br(),
-		dbc.Row(dbc.Col(
-			html.Div(id="plot-dimensions"),
-		)),
-		html.Br(),
-		dbc.Row(dbc.Col(html.H4("Select one individual"))),
-		dbc.Row([
-			dcc.Dropdown(
-				id='dropdown-hull-dimensions', 
-				options=[
-					{'label': "Hull #{}".format(i), 'value': i} for i in datatable.index.unique()
-				],
-				value='1',
-				placeholder='Select one hull to be optimised in the next phase',
-				style={'width': '300pt', 'font-size': '10pt'}
-			),
-			html.Div(id="export-hull-dimensions", style={'padding-left': '50px'})
-		]),
+        dbc.Row(dbc.Col([
+            html.H5("List of all individuals"),
+            html.Div(
+            dash_table.DataTable(
+                id='datatable-interactivity',
+                columns=[{"name": i, "id": i, "deletable": True} for i in datatable.columns],
+                data=datatable.to_dict("rows"),
+                editable=True,
+                #filtering=True,
+                sorting=True,
+                sorting_type="multi",
+                row_selectable="multi",
+                row_deletable=True,
+                selected_rows=[],
+                n_fixed_rows=1,
+                style_cell={'font-size': '8pt'},
+                style_as_list_view=True,
+                style_header={'fontWeight': 'bold'},
+                #pagination_mode="fe",
+                #pagination_settings={
+                #	"displayed_pages": 1,
+                #	"current_page": 0,
+                #	"page_size": 10,
+                #},
+                #navigation="page",
+            ),
+        )])),
+        html.Br(),
+        dbc.Row(dbc.Col(
+            html.Div(id="plot-dimensions"),
+        )),
+        html.Br(),
+        dbc.Row(dbc.Col(html.H4("Select one individual"))),
+        dbc.Row([
+            dcc.Dropdown(
+                id='dropdown-hull-dimensions', 
+                options=[
+                    {'label': "Hull #{}".format(i), 'value': i} for i in datatable.index.unique()
+                ],
+                value='1',
+                placeholder='Select one hull to be optimised in the next phase',
+                style={'width': '300pt', 'font-size': '10pt'}
+            ),
+            html.Div(id="export-hull-dimensions", style={'padding-left': '50px'})
+        ]),
     ], className="mt-4")
 ])

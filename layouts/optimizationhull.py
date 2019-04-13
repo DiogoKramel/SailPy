@@ -16,7 +16,7 @@ optimizationhull = dbc.Container([
         dbc.Col([
             html.H4("Genetic Algorithm Configuration"),
             html.P("""The algorithm applied is the NSGA II - Nondominated Sorting Genetic Algorithm developed by Professor Kalyanmoy Deb. It needs seven parameters to be configured. In case you are not familiar with them, more details are provided when hoving the parameters or reading the documentation in the link below. In any case, the standard configuration will provide satisfactory results."""),
-			html.Span(dbc.Label("Population size"), id="tooltip-population"),
+            html.Span(dbc.Label("Population size"), id="tooltip-population"),
             dbc.Tooltip("A set of individuals randomly generated to start the simulation.", target="tooltip-population"),
             dbc.Input(
                 type='number', 
@@ -72,24 +72,24 @@ optimizationhull = dbc.Container([
             html.Br(),
             html.A('Read More about DEAP', href='https://deap.readthedocs.io/en/master/', target="_blank"),
             html.Br(), html.Br(),
-			html.H4("Method of Selection"),
-			dcc.Dropdown(
-				id='ga-method', 
-				options=[
-					{'label': 'NSGA-II', 'value': '1'},
-					{'label': 'SPEA-II', 'value': '2'},
-				],
-				value='1',
-				style={'width': '80%', 'font-size': '10pt'}
-			),
-			html.Br(),html.Br(),html.Br(),
+            html.H4("Method of Selection"),
+            dcc.Dropdown(
+                id='ga-method', 
+                options=[
+                    {'label': 'NSGA-II', 'value': '1'},
+                    {'label': 'SPEA-II', 'value': '2'},
+                ],
+                value='1',
+                style={'width': '80%', 'font-size': '10pt'}
+            ),
+            html.Br(),html.Br(),html.Br(),
         ], className = "justify mt-4", md=6),
-		dbc.Col([
+        dbc.Col([
             html.H4("Weighted Objectives"),
             html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
             dbc.Row([
                 dbc.Col([
-					dbc.Label('Resistance Weight'),
+                    dbc.Label('Resistance Weight'),
                     html.Div(id='resistance-weight', style={'display': 'inline-block'}),
                     daq.Knob(
                         id='weight1',
@@ -100,7 +100,7 @@ optimizationhull = dbc.Container([
                     ),
                 ]),
                 dbc.Col([
-					dbc.Label('Comfort Ratio Weight'),
+                    dbc.Label('Comfort Ratio Weight'),
                     html.Div(id='comfort-weight', style={'display': 'inline-block'}),
                     daq.Knob(
                         id='weight2',
@@ -142,13 +142,13 @@ optimizationhull = dbc.Container([
             html.Div(id="dimensions-limits")
         ], className = "justify mt-4", md=6),
     ]),
-	dbc.Row([
-		dbc.Col([
-			html.Br(), html.Br(),
-			dbc.Label('Press the button below and wait for the confirmation', style={'align': 'center', 'text-align': 'center'}), html.Br(),
-			html.Button(id='export-ga', type='submit', children='Run optimization'),
+    dbc.Row([
+        dbc.Col([
+            html.Br(), html.Br(),
+            dbc.Label('Press the button below and wait for the confirmation', style={'align': 'center', 'text-align': 'center'}), html.Br(),
+            html.Button(id='export-ga', type='submit', children='Run optimization'),
             html.Br(), html.Br(),
             html.Div(id='output-button'),
-		], className="update mt-4")
-	])
+        ], className="update mt-4")
+    ])
 ])
