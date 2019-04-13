@@ -115,7 +115,7 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, sav
     
     constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7  = False, False, False, False, False, False, False
     valid = False
-    br = 40		
+    br = 0.4		
     
     dispmass = disp*1025
     ssv = boa**2/(br*tc*disp**(1/3))       

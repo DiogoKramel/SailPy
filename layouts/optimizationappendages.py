@@ -86,7 +86,7 @@ optimizationappendages = dbc.Container([
         ], className = "justify mt-4", md=6),
         dbc.Col([
             html.H4("Weighted Objectives"),
-            html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
+            html.P("""Now, instead of analysing the bare hul resistance, we will estimate the velocity through a VPP - Velocity Predictino Programme. The comfort is still analysed as second objective. As done before, chose the weight of velocity compared to comfort."""),
             dbc.Row([
                 dbc.Col([
                     dbc.Label('Velocity'),

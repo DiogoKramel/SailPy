@@ -98,7 +98,7 @@ def optimize_nsgaII():
         cwp = individual[6]
         disp = lwl*bwl*tc*cb
         awp = bwl*lwl*cwp
-        br = 40		# between 28 and 56
+        br = 0.4		# between 28 and 56
         boa = bwl*1.2
         loa = lwl*1.05
         dispmass = disp*1025
