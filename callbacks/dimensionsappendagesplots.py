@@ -145,6 +145,7 @@ def create(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tipchord
     xcea = cesailx/lwl
     marcaR = np.float(ruddernaca)
     marcaK = np.float(keelnaca)
+    crewmass = np.float(crewmass)
 
     json.dump({'p': psail, 'e': esail, 'i': isail, 'j': jsail, 'bad': boomheight, 'spl': spl, 'lpg': lpg, 'pmz': pmz, 'emz': emz, 'badmz': badmz, 'boa': boa, 'fb': freeboard, 'lr': lr, 'ehm': mastheight, 'emdc': mastdiameter, 'spanR': spanrudder, 'tipcR': tipchordrudder, 'rootcR': rootchordrudder, 'tiptcksR': tipchordruddertcks, 'roottcksR': rootchordruddertcks, 'sweepRdeg': sweeprudderdeg, 'spanK': spankeel, 'tipcK': tipchordkeel, 'rootcK': rootchordkeel, 'tiptcksK': tipchordkeeltcks, 'roottcksK': rootchordkeeltcks, 'sweepKdeg': sweepkeel, 'xcea': xcea, 'mcrew': crewmass, 'marcaR': marcaR, 'marcaK': marcaK, 'hsr': heightsurfacerudder}, codecs.open('assets/data/dimensions-appendages.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
 
