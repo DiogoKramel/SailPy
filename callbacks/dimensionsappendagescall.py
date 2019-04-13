@@ -194,11 +194,11 @@ def dimensionskeel(lwl, tc, disp):
     rootkeel=1.2*surfacekeel/spankeel
     return html.Div([
         dbc.Label("Root Chord"), html.Br(),
-        dbc.Input(type='text', id='rootchord-min', bs_size="sm", value=format(round(rootkeel*0.9,2)), className='boxminimum'),
+        dbc.Input(type='text', id='rootchord-keel-min', bs_size="sm", value=format(round(rootkeel*0.9,2)), className='boxminimum'),
         html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord', bs_size="sm", value=format(round(rootkeel,2)), className='boxinput'),
+        dbc.Input(type='text', id='rootchord-keel', bs_size="sm", value=format(round(rootkeel,2)), className='boxinput'),
         html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord-max', bs_size="sm", value=format(round(rootkeel*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='rootchord-keel-max', bs_size="sm", value=format(round(rootkeel*1.1,2)), className='boxmaximum'),
         
         dbc.Label("Tip Chord"), html.Br(),
         dbc.Input(type='text', id='tipchord-keel-min', bs_size="sm", value=format(round(tipkeel*0.9,2)), className='boxminimum'),
