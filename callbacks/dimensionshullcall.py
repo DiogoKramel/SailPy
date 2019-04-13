@@ -292,8 +292,8 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
 
     keel_obj = codecs.open('assets/data/keelsolution.json', 'r', encoding='utf-8').read()
     keel_solution = json.loads(keel_obj)
-    keel_interpolation_y = np.asarray(keel_solution['y_i_keel'])
-    keel_interpolation_x = np.asarray(keel_solution['x_i_keel'])
+    keel_interpolation_y = np.asarray(keel_solution['y_keel'])
+    keel_interpolation_x = np.asarray(keel_solution['x_keel'])
 
     awp = cwp*lwl*bwl
     disp = cb*lwl*bwl*tc

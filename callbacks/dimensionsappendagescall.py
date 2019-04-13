@@ -4,6 +4,7 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
+import dash_table
 from app import app
 import plotly.graph_objs as go
 import json, codecs
@@ -11,21 +12,13 @@ from scipy.integrate import simps
 import pandas as pd
 
 
-@app.callback(Output('dimensions-hull', 'children'),
-    [Input('bwl-new', 'value'), Input('lwl-new', 'value'), Input('tc-new', 'value')])
-def dimensionshull(bwlnew, lwlnew, tcnew):
+@app.callback(Output('dimension-boa', 'children'),
+    [Input('bwl-new', 'value')])
+def dimensionshull(bwlnew):
     boa = np.float(bwlnew)*1.3
-    freeboard = np.float(tcnew)*2.5
-    overhang = np.float(lwlnew)/10
     return html.Div([
-        dbc.Label("Free Board [m]"),
-        dbc.Input(type='text', id='freeboard', bs_size="sm", value=format(round(freeboard,2))),
         dbc.Label("Maximum beam [m]"),
         dbc.Input(type='text', id='boa', bs_size="sm", value=format(round(boa,2))),
-        dbc.Label("Overhang [m]"),
-        dbc.Input(type='text', id='overhang', bs_size="sm", value=format(round(overhang,2))),
-        dbc.Label("Bow angle [deg]"),
-        dbc.Input(type='text', id='bowangle', bs_size="sm", value=15),
     ])
 
 @app.callback(Output('dimensions-sail', 'children'),
@@ -170,9 +163,33 @@ def dimensionskeel(bulbocheck):
             dbc.Input(type='text', id='sbk', bs_size="sm", value=0)
         ])
 
-@app.callback(Output('dimension-loa', 'children'), [Input('overhang', 'value'), Input('boa', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value')])
-def dimensionloa(overhang, boa, bowangle, freeboard):
-    lwl =10
+@app.callback(Output('dimension-loa', 'children'), [Input('lwl-new', 'value'), Input('overhang', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value'), Input('disp-new', 'value'), Input('ballast-ratio', 'value'), Input('tc-new', 'value')])
+def dimensionloa(lwl, overhang, bowangle, freeboard, disp, br, tc):
     loa = np.float(lwl)+np.float(overhang)+np.tan(np.radians(np.float(bowangle)))*np.float(freeboard)
     loaft = loa/0.3048
-    return html.Div(dbc.Row(dbc.Col(dbc.Label("The overall lenght of the vessel is {} feet, equivalent to {} meters.".format(np.round(loaft,0), np.round(loa,2)))))),
+    boa = 3
+    dispmass = np.float(disp)*1025
+    ssv = boa**2/(np.float(br)*np.float(tc)*np.float(disp)**(1/3))       
+    avs = 110+(400/(ssv-10))
+    cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
+    cr = np.float(disp)*1025*2.20462/((boa*3.28084)**(4/3)*0.65*(0.7*np.float(lwl)*3.28084+0.3*loa*3.28084))
+
+    data = {'Parameters' : ['Angle of Vanishing Stability', 'Capsize Screening Factor', 'Comfort Ratio'], 'Values' : [round(avs,2), round(cs,2), round(cr,2)], 'Recommendation' : ['> 110', '< 2', '> 30'], 'Unit' : ['degrees', '-', '-']}
+    df = pd.DataFrame(data)
+
+    return html.Div([
+        dbc.Row(
+            dbc.Col([
+                dbc.Label("The overall lenght of the vessel is {} feet, equivalent to {} meters.".format(np.round(loaft,0), np.round(loa,2))),
+                html.Br(), html.Br(),
+                dash_table.DataTable(
+                    columns=[{"name": i, "id": i} for i in df.columns],
+                    data=df.to_dict("rows"),
+                    style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '80px', 'whiteSpace': 'normal'},
+                    style_cell_conditional=[{'if': {'column_id': 'Parameters'}, 'textAlign': 'left'}],
+                    style_as_list_view=True,
+                    style_header={'fontWeight': 'bold'},
+                )
+            ]),
+        ),
+    ]),

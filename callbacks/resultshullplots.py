@@ -4,6 +4,7 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
+import dash_daq as daq
 from app import app
 import plotly.graph_objs as go
 import json, codecs
@@ -135,6 +136,28 @@ def update_output(resultshullaxisy, resultshullaxisx):
         font=dict(size=12),
         )
     }
+
+@app.callback(
+    Output('plot-constraint-individual', 'children'),
+    [Input('output-optimization', 'hoverData')])
+def update_y_timeseries(hoverData):
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    hover = np.int(hoverData["points"][0]['text'])
+    row = df.loc[df['id']==hover]
+    return html.Div([
+        dbc.Label("Angle of Vanishing Stability"),
+        dcc.Slider(
+            min=50, max=120, value=row.iloc[0]['AVS'],
+            marks={'60': 'Min'}, disabled = True, style={'width': '50%'}
+        ),
+        html.Br(),
+        dbc.Label("Capsize Screening Factor"),
+        dcc.Slider(
+            min=0, max=5, value=row.iloc[0]['CS'],
+            marks={'3': 'Max', '2': 'Tolerable'}, disabled = True, style={'width': '50%'}
+        ),
+        html.Br(),
+    ])
 
 @app.callback(
     Output('plot-resistance-individual', 'figure'),
@@ -649,4 +672,11 @@ def update_graph(resultshullaxisx, selected_row_indices):
             for column in ["LWL", "BWL", "Draft", "Resistance", "Comfort"]
         ]
     )
+
+@app.callback(Output("export-hull-dimensions", "children"), [Input("dropdown-hull-dimensions", "value")])
+def update_y_timeseries(id):
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    row = df.loc[df['id']==np.float(id)]
+    console.log(row)
+    return html.Div(dbc.Alert("Exported hull number {}".format(round(id, 2)), color="success", style={'padding': '5px', 'display': 'inline-block'}))
     

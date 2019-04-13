@@ -2,6 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_daq as daq
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import dash_daq as daq
@@ -68,7 +69,9 @@ resultshull = dbc.Container([
         dbc.Row([
 			dbc.Col([
 				html.Div(dcc.Graph(id='output-optimization')),
-				html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv')
+				html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'),
+				html.Br(),
+				#html.Div(id='plot-constraint-individual'),
 			], width=10),
 			dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
 		]),
@@ -132,8 +135,9 @@ resultsplus = dbc.Container([
 				],
 				value='1',
 				placeholder='Select one hull to be optimised in the next phase',
-				style={'width': '100%', 'font-size': '10pt'}
+				style={'width': '50%', 'font-size': '10pt'}
 			),
 		]),
+		html.Div(id="export-hull-dimensions")
     ], className="mt-4")
 ])

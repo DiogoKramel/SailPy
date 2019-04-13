@@ -40,11 +40,11 @@ introduction = dbc.Container([
             ]),
             html.Br(),
             dbc.Row([
-                dbc.Col(html.I(className="icon-bargraph fa-3x"),
+                dbc.Col(html.I(className='icon-bargraph fa-3x'),
                         md=4, className='update'),
-                dbc.Col(html.I(className="icon-refresh fa-3x"),
+                dbc.Col(html.I(className='icon-refresh fa-3x'),
                         md=4, className='update'),
-                dbc.Col(html.I(className="icon-search fa-3x"),
+                dbc.Col(html.I(className='icon-search fa-3x'),
                         md=4, className='update'),
             ]),
             dbc.Row([
@@ -58,4 +58,4 @@ introduction = dbc.Container([
         ], md=6),
     ]),
 	html.Br(),html.Br(), html.Br(), html.Br(),
-], className="mt-4")
+], className='mt-4')

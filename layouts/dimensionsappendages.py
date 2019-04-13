@@ -54,7 +54,13 @@ appendages = dbc.Container([
 	dbc.Row([
 		dbc.Col([
 			html.H5("Hull"),
-			html.Div(id='dimensions-hull'),
+			dbc.Label("Free Board [m]"),
+			dbc.Input(type='text', id='freeboard', bs_size="sm", value=format(round(1.3,2))),
+			html.Div(id="dimension-boa"),
+			dbc.Label("Overhang [m]"),
+			dbc.Input(type='text', id='overhang', bs_size="sm", value=format(round(1,2))),
+			dbc.Label("Bow angle [deg]"),
+			dbc.Input(type='text', id='bowangle', bs_size="sm", value=15),
 			html.Br(),
 			html.H5("Sail"),
 			dbc.Label("Sail configuration"),
@@ -93,6 +99,8 @@ appendages = dbc.Container([
 			html.H5("Extra data"),
 			dbc.Label("Crew mass [kg]"),
 			dbc.Input(type='text', id='crewmass', bs_size="sm", value='280'),
+			dbc.Label("Ballast Ratio [%]"),
+			dbc.Input(type='text', id='ballast-ratio', bs_size="sm", value='40'),
 			dbc.Label("Keel Naca Profile"),
 			dcc.Dropdown(
 				id='keel-naca',
@@ -128,9 +136,8 @@ appendages = dbc.Container([
 		dbc.Col([
 			html.H5("Side plan view"),
             html.Div(dcc.Graph(id='plot-appendages', style={'width': 'inherit'})),
-			html.Br(),
-			#html.Div(id="dimension-loa"),
-			html.Br(),html.Br(),html.Br(),html.Br(),html.Br()
+			html.Br(), html.Br(),
+			html.Div(id="dimension-loa"),
 		], width=6),
 	]),
 ], className="mt-4",)
