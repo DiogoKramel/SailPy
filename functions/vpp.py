@@ -1,10 +1,5 @@
 import time
 import numpy as np
-import matplotlib as mpl
-mpl.use('TkAgg')
-import matplotlib.pyplot as plt
-from  matplotlib import patches
-from mpl_toolkits.mplot3d import Axes3D
 from scipy import interpolate, optimize
 import json, codecs                             # export as json
 
