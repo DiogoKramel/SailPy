@@ -141,36 +141,49 @@ def update_output(resultshullaxisy, resultshullaxisx):
     Output('plot-constraint-individual', 'children'),
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
-    df = pd.read_csv("assets/data/optimizationresistance.csv")
-    hover = np.int(hoverData["points"][0]['text'])
-    row = df.loc[df['id']==hover]
-    return html.Div([
-        dbc.Label("Angle of Vanishing Stability"),
-        dcc.Slider(
-            min=50, max=120, value=row.iloc[0]['AVS'],
-            marks={'60': 'Min'}, disabled = True, style={'width': '50%'}
-        ),
-        html.Br(),
-        dbc.Label("Capsize Screening Factor"),
-        dcc.Slider(
-            min=0, max=5, value=row.iloc[0]['CS'],
-            marks={'3': 'Max', '2': 'Tolerable'}, disabled = True, style={'width': '50%'}
-        ),
-        html.Br(),
-    ])
+    if hoverData is None:
+        return ' '
+    else:
+        df = pd.read_csv("assets/data/optimizationresistance.csv")
+        hover = np.int(hoverData["points"][0]['text'])
+        row = df.loc[df['id']==hover]
+        return html.Div([
+            dbc.Label("Angle of Vanishing Stability"),
+            dcc.Slider(
+                min=50, max=120, value=row.iloc[0]['AVS'],
+                marks={'60': 'Min'}, disabled = True, style={'width': '50%'}
+            ),
+            html.Br(),
+            dbc.Label("Capsize Screening Factor"),
+            dcc.Slider(
+                min=0, max=5, value=row.iloc[0]['CS'],
+                marks={'3': 'Max', '2': 'Tolerable'}, disabled = True, style={'width': '50%'}
+            ),
+            html.Br(),
+        ])
 
 @app.callback(
     Output('plot-resistance-individual', 'figure'),
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
-    df = pd.read_csv("assets/data/optimizationresistance.csv")
-    hover = np.int(hoverData["points"][0]['text'])
-    row = df.loc[df['id']==hover]
+    if hoverData is None:
+        Rv = 0
+        Rincli = 0
+        Ri =0 
+        Rr = 0
+    else:
+        df = pd.read_csv("assets/data/optimizationresistance.csv")
+        hover = np.int(hoverData["points"][0]['text'])
+        row = df.loc[df['id']==hover]
+        Rv = [row.iloc[0]['Rv']]
+        Ri = [row.iloc[0]['Ri']]
+        Rr = [row.iloc[0]['Rr']]
+        Rincli = [row.iloc[0]['Rincli']]
     return {
         'data': [
             go.Bar(
                 x=['R'],
-                y=[row.iloc[0]['Rv']],
+                y=Rv,
                 name = "Viscous",
                 marker=dict(
                     color='rgb(43,140,190)'
@@ -178,7 +191,7 @@ def update_y_timeseries(hoverData):
             ),
             go.Bar(
                 x=['R'],
-                y=[row.iloc[0]['Ri']],
+                y=Ri,
                 name = "Induced",
                 marker=dict(
                     color='rgb(123,204,196)'
@@ -186,7 +199,7 @@ def update_y_timeseries(hoverData):
             ),
             go.Bar(
                 x=['R'],
-                y=[row.iloc[0]['Rr']],
+                y=Rr,
                 name = "Residual",
                 marker=dict(
                     color='rgb(186,228,188)'
@@ -194,7 +207,7 @@ def update_y_timeseries(hoverData):
             ),
             go.Bar(
                 x=['R'],
-                y=[row.iloc[0]['Rincli']],
+                y=Rincli,
                 name = "Inclination",
                 marker=dict(
                     color='rgb(240,249,232)'

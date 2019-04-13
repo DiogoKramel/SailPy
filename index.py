@@ -15,10 +15,11 @@ server = app.server
 
 logoapp = html.Img(src='/assets/static/logoapp.png', height='45px')
 logoappwhite = html.Img(src='/assets/landing/logoappwhite.png', height='50px')
-logousp = html.Img(src='/assets/static/logousp.png', height='35px')
-logopoli = html.Img(src='/assets/static/logopolitecnica.png', height='35px')
-logopnv = html.Img(src='/assets/static/pnv.png', height='35px')
-logocapes = html.Img(src='/assets/static/logocapes.png', height='35px')
+logousp = html.A([html.Img(src='/assets/static/logousp.png', height='35px')], href="https://www.usp.br/")
+logopoli = html.A([html.Img(src='/assets/static/logopolitecnica.png', height='35px')], href="https://www.poli.usp.br/")
+logopnv = html.A([html.Img(src='/assets/static/pnv.png', height='35px')], href="www.pnv.poli.usp.br/")
+logocapes = html.A([html.Img(src='/assets/static/logocapes.png', height='35px')], href="http://www.capes.gov.br")
+logogit = html.A([html.Img(src='/assets/static/github.svg', height='35px')], href="https://github.com/DiogoKramel/SailPy")
 title = dcc.Link('SailPy - A preliminary design tool for sailboats', className='navbar-brand', style={'color': 'white'})
 
 navitems = html.Ul([
@@ -60,6 +61,7 @@ footer = html.Nav([
                 html.A('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', style={'display': 'inline-block'}), 
                 html.P('.', style={'display': 'inline-block', 'margin-top':'10px'}),
             ], style={'display': 'inline-block'}),
+			dbc.Col(logogit, width='auto'),
         ]),
     ]),
 ], className='navbar footer footerbottom')
@@ -71,7 +73,7 @@ landpage = html.Div([
             html.H3('SailPy', className='display-3'),
             html.P('A preliminary design tool for sailboats', className='lead'),
             html.Hr(className='my-2'),
-            html.P("SailPy is an opensource Python application for conceptual sailboat design with an object-oriented approach. The sailboat is simulated in different conditions, to which optimization tools are applied to evaluate its performance, assisting the definition of the best set of dimensions in order to meet the user's needs. This library encourages suggestions, new features, improvements, and report of bugs.", className='justify'),
+            html.P("SailPy is an opensource Python application for conceptual sailboat design with an object-oriented approach. The sailboat is simulated in different conditions, to which optimization tools are applied to evaluate its performance, assisting the definition of the best set of dimensions in order to meet the user's needs. This library encourages suggestions, new features, improvements, and report of bugs. The link to the scripts you can find at the GitHub icon in the page bottom.", className='justify'),
             html.Hr(className='my-2'),
             html.Br(),
             html.P(dbc.Button(dcc.Link(html.Div(html.Div('Start the analysis', className='btnupdate'), className='fa fa-arrow-circle-right btnupdate'), href=f'/application', style={'color': 'white'}))),
@@ -123,7 +125,7 @@ def display_page(tab):
         tc = np.float(dim["tc"])
         return dimensionsappendages.appendages, space, footer
     elif tab == 'tab-6':
-        return optimizationappendages.optimizationappendages
+        return optimizationappendages.optimizationappendages, space, footer
     else:
         return ''
 
