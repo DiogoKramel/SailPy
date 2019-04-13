@@ -71,7 +71,7 @@ resultshull = dbc.Container([
                 html.Div(dcc.Graph(id='output-optimization')),
                 html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'),
                 html.Br(),
-                #html.Div(id='plot-constraint-individual'),
+                html.Div(id='plot-constraint-individual'),
             ], width=10),
             dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
         ]),

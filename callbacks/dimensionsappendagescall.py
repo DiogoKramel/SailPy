@@ -300,8 +300,8 @@ def dimensionloa(lwl, overhang, bowangle, freeboard, disp, br, tc):
     loaft = loa/0.3048
     boa = 3
     dispmass = np.float(disp)*1025
-	br = np.float(br)
-    ssv = boa**2/(*np.float(tc)*np.float(disp)**(1/3))       
+    br = np.float(br)
+    ssv = boa**2/(br*np.float(tc)*np.float(disp)**(1/3))       
     avs = 110+(400/(ssv-10))
     cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
     cr = np.float(disp)*1025*2.20462/((boa*3.28084)**(4/3)*0.65*(0.7*np.float(lwl)*3.28084+0.3*loa*3.28084))
