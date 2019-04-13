@@ -1,10 +1,6 @@
 import time, array, random, copy, math
 import pandas as pd
 import numpy as np
-import matplotlib
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 #import networkx                   # genealogic tree
 #from networkx.drawing.nx_agraph import graphviz_layout
 from math import sqrt
