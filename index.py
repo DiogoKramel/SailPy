@@ -5,9 +5,11 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash_table_experiments import DataTable
 import plotly.graph_objs as go
+import json, codecs
+import numpy as np
 
 from app import app
-from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages
+from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages #, optimizationappendages
 
 server = app.server
 
@@ -111,7 +113,17 @@ def display_page(tab):
     elif tab == 'tab-4':
         return resultshulll.resultshull, resultshulll.resultsplus, space, footer
     elif tab == 'tab-5':
+        dim = codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read()
+        dim = json.loads(dim)
+        lwl = np.float(dim["lwl"])
+        bwl = np.float(dim["bwl"])
+        lcb = np.float(dim["lcb"])
+        lcf = np.float(dim["lcf"])
+        disp = np.float(dim["disp"])
+        tc = np.float(dim["tc"])
         return dimensionsappendages.appendages, space, footer
+    elif tab == 'tab-6':
+        return #optimizationappendages.optimizationappendages
     else:
         return ''
 
