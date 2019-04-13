@@ -41,7 +41,7 @@ def vpp_solve(sailset):
     kb = np.float(dimensions["kb"])
     kg = np.float(dimensions["kg"])
     scb = np.float(dimensions["scb"])           # superfície molhada do casco (opcional) [m2]
-    GMlong = np.float(dimensions["kg"])         # Desnecessario? altura metacêntrica longitudinal (opcional para cálculo do pitch) [m]
+    #GMlong = np.float(dimensions["kg"])         # Desnecessario? altura metacêntrica longitudinal (opcional para cálculo do pitch) [m]
     
     ### TO-DO	
     P = 15.1			# altura da vela mestra [m]
@@ -701,4 +701,4 @@ def vpp_solve(sailset):
 
     json.dump({'vboatmed': vboatmed, 'ang_est': ang_est, 'CS': CS, 'MCR': MCR, 'RA': RA}, codecs.open('output/secondaryevaluation.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
 
-    return betatwfinaldeg[0], vboatfinal, Rtfinal, Rvfinal, Rrfinal, Rifinal
+    return vboatfinal, MCR, betatwfinaldeg[0], Rtfinal, Rvfinal, Rrfinal, Rifinal, 
