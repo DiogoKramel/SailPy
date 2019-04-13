@@ -79,7 +79,7 @@ optimizationappendages = dbc.Container([
 					{'label': 'NSGA-II', 'value': '1'},
 					{'label': 'SPEA-II', 'value': '2'},
 				],
-				placeholder='Choose one method for selecting the individuals',
+				value='1',
 				style={'width': '80%', 'font-size': '10pt'}
 			),
 			html.Br(),html.Br(),html.Br(),
@@ -145,7 +145,7 @@ optimizationappendages = dbc.Container([
 		dbc.Col([
 			html.Br(), html.Br(),
 			dbc.Label('Press the button below and wait for the confirmation', style={'align': 'center', 'text-align': 'center'}), html.Br(),
-			html.Button(id='export-ga', type='submit', children='Run optimization'),
+			html.Button(id='export-ga-2', type='submit', children='Run optimization'),
             html.Br(), html.Br(),
             html.Div(id='output-button-2'),
 		], className="update mt-4")

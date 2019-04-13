@@ -101,3 +101,25 @@ P {
 	padding-bottom: 0;
 	padding-top: 3pt;
 }
+
+.boxminimum {
+	width: 25%;
+	display: inline-block
+}
+
+.boxinput {
+	width: 30%;
+	display: inline-block;
+	padding-right: 10%; 
+	border-width: 2px
+}
+
+.boxmaximum {
+	width: 25%;
+	display: inline-block
+}
+
+.spacebox {
+	width: 10%;
+	display: inline-block
+}

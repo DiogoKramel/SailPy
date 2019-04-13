@@ -9,7 +9,7 @@ import json, codecs
 import numpy as np
 
 from app import app
-from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages #, optimizationappendages
+from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages, optimizationappendages
 
 server = app.server
 
@@ -123,7 +123,7 @@ def display_page(tab):
         tc = np.float(dim["tc"])
         return dimensionsappendages.appendages, space, footer
     elif tab == 'tab-6':
-        return #optimizationappendages.optimizationappendages
+        return optimizationappendages.optimizationappendages
     else:
         return ''
 

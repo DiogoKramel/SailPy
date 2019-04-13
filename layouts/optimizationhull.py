@@ -79,7 +79,7 @@ optimizationhull = dbc.Container([
 					{'label': 'NSGA-II', 'value': '1'},
 					{'label': 'SPEA-II', 'value': '2'},
 				],
-				placeholder='Choose one method for selecting the individuals',
+				value='1',
 				style={'width': '80%', 'font-size': '10pt'}
 			),
 			html.Br(),html.Br(),html.Br(),
