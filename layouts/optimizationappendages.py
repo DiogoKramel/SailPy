@@ -137,8 +137,6 @@ optimizationappendages = dbc.Container([
                     html.Br(),html.Br(),
                 ])
             ]),
-            html.H4("Dimensions optimized"),
-            html.P("""The limits of each dimension optimized at this stage can be set below. Standard values are recommended, but they can be stretched to explore more widely the dimensions space. The algorithm will evaluate which solutions are feasible and automatically exclude the ones that do not fit the criteria. Bear in mind that the values of minimum and maximum may affect performance and convergence."""),
         ], className = "justify mt-4", md=6),
     ]),
     dbc.Row([
