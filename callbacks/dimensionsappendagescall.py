@@ -294,15 +294,17 @@ def dimensionskeel(bulbocheck):
             dbc.Input(type='text', id='sbk', bs_size="sm", value=0)
         ])
 
-@app.callback(Output('dimension-loa', 'children'), [Input('lwl-new', 'value'), Input('overhang', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value'), Input('disp-new', 'value'), Input('ballast-ratio', 'value'), Input('tc-new', 'value')])
-def dimensionloa(lwl, overhang, bowangle, freeboard, disp, br, tc):
+@app.callback(Output('dimension-loa', 'children'), [Input('lwl-new', 'value'), Input('overhang', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value'), Input('disp-new', 'value'), Input('ballast-ratio', 'value'), Input('tc-new', 'value'), Input('bwl-new', 'value')])
+def dimensionloa(lwl, overhang, bowangle, freeboard, disp, br, tc, bwl):
     loa = np.float(lwl)+np.float(overhang)+np.tan(np.radians(np.float(bowangle)))*np.float(freeboard)
     loaft = loa/0.3048
-    boa = 3
+    boa = np.float(bwl)*1.1
     dispmass = np.float(disp)*1025
     br = np.float(br)/100
-    ssv = boa**2/(br*np.float(tc)*np.float(disp)**(1/3))       
+    ssv = boa**2/(br*np.float(tc)*np.float(disp)**(1/3))
+    print(ssv)       
     avs = 110+(400/(ssv-10))
+    print(avs)
     cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
     cr = np.float(disp)*1025*2.20462/((boa*3.28084)**(4/3)*0.65*(0.7*np.float(lwl)*3.28084+0.3*loa*3.28084))
 

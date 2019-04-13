@@ -125,7 +125,7 @@ appendages = dbc.Container([
             dbc.Label("Ballast Ratio [%]"), html.Br(),
             dbc.Input(type='text', id='ballast-ratio-min', bs_size="sm", value=format(round(26,2)), className='boxminimum'),
             html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='ballast-ratio', bs_size="sm", value=format(round(40,2)), className='boxinput'),
+            dbc.Input(type='text', id='ballast-ratio', bs_size="sm", value=format(round(28,2)), className='boxinput'),
             html.P(" ", className='spacebox'),
             dbc.Input(type='text', id='ballast-ratio-max', bs_size="sm", value=format(round(58,2)), className='boxmaximum'),
             
