@@ -57,5 +57,5 @@ introduction = dbc.Container([
             ]),
         ], md=6),
     ]),
-	html.Br(),html.Br(), html.Br(), html.Br(),
+    html.Br(),html.Br(), html.Br(), html.Br(),
 ], className='mt-4')
