@@ -69,9 +69,9 @@ resultshull = dbc.Container([
         dbc.Row([
             dbc.Col([
                 html.Div(dcc.Graph(id='output-optimization')),
-                html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'),
-                html.Br(),
                 html.Div(id='plot-constraint-individual'),
+                html.Br(),
+                html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'),
             ], width=10),
             dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
         ]),
@@ -94,9 +94,18 @@ datatable = datatable.loc[:,"id":"LCB"]
 resultsplus = dbc.Container([
     dbc.Col([
         dbc.Row(dbc.Col(html.H5("Dimensions Parallel Plot"))),
+         dcc.Dropdown(
+            id='parallel-datatype', 
+            options=[
+                {'label': "All individuals", 'value': 1},
+                {'label': "Only valid individuals", 'value': 2},
+                {'label': "Only not valid individuals", 'value': 3},
+            ],
+            value='1',
+            style={'width': '300pt'}
+        ),
         dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
         html.Br(),
-
         dbc.Row(dbc.Col([
             html.H5("List of all individuals"),
             html.Div(

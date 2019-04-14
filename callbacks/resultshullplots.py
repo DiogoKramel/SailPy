@@ -141,44 +141,29 @@ def update_output(resultshullaxisy, resultshullaxisx):
     Output('plot-constraint-individual', 'children'),
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
-    if hoverData is None:
-        return ' '
-    else:
-        df = pd.read_csv("assets/data/optimizationresistance.csv")
-        hover = np.int(hoverData["points"][0]['text'])
-        row = df.loc[df['id']==hover]
-        return html.Div([
-            dbc.Label("Angle of Vanishing Stability"),
-            dcc.Slider(
-                min=50, max=120, value=row.iloc[0]['AVS'],
-                marks={'60': 'Min'}, disabled = True, style={'width': '50%'}
-            ),
-            html.Br(),
-            dbc.Label("Capsize Screening Factor"),
-            dcc.Slider(
-                min=0, max=5, value=row.iloc[0]['CS'],
-                marks={'3': 'Max', '2': 'Tolerable'}, disabled = True, style={'width': '50%'}
-            ),
-            html.Br(),
-        ])
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    hover = np.int(hoverData["points"][0]['text'])
+    row = df.loc[df['id']==hover]
+    avs = np.float(row.iloc[0]['AVS'])
+    cs = np.float(row.iloc[0]['CS'])
+    return html.Div([
+        dbc.Label("Angle of Vanishing Stability: {} degrees".format(round(avs,2))),
+        html.Br(),
+        dbc.Label("Capsize Screening Factor: {} degrees".format(round(cs,2))),
+        html.Br(),
+    ])
 
 @app.callback(
     Output('plot-resistance-individual', 'figure'),
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
-    if hoverData is None:
-        Rv = 0
-        Rincli = 0
-        Ri =0 
-        Rr = 0
-    else:
-        df = pd.read_csv("assets/data/optimizationresistance.csv")
-        hover = np.int(hoverData["points"][0]['text'])
-        row = df.loc[df['id']==hover]
-        Rv = [row.iloc[0]['Rv']]
-        Ri = [row.iloc[0]['Ri']]
-        Rr = [row.iloc[0]['Rr']]
-        Rincli = [row.iloc[0]['Rincli']]
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    hover = np.int(hoverData["points"][0]['text'])
+    row = df.loc[df['id']==hover]
+    Rv = [row.iloc[0]['Rv']]
+    Ri = [row.iloc[0]['Ri']]
+    Rr = [row.iloc[0]['Rr']]
+    Rincli = [row.iloc[0]['Rincli']]
     return {
         'data': [
             go.Bar(
@@ -597,9 +582,17 @@ def update_y_timeseries(hoverData):
 
 @app.callback(
      Output('plot-parallel-dimensions', 'figure'),
-    [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value')])
-def update_output(resultshullaxisy, resultshullaxisx):
-    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    [Input('parallel-datatype', 'value')])
+def update_output(type):
+    print(type)
+    if np.float(type) == 1:
+        df = pd.read_csv("assets/data/optimizationresistance.csv")
+    elif np.float(type) == 2:
+        df = pd.read_csv("assets/data/optimizationresistance.csv")
+        df = df.loc[df['valid']==True]
+    elif np.float(type) == 3:
+        df = pd.read_csv("assets/data/optimizationresistance.csv")
+        df = df.loc[df['valid']==False]
     return {
         'data': [
             go.Parcoords(
