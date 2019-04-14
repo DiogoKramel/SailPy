@@ -102,7 +102,8 @@ resultsplus = dbc.Container([
                 {'label': "Only not valid individuals", 'value': 3},
             ],
             value='1',
-            style={'width': '300pt'}
+            style={'width': '300pt'},
+			className='regularfont',
         ),
         dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
         html.Br(),

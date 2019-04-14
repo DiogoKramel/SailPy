@@ -149,6 +149,9 @@ def create(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tipchord
 
     json.dump({'p': psail, 'e': esail, 'i': isail, 'j': jsail, 'bad': boomheight, 'spl': spl, 'lpg': lpg, 'pmz': pmz, 'emz': emz, 'badmz': badmz, 'boa': boa, 'fb': freeboard, 'lr': lr, 'ehm': mastheight, 'emdc': mastdiameter, 'spanR': spanrudder, 'tipcR': tipchordrudder, 'rootcR': rootchordrudder, 'tiptcksR': tipchordruddertcks, 'roottcksR': rootchordruddertcks, 'sweepRdeg': sweeprudderdeg, 'spanK': spankeel, 'tipcK': tipchordkeel, 'rootcK': rootchordkeel, 'tiptcksK': tipchordkeeltcks, 'roottcksK': rootchordkeeltcks, 'sweepKdeg': sweepkeel, 'xcea': xcea, 'mcrew': crewmass, 'marcaR': marcaR, 'marcaK': marcaK, 'hsr': heightsurfacerudder}, codecs.open('assets/data/dimensions-appendages.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
 
+
+    #json.dump({'pmin': psailmin, 'emin': esailmin, 'imin': isailmin, 'jmin': jsailmin, 'badmin': boomheightmin, 'splmin': splmin, 'lpgmin': lpgmin, 'pmzmin': pmzmin, 'emzmin': emzmin, 'badmzmin': badmzmin, 'boamin': boamin, 'fbmin': freeboardmin, 'lrmin': lrmin, 'ehmmin': mastheightmin, 'emdcmin': mastdiametermin, 'spanRmin': spanruddermin, 'tipcRmin': tipchordruddermin, 'rootcRmin': rootchordruddermin, 'tiptcksRmin': tipchordruddertcksmin, 'roottcksRmin': rootchordruddertcksmin, 'sweepRdegmin': sweeprudderdegmin, 'spanKmin': spankeelmin, 'tipcKmin': tipchordkeelmin, 'rootcKmin': rootchordkeelmin, 'tiptcksKmin': tipchordkeeltcksmin, 'roottcksKmin': rootchordkeeltcksmin, 'sweepKdegmin': sweepkeelmin, 'xceamin': xceamin, 'hsrmin': heightsurfaceruddermin, 'mcrewmin': crewmass, 'marcaR': marcaR, 'marcaK': marcaK}, codecs.open('assets/data/dimensions-appendages-limits.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+
     return {
         'data': [
             go.Scatter(

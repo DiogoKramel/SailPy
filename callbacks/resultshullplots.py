@@ -149,7 +149,7 @@ def update_y_timeseries(hoverData):
     return html.Div([
         dbc.Label("Angle of Vanishing Stability: {} degrees".format(round(avs,2))),
         html.Br(),
-        dbc.Label("Capsize Screening Factor: {} degrees".format(round(cs,2))),
+        dbc.Label("Capsize Screening Factor: {}".format(round(cs,2))),
         html.Br(),
     ])
 

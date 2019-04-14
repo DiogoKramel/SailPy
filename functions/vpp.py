@@ -1,99 +1,34 @@
-import time
 import numpy as np
 from scipy import interpolate, optimize
-import json, codecs                             # export as json
+import csv
 
 
-def vpp_solve(sailset):
-    marcaS=np.float(sailset)    # configuração da vela (=1) principal+genoa (=2) principal+balão (=3) principal+genoa+balão (=4) principal
-    
-    ### 1 IMPORTANDO DIMENSOES ###
-    dimensions_obj = codecs.open('output/dimensions.json', 'r', encoding='utf-8').read()
-    dimensions = json.loads(dimensions_obj)
-                  
-    loa = np.float(dimensions["loa"])*0.3048    # comprimento total [m]
-    category = (dimensions["category"])         # cruiser or racer
-
-    ### Dimensões basicas otimizadas
-    lwl = np.float(dimensions["lwl"])           # comprimento da linha d'água [m]
-    lcb = np.float(dimensions["lcb"])-lwl/2     # posição longitudinal do centro de carena [m]
-    lcf = np.float(dimensions["lcf"])-lwl/2     # posição longitudinal do centro de flutuação [m]
-    tcan = np.float(dimensions["tc"])             # calado moldado [m]
-    divcan = np.float(dimensions["disp"])       # deslocamento volumétrico do casco [m3]
-    
-    ### Dimensões basicas obtidas
-    alcb = np.float(dimensions["alcb"])         # área lateral do casco [m2]
-    am = np.float(dimensions["am"])             # superfície molhada do casco (opcional) [m2]
-    awp = np.float(dimensions["awp"])
-    bmt = np.float(dimensions["bmt"])
-    bwl = np.float(dimensions["bwl"])           # boca na linha d'água [m]
-    cb = np.float(dimensions["cb"])             # coeficiente de bloco 
-    cm = np.float(dimensions["cm"])             # coeficiente de seção mestra
-    cp = np.float(dimensions["cp"])             # coeficiente prismático longitudinal
-    cwp = np.float(dimensions["cwp"])           # coeficiente de flutuação
-    GMtrans = np.float(dimensions["gmt"])       # altura metacêntrica transversal [m]
-    itwp = np.float(dimensions["itwp"])
-    kb = np.float(dimensions["kb"])
-    kg = np.float(dimensions["kg"])
-    scb = np.float(dimensions["scb"])           # superfície molhada do casco (opcional) [m2]
-    #GMlong = np.float(dimensions["kg"])         # Desnecessario? altura metacêntrica longitudinal (opcional para cálculo do pitch) [m]
-    
-    ### TO-DO	
-    P = 15.1			# altura da vela mestra [m]
-    E = 4.7			    # comprimento da base da vela mestra [m]
-    BAD = 1.11			# altura da retranca da vela mestra [m]
-    SL = 16.6			# comprimento da valuma da vela balão [m]
-    J = 4.3			    # comprimento da base da vela de proa [m]
-    I = 16.9			# altura da vela de proa [m]
-    LPG = 6.45			# perpendicular da vela de proa [m]
-
-    ### Dimensões estimadas
-    boa = loa/3.3        # boca máxima [m]  ***minha autoria
-    fb = boa/3.3		 # borda livre [m]  ***minha autoria
-    lr = loa/2			 # distância long entre CE do leme e CE hidrodinâmico global [m]  ***minha autoria
-    EHM	= BAD+P			 # altura do mastro a partir do convés [m]
-    EMDC = 0.185		 # diâmetro médio do mastro [m]
-
-    ### Keel and Rudder, não sei o que eu vou fazer com eles - TEM NA SERIE DE DELFT
-    spanR = 1.47	    # envergadura do leme [m]
-    tipcR = 0.32		# corda na extremidade inferior do leme [m]
-    rootcR = 0.688		# corda na raiz do leme [m]
-    tiptcksR = 0.12		# razão entre espessura máxima e corda na extremidade inferior do leme [-]
-    roottcksR = 0.12	# razão entre espessura máxima e corda na raiz do leme [-]
-    sweepRdeg = 10.0	# ângulo de enflechamento [graus]
-    spanK = 1.5			# envergadura da quilha [m]
-    tipcK = 1.05		# corda na extremidade inferior da quilha [m]
-    rootcK = 1.85		# corda na raiz da quilha [m]
-    tiptcksK = 0.175	# razão entre espessura máxima e corda na extremidade inferior da quilha [-]
-    roottcksK = 0.105	# razão entre espessura máxima e corda na raiz da quilha [-]
-    sweepKdeg = 15.0	# ângulo de enflechamento [degrees]
-
-    ### Dimensões que não vão ser configuradas ou otimizadas
-    xcea = 0.6			    #centro de esforço longitudinal da vela em relação ao comprimento total [-]
+def vpp_solve(sailset, lwl, loa, bwl, tc, disp, lcb, lcf, cb, cm, cp, cwp, awp, alcb, am, boa, scb, kb, kg, itwp, GMtrans, bmt, fb, lr, xcea, mcrew, P, E, I, J, BAD, SL, LPG, spanR, tipcR, rootcR, tiptcksR, roottcksR, sweepRdeg, spanK, tipcK, rootcK, tiptcksK, roottcksK, sweepKdeg, marcaK, marcaR, EHM, EMDC, hsr, savefile):
+    marcaS = np.float(sailset)    # configuração da vela (=1) principal+genoa (=2) principal+balão (=3) principal+genoa+balão (=4) principal
     poscrew = 1.0			# posição do centro de massa da tripulação na boca máxima (=1.0) ou na linha de centro (=0)
-    mcrew = 280			    # massa da tripulação [kg]
     Pmz = 0			        # comprimento do lado vertical do triângulo da vela mezena [m]
     Emz = 0			        # comprimento do lado horizontal do triângulo da vela mezena [m]
     BADmz = 0			    # altura da retranca da mezena em relação ao convés [m]
-    #marcascb = 1			# cálculo da estimativa da área molhada do casco (=1) ou não (=0)
-    #marcaawp = 1			# cálculo da estimativa da área da seção molhada do casco (=1) ou não (=0)
     marcaK = 1.0			# quilha naca 4 (=1) ou 6 (=0) dígitos
     marcaR = 1.0			# leme naca 4 (=1) or 6 (=0) dígitos    
     lbK = 0.0			    # comprimento do bulbo da quilha [m] (=0) se não há bulbo
     abK = 0.0			    # área lateral do bulbo da quilha [m2] (=0) se não há bulbo
     sbK = 0.0			    # área molhada do bulbo na quilha [m2] (=0) se não há bulbo
-    hsr = 0.0			    # profundidade da raiz do leme [m] (=0) se o leme atravessa a linha d'água
     tala = 0.0			    # enrijecimento da vela [-] totalmente flat (=0) 
     #dispK = 0.288			# deslocamento da quilha (opcional) [m3]
     #zcbK = 0.3207			# altura do centro de carena da quilha (opcional) [m]
+    veltw_min = 3
+    veltw_max = 4
     
-
     ### Parametros basicos
     rho = 1025          # water density [kg/m3]
     rhoair = 1.3        # air density [kg/m3]
     rhopb = 11340       # lead density [kg/m3]
     ni = 1e-6           # water kinematic viscosity [m2/s]
     grav = 9.80665      # gravity acceleration [m/s2]
+    
+    divcan = disp
+    tcan = tc
 
     ### 2 COEFICIENTES AUXILIARES ###
     vector_delf=np.zeros(9)     #delft series
@@ -109,25 +44,22 @@ def vpp_solve(sailset):
     DD=[['FroudeNo' 'A0' 'A1' 'A2' 'A3'], [0.2, -0.00104, 0.00172, 0.00117, -0.00008], [0.25, -0.0055, 0.00597, 0.0039, -0.00009], [0.3, -0.0111, 0.01421, 0.00069, 0.00021], [0.35, -0.00713, 0.02632, -0.00232, 0.00039], [0.4, -0.03581, 0.08649, 0.00999, 0.00017], [0.45, -0.0047, 0.11592, -0.00064, 0.00035], [0.5, 0.00553, 0.07371, 0.05991, -0.00114], [0.55, 0.04822, 0.0066, 0.07048, -0.00035], [0.6, 0.01021, 0.14173, 0.06409, -0.00192]]
 
     ### 1.5 Converting radians parameters to degree and mass to volume and declaring empty array
-    pi=np.pi
-    sweepR=np.radians(sweepRdeg)              #rudders sweep angle
-    sweepK=np.radians(sweepKdeg)              #keels sweep angle
+    pi = np.pi
+    sweepR = np.radians(sweepRdeg)              #rudders sweep angle
+    sweepK = np.radians(sweepKdeg)              #keels sweep angle
 
     ### 1.6 Configuracao dos ventos de incidencia
     if marcaS==1 or marcaS==4:                #S=1 main and genoa S=4 main S=2 main and spin S=3 main, genoa and spin
-        betatwdeg=np.arange(30,181,5)         #true wind angle from 30 to 180 degrees
+        betatwdeg=np.arange(30,181,10)         #true wind angle from 30 to 180 degrees
         initialguess=np.array([np.radians(5),4,np.radians(15),np.radians(-4)])
     if marcaS==2 or marcaS==3:                #in case there is a spinnaker
-        betatwdeg=np.arange(120,181,5)
+        betatwdeg=np.arange(120,181,10)
         initialguess=np.array([np.radians(0),3.7,np.radians(20),np.radians(-10)])
     betatw=np.radians(betatwdeg)
-    veltw=np.arange(3.08667,7,1.02889)                   #true wind speed evaluated from 5 to 20 m/s
+    veltw=np.arange(veltw_min,veltw_max+1,1)                   #true wind speed evaluated from 5 to 20 m/s
     len_betatw=np.size(betatw)
     len_veltw=np.size(veltw)
     vboatfinal,vmgfinal,betatwfinal,heeldeg,leewaydeg,deltaRdeg,pitchdeg,Fnfinal,Rtfinal,Rvfinal,Rrfinal,Rifinal,GZfinal=np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw))
-
-    count=0                   #contador de iteracoes dentro do vpp
-    tinicial=time.time()      #contador de tempo de processamento
 
     ### 2. VPP E OTIMIZACAO
     for t in range (0,len_veltw,1):    #para otimizacao, o for t é identado juntamente com bwl 
@@ -667,18 +599,13 @@ def vpp_solve(sailset):
             betatwfinaldeg=np.degrees(betatwfinal)
             heeldeg[t,u]=np.degrees(heel)
             leewaydeg[t,u]=np.degrees(leeway)
-            deltaRdeg[t,u]=np.degrees(deltaR)      
-            #pitchdeg[t,u]=pitch
+            deltaRdeg[t,u]=np.degrees(deltaR) 
             Fnfinal[t,u]=Fn
             Rtfinal[t,u]=Rt
             Rvfinal[t,u]=Rv
             Rrfinal[t,u]=Rr
             Rifinal[t,u]=Ri
             GZfinal[t,u]=GZ
-
-    tfinal=time.time()
-    telapsed=tfinal-tinicial             #tempo decorrido desde o inicio
-    print('Tempo de processamento do VPP: %.4f segundos'%(telapsed))
     
     ### 5 CALCULO DOS OBJETIVOS ###
     vboatmed=np.mean(vboatfinal)            #media da velocidade do veleiro em todos os ventos
@@ -694,6 +621,18 @@ def vpp_solve(sailset):
     DLR=dimcan/1000/(lwl*3.28084/100)**3    #displacement-lenght ratio
     SAD=An/divcan**(2/3)                    #sail area-diplacement ratio
 
-    json.dump({'vboatmed': vboatmed, 'ang_est': ang_est, 'CS': CS, 'MCR': MCR, 'RA': RA}, codecs.open('output/secondaryevaluation.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    # 5 EXPORT TO CSV
+    rows = []
+    with open("assets/data/"+savefile+".csv", "r") as csvfile:
+        csvreader = csv.reader(csvfile) 
+        for row in csvreader: 
+            rows.append(row)
+        index = csvreader.line_num
+    
+    exportdata = [index, format(vboatmed, '.4f'), format(MCR, '.4f')]
+    print(exportdata)
+    with open("assets/data/"+savefile+".csv", "a") as file:
+        writer = csv.writer(file, delimiter=',')
+        writer.writerow(exportdata)
 
-    return vboatfinal, MCR, betatwfinaldeg[0], Rtfinal, Rvfinal, Rrfinal, Rifinal, 
+    return vboatmed, MCR

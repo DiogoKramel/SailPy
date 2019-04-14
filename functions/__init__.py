@@ -1,4 +1,5 @@
 from .resistance import resistance
+from .vpp import vpp_solve
 from .nsga2 import optimize_nsgaII
 from .nsga2_appendages import optimize_nsgaII_appendages
 from .parametrization import wl_solve 

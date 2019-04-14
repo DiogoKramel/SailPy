@@ -283,8 +283,6 @@ def dimensionskeel(mzncheck):
     [Input('bulbo-check', 'value')])
 def dimensionskeel(bulbocheck):
     if bulbocheck == '0':
-        return html.Div([html.P("")])
-    if bulbocheck == '1':
         return html.Div([
             dbc.Label("Keel bulbous length"),
             dbc.Input(type='text', id='lbk', bs_size="sm", value=0),
@@ -292,6 +290,29 @@ def dimensionskeel(bulbocheck):
             dbc.Input(type='text', id='abk', bs_size="sm", value=0),
             dbc.Label("Keel bulbous wetted area"),
             dbc.Input(type='text', id='sbk', bs_size="sm", value=0)
+        ])
+    if bulbocheck == '1':
+        return html.Div([
+            dbc.Label("Keel bulbous length"), html.Br(),
+            dbc.Input(type='text', id='lbk-min', bs_size="sm", value=format(round(0.7,2)), className='boxminimum'),
+            html.P(" ", className='spacebox'),
+            dbc.Input(type='text', id='lbk', bs_size="sm", value=format(round(1,2)), className='boxinput'),
+            html.P(" ", className='spacebox'),
+            dbc.Input(type='text', id='lbk-max', bs_size="sm", value=format(round(1.3,2)), className='boxmaximum'),
+            
+			dbc.Label("Keel bulbous lateral area"), html.Br(),
+            dbc.Input(type='text', id='abk-min', bs_size="sm", value=format(round(0.7,2)), className='boxminimum'),
+            html.P(" ", className='spacebox'),
+            dbc.Input(type='text', id='abk', bs_size="sm", value=format(round(1,2)), className='boxinput'),
+            html.P(" ", className='spacebox'),
+            dbc.Input(type='text', id='abk-max', bs_size="sm", value=format(round(1.3,2)), className='boxmaximum'),
+            
+			dbc.Label("Keel bulbous wetted area"), html.Br(),
+            dbc.Input(type='text', id='sbk-min', bs_size="sm", value=format(round(0.7,2)), className='boxminimum'),
+            html.P(" ", className='spacebox'),
+            dbc.Input(type='text', id='sbk', bs_size="sm", value=format(round(1,2)), className='boxinput'),
+            html.P(" ", className='spacebox'),
+            dbc.Input(type='text', id='sbk-max', bs_size="sm", value=format(round(1.3,2)), className='boxmaximum'),
         ])
 
 @app.callback(Output('dimension-loa', 'children'), [Input('lwl-new', 'value'), Input('overhang', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value'), Input('disp-new', 'value'), Input('ballast-ratio', 'value'), Input('tc-new', 'value'), Input('bwl-new', 'value')])
