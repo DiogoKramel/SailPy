@@ -9,7 +9,7 @@ import json, codecs
 import numpy as np
 
 from app import app
-from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages, optimizationappendages
+from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages, optimizationappendages, resultsappendages
 
 server = app.server
 
@@ -61,7 +61,7 @@ footer = html.Nav([
                 html.A('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', style={'display': 'inline-block'}), 
                 html.P('.', style={'display': 'inline-block', 'margin-top':'10px'}),
             ], style={'display': 'inline-block'}),
-			dbc.Col(logogit, width='auto'),
+            dbc.Col(logogit, width='auto'),
         ]),
     ]),
 ], className='navbar footer footerbottom')
@@ -126,6 +126,8 @@ def display_page(tab):
         return dimensionsappendages.appendages, space, footer
     elif tab == 'tab-6':
         return optimizationappendages.optimizationappendages, space, footer
+    elif tab == 'tab-7':
+        return resultsappendages.resultsappendages, space, footer
     else:
         return ''
 
