@@ -61,21 +61,14 @@ git clone https://github.com/AppName
 Then change directory into the repo:
 
 ```
-cd AppNamePath
+cd SailPy-master/
 ```
 
-Now create and activate the virtual environment. On a mac:
+Now create and activate the virtual environment:
 
 ```
-virtualenv -p <python version> env
-source env/bin/activate
-```
-
-On a Windows:
-
-```
-virtualenv -p <python version> env
-env/Scripts/activate
+virtualenv venv
+source venv/bin/activate
 ```
 
 Now that virtualenv is setup and active we can install the dependencies:
@@ -87,7 +80,7 @@ pip install -r requirements.txt
 Once the dependencies have been installed, run the application:
 
 ```
-python app.py
+python index.py
 ```
 
 More info: https://packaging.python.org/guides/installing-using-pip-and-virtualenv/
