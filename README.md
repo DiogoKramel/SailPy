@@ -58,24 +58,24 @@ You can clone or download this repo:
 git clone https://github.com/AppName
 ```
 
-Then cd into the repo:
+Then change directory into the repo:
 
 ```
 cd AppNamePath
 ```
 
-Now create and activate a virtual environment. On a mac:
+Now create and activate the virtual environment. On a mac:
 
 ```
-virtualenv -p <python version> venv
-source eenv/bin/activate
+virtualenv -p <python version> env
+source env/bin/activate
 ```
 
 On a Windows:
 
 ```
 virtualenv -p <python version> env
-eenv/Scripts/activate
+env/Scripts/activate
 ```
 
 Now that virtualenv is setup and active we can install the dependencies:
