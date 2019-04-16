@@ -16,14 +16,14 @@ import pandas as pd
 @app.callback(Output('output-optimization-sd', 'figure'), [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value'), Input('year-interval', 'value'), Input('rig-type', 'value'), Input('keel-type', 'value')])
 def update_output(resultshullaxisy, resultshullaxisx, yearinterval, rigtype, keeltype):
     df = pd.read_csv("assets/data/saildata.csv")
-    #dfvalid = df.loc[df['valid']==True]
-    
+    if rigtype != None:
+        df = df.loc[df['typerig']==rigtype]
     return {
         'data': [
             go.Scatter(
                 x=df[resultshullaxisx],
                 y=df[resultshullaxisy],
-                text=df["name"],
+                text=df["name"]+" by "+df["designer"],
                 textposition='top center',
                 mode='markers',
                 name='Valid individuals',

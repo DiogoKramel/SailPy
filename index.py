@@ -133,12 +133,13 @@ def display_page(tab):
 
 @app.callback(Output('landing-application', 'children'), [Input('url', 'pathname')])
 def display_page(pathname):
+    space = html.Div([html.Br(), html.Br(), html.Br(), html.Br(), html.Br()])
     if pathname == '/':
         return landpage, footer
     elif pathname == '/application':
         return navbar, tabs, html.Div(id='page-content')
     elif pathname == '/saildata':
-        return navbar, tabs, saildata, footer
+        return navbar, saildata.saildata, space, footer
     else:
         return '404'
 

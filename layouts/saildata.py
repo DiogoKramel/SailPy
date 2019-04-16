@@ -43,7 +43,7 @@ saildata = dbc.Container([
                         {'label': 'ballast', 'value': 'ballast'},
                         {'label': 'sa', 'value': 'sa'},
                     ],
-                    value='Comfort',
+                    value='loa',
                     className='regularfont',
                 ),
                 html.Br()
@@ -75,17 +75,17 @@ saildata = dbc.Container([
         dbc.Row([
             dbc.Col([
                 dcc.Dropdown(
-                    id='rigtype',
+                    id='rig-type',
                     options=[
-                        {'label': 'Cutter', 'value': 'Cutter'},
-                        {'label': 'Sloop', 'value': 'Sloop'},
-                        {'label': 'Ketch', 'value': 'Ketch'}
+                        {'label': 'Cutter', 'value': 'CUTTER'},
+                        {'label': 'Sloop', 'value': 'SLOOP'},
+                        {'label': 'Ketch', 'value': 'KETCH'}
                     ],
                     multi=True,
-                    value="Cutter"
+                    value="CUTTER"
                 ),
                 dcc.Dropdown(
-                    id='keeltype',
+                    id='keel-type',
                     options=[
                         {'label': 'Steel', 'value': 'Steel'},
                         {'label': 'Fin Keel', 'value': 'FinKeel'},
@@ -95,7 +95,7 @@ saildata = dbc.Container([
                     value="FinKeel"
                 ),
             ]),
-        ])
+        ]),
         dbc.Row([
             dbc.Col([
                 html.Div(dcc.Graph(id='output-optimization-sd')),
@@ -105,13 +105,12 @@ saildata = dbc.Container([
         ]),
         dbc.Row([
             dbc.Col([
-                dbc.Label(Select the year interval),
+                dbc.Label("Select the year interval"),
                 dcc.RangeSlider(
                     id='year-interval',
                     min=1960,
                     max=2000,
                     value=[1970, 1990],
-                    marks={i for i in range(1970,2000)},
                     allowCross=False
                 )
             ])
