@@ -13,8 +13,8 @@ import csv
 import pandas as pd
 
 
-@app.callback(Output('output-optimization-sd', 'figure'), [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value')])
-def update_output(resultshullaxisy, resultshullaxisx):
+@app.callback(Output('output-optimization-sd', 'figure'), [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value'), Input('year-interval', 'value'), Input('rig-type', 'value'), Input('keel-type', 'value')])
+def update_output(resultshullaxisy, resultshullaxisx, yearinterval, rigtype, keeltype):
     df = pd.read_csv("assets/data/saildata.csv")
     #dfvalid = df.loc[df['valid']==True]
     

@@ -74,10 +74,47 @@ saildata = dbc.Container([
         ]),
         dbc.Row([
             dbc.Col([
+                dcc.Dropdown(
+                    id='rigtype',
+                    options=[
+                        {'label': 'Cutter', 'value': 'Cutter'},
+                        {'label': 'Sloop', 'value': 'Sloop'},
+                        {'label': 'Ketch', 'value': 'Ketch'}
+                    ],
+                    multi=True,
+                    value="Cutter"
+                ),
+                dcc.Dropdown(
+                    id='keeltype',
+                    options=[
+                        {'label': 'Steel', 'value': 'Steel'},
+                        {'label': 'Fin Keel', 'value': 'FinKeel'},
+                        {'label': 'Mono Keel', 'value': 'MonoKeel'}
+                    ],
+                    multi=True,
+                    value="FinKeel"
+                ),
+            ]),
+        ])
+        dbc.Row([
+            dbc.Col([
                 html.Div(dcc.Graph(id='output-optimization-sd')),
                 html.Br(),
                 html.A('Export all individuals generated', download='saildata.csv', href='assets/data/saildata.csv'),
             ], width=12),
         ]),
+        dbc.Row([
+            dbc.Col([
+                dbc.Label(Select the year interval),
+                dcc.RangeSlider(
+                    id='year-interval',
+                    min=1960,
+                    max=2000,
+                    value=[1970, 1990],
+                    marks={i for i in range(1970,2000)},
+                    allowCross=False
+                )
+            ])
+        ])
     ], className="mt-4")
 ])
