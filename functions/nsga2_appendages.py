@@ -18,8 +18,8 @@ def optimize_nsgaII_appendages():
     gaconfig = json.loads(gaconfig_obj)
     weight1 = np.float(gaconfig["weight1"])/10 # velocity
     weight2 = np.float(gaconfig["weight2"])/10 # comfort ratio weight
-    velocityrange = np.array(gaconfig["velocityrange"])
-    heelrange = np.array(gaconfig["heelrange"])    
+    windspeedrange = np.array(gaconfig["windspeedrange"])
+    windanglerange = np.array(gaconfig["windanglerange"])    
     pop_size = np.int(gaconfig["popsize"])
     children_size = np.int(gaconfig["childrensize"])
     max_gen = np.int(gaconfig["maxgeneration"])
@@ -110,7 +110,6 @@ def optimize_nsgaII_appendages():
         marcaR = np.float(dimapp["marcaR"])
         mcrew = np.float(dimapp["mcrew"])
 
-        
         dimensions = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
         dim = json.loads(dimensions)
         cb = np.float(dim["cb"])

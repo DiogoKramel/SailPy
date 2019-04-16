@@ -113,9 +113,9 @@ optimizationappendages = dbc.Container([
             ]),
             dbc.Row([
                 dbc.Col([
-                    dbc.Label("Velocities analyzed"),
+                    dbc.Label("Wind speed in knots analyzed"),
                     dcc.RangeSlider(
-                        id='velocity-range',
+                        id='wind-speed-range',
                         marks={i: '{} knots'.format(i) for i in range(2, 8)},
                         min=2,
                         max=7,
@@ -126,13 +126,13 @@ optimizationappendages = dbc.Container([
             ]),
             dbc.Row([
                 dbc.Col([
-                    dbc.Label("Heel angles analyzed"),
+                    dbc.Label("Wind true angle analyzed"),
                     dcc.RangeSlider(
                         marks={i: '{} deg'.format(i*10) for i in range(0, 6)},
                         min=0,
                         max=5,
                         value=[2, 3],
-                        id='heel-range',
+                        id='wind-angle-range',
                     ),
                     html.Br(),html.Br(),
                 ])

@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import interpolate, optimize
 import csv
+import json, codecs
 
 
 def vpp_solve(sailset, lwl, loa, bwl, tc, disp, lcb, lcf, cb, cm, cp, cwp, awp, alcb, am, boa, scb, kb, kg, itwp, GMtrans, bmt, fb, lr, xcea, mcrew, P, E, I, J, BAD, SL, LPG, spanR, tipcR, rootcR, tiptcksR, roottcksR, sweepRdeg, spanK, tipcK, rootcK, tiptcksK, roottcksK, sweepKdeg, marcaK, marcaR, EHM, EMDC, hsr, savefile):
@@ -50,27 +51,26 @@ def vpp_solve(sailset, lwl, loa, bwl, tc, disp, lcb, lcf, cb, cm, cp, cwp, awp, 
 
     ### 1.6 Configuracao dos ventos de incidencia
     if marcaS==1 or marcaS==4:                #S=1 main and genoa S=4 main S=2 main and spin S=3 main, genoa and spin
-        betatwdeg=np.arange(30,181,10)         #true wind angle from 30 to 180 degrees
+        betatwdeg=np.arange(30,181,5)         #true wind angle from 30 to 180 degrees
         initialguess=np.array([np.radians(5),4,np.radians(15),np.radians(-4)])
     if marcaS==2 or marcaS==3:                #in case there is a spinnaker
-        betatwdeg=np.arange(120,181,10)
+        betatwdeg=np.arange(120,181,5)
         initialguess=np.array([np.radians(0),3.7,np.radians(20),np.radians(-10)])
     betatw=np.radians(betatwdeg)
-    veltw=np.arange(veltw_min,veltw_max+1,1)                   #true wind speed evaluated from 5 to 20 m/s
+    veltw=np.arange(3.08667,7.31779,1.02889)                   #true wind speed evaluated from 5 to 20 m/s
     len_betatw=np.size(betatw)
     len_veltw=np.size(veltw)
     vboatfinal,vmgfinal,betatwfinal,heeldeg,leewaydeg,deltaRdeg,pitchdeg,Fnfinal,Rtfinal,Rvfinal,Rrfinal,Rifinal,GZfinal=np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw)),np.zeros((len_veltw,len_betatw))
 
     ### 2. VPP E OTIMIZACAO
-    for t in range (0,len_veltw,1):    #para otimizacao, o for t é identado juntamente com bwl 
+    for t in range (0,len_veltw,1):
         for u in range (0,len_betatw,1):
             def f(y):
-                global vboat         #declarar como global qualquer variavel a ser usada fora da funcao
+                global vboat
                 global vmg
                 global heel
                 global leeway       
                 global deltaR
-                global pitch
                 global Fn
                 global Rt
                 global Rv
@@ -612,10 +612,10 @@ def vpp_solve(sailset, lwl, loa, bwl, tc, disp, lcb, lcf, cb, cm, cp, cwp, awp, 
     BR=40                                   #Ballast Ratio entre 56 e 28 - colocar nos inputs
     loa=lwl*1.1                             #colocar nos inputs
     dimcan=divcan*rho                       #deslocamento massico
-    SSV=boa**2/(BR*tcan*divcan**(1/3))       
+    SSV=bwl**2/(BR*tcan*divcan**(1/3))       
     ang_est=110+(400/(SSV-10))              #angulo de perda de estabilidade
     CS=boa*3.28084/(dimcan*2.20462/64)**(1/3)                #capsize screening factor
-    MCR=dimcan*2.20462/((boa*3.28084)**(4/3)*0.65*(0.7*lwl*3.28084+0.3*loa*3.28084))    #motion comfort ratio
+    MCR=dimcan*2.20462/((bwl*3.28084)**(4/3)*0.65*(0.7*lwl*3.28084+0.3*loa*3.28084))    #motion comfort ratio
     RA=(6.28/(tcan*3.28084))**2*(boa*3.28084-1.5)*10*pi/(180*32.2)                      #aceleracao vertical
     RAg=RA/grav                             #acelaracao vertical em termos de aceleracao da gravidade
     DLR=dimcan/1000/(lwl*3.28084/100)**3    #displacement-lenght ratio
@@ -629,10 +629,22 @@ def vpp_solve(sailset, lwl, loa, bwl, tc, disp, lcb, lcf, cb, cm, cp, cwp, awp, 
             rows.append(row)
         index = csvreader.line_num
     
-    exportdata = [index, format(vboatmed, '.4f'), format(MCR, '.4f')]
+    exportdata = [index, format(vboatmed, '.4f'), format(ang_est, '.4f'), True]
     print(exportdata)
+    print(MCR)
+    print(bwl)
+    print(divcan)
+    print(tcan)
     with open("assets/data/"+savefile+".csv", "a") as file:
         writer = csv.writer(file, delimiter=',')
         writer.writerow(exportdata)
 
-    return vboatmed, MCR
+    # export polar diagram values
+    if index < 2:
+        json.dump({'angle': betatwfinaldeg[0].tolist()}, codecs.open('assets/data/vpp_results/angles.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    
+    index = np.str(index)
+    filename="assets/data/vpp_results/veloc_hull"+index+".json"
+    json.dump({'velocity': vboatfinal.tolist()}, codecs.open(filename, 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+   
+    return vboatmed, ang_est

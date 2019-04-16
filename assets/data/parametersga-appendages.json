@@ -1,1 +1,1 @@
-{"childrensize": "4", "eta": "20", "gamethod": "1", "halloffamenumber": "5", "heelrange": [2, 3], "indpb": "20", "maxgeneration": "15", "mutprob": "20", "popsize": "10", "velocityrange": [3, 5], "weight1": 9, "weight2": 6.5}
+{"childrensize": "4", "eta": "20", "gamethod": "1", "halloffamenumber": "5", "indpb": "20", "maxgeneration": "15", "mutprob": "20", "popsize": "10", "weight1": 9, "weight2": 6.5, "windanglerange": [2, 3], "windspeedrange": [3, 5]}

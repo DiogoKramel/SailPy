@@ -36,7 +36,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
     
     dfvalid = df.loc[df['valid']==True]
     dfvalid=dfvalid.reset_index()
-    dfnotvalid = df.loc[df["valid"]==False]
+    #dfnotvalid = df.loc[df["valid"]==False]
     p_front = pareto_frontier(dfvalid["Comfort"], dfvalid["AverageVelocity"], maxX = True, maxY = True)
     
     paretox=[]
@@ -75,18 +75,18 @@ def update_output(resultshullaxisy, resultshullaxisx):
                     opacity = 0.5+0.5*df["id"]/max(df["id"]),
                 ),
             ),
-            go.Scatter(
-                x=dfnotvalid[resultshullaxisx],
-                y=dfnotvalid[resultshullaxisy],
-                text=dfnotvalid["id"],
-                textposition='top center',
-                mode='markers',
-                name='Invalid',
-                marker=dict(
-                    color='rgba(255,0,0,0.2)',
-                    symbol='cross',
-                ),
-            ),
+            #go.Scatter(
+            #    x=dfnotvalid[resultshullaxisx],
+            #    y=dfnotvalid[resultshullaxisy],
+            #    text=dfnotvalid["id"],
+            #    textposition='top center',
+            #    mode='markers',
+            #    name='Invalid',
+            #    marker=dict(
+            #        color='rgba(255,0,0,0.2)',
+            #        symbol='cross',
+            #    ),
+            #),
             #go.Scatter(
             #    x=dfinit[resultshullaxisx],
             #    y=dfinit[resultshullaxisy],
@@ -136,4 +136,58 @@ def update_output(resultshullaxisy, resultshullaxisx):
         legend=dict(x=0.8, y=1),
         font=dict(size=12),
         )
+    }
+
+
+@app.callback(Output('polar-diagram', 'figure'), [Input('output-optimization2', 'hoverData')])
+def callback_vpp(hoverData):
+    hover = np.int(hoverData["points"][0]['text'])
+    index = np.str(hover)
+    filename="assets/data/vpp_results/veloc_hull"+index+".json"
+    
+    veloc_obj = codecs.open(filename, 'r', encoding='utf-8').read()
+    veloc_solution = json.loads(veloc_obj)
+    velocities= np.asarray(veloc_solution['velocity'])
+    ymax=1.1*np.max(velocities)
+
+    angles_obj = codecs.open("assets/data/vpp_results/angles.json", 'r', encoding='utf-8').read()
+    angles_solution = json.loads(angles_obj)
+    angles= np.asarray(angles_solution['angle'])
+    return {
+        'data': [go.Scatterpolar(
+            theta=angles,
+            r=velocities[0],
+            mode='lines',
+            name='6 nós'
+        ),
+        go.Scatterpolar(
+            theta=angles,
+            r=velocities[1],
+            mode='lines',
+            name='8 nós'
+        )],
+        # https://plot.ly/python/polar-chart/
+        'layout': go.Layout(
+            title='Velocity Prediction',
+            hovermode = "closest",
+            height = 400,
+            margin = {
+                "r": 20,
+                "t": 30,
+                "b": 50,
+                "l": 50
+            },
+            polar = dict(
+                sector = [0, 360],
+                radialaxis = dict(
+                    angle = 90,
+                    range = [0, ymax],
+                ),
+                angularaxis = dict(
+                    direction = "clockwise",
+                    rotation = 90,
+                ),
+            ),
+            font=dict(size=10),
+        ),
     }

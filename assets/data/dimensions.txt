@@ -1,0 +1,79 @@
+Dimensões - Veleiro YD-40
+Escola Politécnica da Universidade de São Paulo
+Versão 23.04.2018
+
+Código			Valor (=99 estimar)	Descrição
+type			2			categoria regata (=0) ou cruzeiro (=1) ou hibrido (=2) [-]
+rho			1025			densidade da água salgada [kg/m3]
+rhoair			1.3			densidade do ar [kg/m3]
+rhopb			11340			densidade do chumbo do lastro [kg/m3]	
+ni			1e-6			viscosidade cinemática da água [m2/s]
+grav			9.80665			aceleração da gravidade [m/s2]
+loa			12.192			comprimento total [m]
+lwl 			10.02			comprimento da linha d'água [m]
+boa			3.71			boca máxima [m]
+bwl 			3.17			boca na linha d'água [m]
+tcan 			0.57			calado moldado [m]
+fb			1.0			borda livre [m]
+lcb			-0.35			posição longitudinal do centro de carena [m]
+lcf			-0.63			posição longitudinal do centro de flutuação [m]
+lr			6.0			distância longitudinal entre CE do leme e CE hidrodinâmico global [m]
+alcb			4.5			área lateral do casco [m2]
+scb			25.2			superfície molhada do casco (opcional) [m2]
+cb			0.4485			coeficiente de bloco [-]
+cm			0.65			coeficiente de seção mestra [-]
+cp			0.56			coeficiente prismático longitudinal [-]
+cwp			0.70			coeficiente de flutuação [-]
+divcan 			8.12			deslocamento volumétrico do casco [m3]
+KGcb			0.8			KG do casco
+GMtrans			1.45			altura metacêntrica transversal[m]
+GMlong			20			altura metacêntrica longitudinal (opcional para cálculo do pitch) [m]
+spanR			1.47			envergadura do leme [m]
+tipcR			0.32			corda na extremidade inferior do leme [m]
+rootcR			0.688			corda na raiz do leme [m]
+tiptcksR		0.12			razão entre espessura máxima e corda na extremidade inferior do leme [-]
+roottcksR		0.12			razão entre espessura máxima e corda na raiz do leme [-]
+sweepRdeg		10.0			ângulo de enflechamento [graus]
+hsr			0.0			profundidade da raiz do leme [m] (=0) se o leme atravessa a linha d'água
+spanK			1.5			envergadura da quilha [m]
+tipcK			1.05			corda na extremidade inferior da quilha [m]
+rootcK			1.85			corda na raiz da quilha [m]
+tiptcksK		0.175			razão entre espessura máxima e corda na extremidade inferior da quilha [-]
+roottcksK		0.105			razão entre espessura máxima e corda na raiz da quilha [-]
+sweepKdeg		15.0			ângulo de enflechamento [degrees]
+lbK			0.0			comprimento do bulbo da quilha [m] (=0) se não há bulbo
+abK			0.0			área lateral do bulbo da quilha [m2] (=0) se não há bulbo
+sbK			0.0			área molhada do bulbo na quilha [m2] (=0) se não há bulbo
+dispK			0.288			deslocamento da quilha (opcional) [m3]
+zcbK			0.3207			altura do centro de carena da quilha (opcional) [m]
+P			15.1			altura da vela mestra [m]
+E			4.7			comprimento da base da vela mestra [m]
+BAD			1.11			altura da retranca da vela mestra [m]
+SL			16.6			comprimento da valuma da vela balão [m]
+J			4.3			comprimento da base da vela de proa [m]
+I			16.9			altura da vela de proa [m]
+LPG			6.45			perpendicular da vela de proa [m]
+Pmz			0			comprimento do lado vertical do triângulo da vela mezena [m]
+Emz			0			comprimento do lado horizontal do triângulo da vela mezena [m]
+BADmz			0			altura da retranca da mezena em relação ao convés [m]
+EHM			16.5			altura do mastro a partir do convés [m]
+EMDC			0.185			diâmetro médio do mastro [m]
+xcea			0.6			centro de esforço longitudinal da vela em relação ao comprimento total [-]
+BR			40			razão de lastro
+marcaS			1.0			configuração da vela [-] (=1) principal+genoa (=2) principal+balão (=3) principal+genoa+balão (=4) principal
+marcaK			1.0			quilha naca 4 (=1) ou 6 (=0) dígitos
+marcaR			1.0			leme naca 4 (=1) or 6 (=0) dígitos
+marcascb		0.0			cálculo da estimativa da área molhada do casco (=1) ou não (=0)
+marcaawp		1.0			cálculo da estimativa da área da seção molhada do casco (=1) ou não (=0)
+poscrew			1.0			posição do centro de massa da tripulação na boca máxima (=1.0) ou na linha de centro (=0)
+mcrew 			280			massa da tripulação [kg]
+marcacoef		0.0			GZ calculado através aproximação da CEE (=0) ou utiliza coeficientes de estabilidade (=1)
+marcaCEE		0.0			Correcao para CEE (=1) ou CEE está correta (=0)
+coef0			0.0			coeficientes do cálculo de GZ
+coef1			0.0			
+coef2			0.0
+coef3			0.0
+coef4			0.0
+coef5			0.0
+coef6			0.0
+tala			0.0			enrijecimento da vela [-] totalmente flat (=0) [não aplicável]
