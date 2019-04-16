@@ -9,7 +9,7 @@ import json, codecs
 import numpy as np
 
 from app import app
-from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages, optimizationappendages, resultsappendages
+from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages, optimizationappendages, resultsappendages, saildata
 
 server = app.server
 
@@ -137,6 +137,8 @@ def display_page(pathname):
         return landpage, footer
     elif pathname == '/application':
         return navbar, tabs, html.Div(id='page-content')
+    elif pathname == '/saildata':
+        return navbar, tabs, saildata, footer
     else:
         return '404'
 
