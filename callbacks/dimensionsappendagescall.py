@@ -300,14 +300,14 @@ def dimensionskeel(bulbocheck):
             html.P(" ", className='spacebox'),
             dbc.Input(type='text', id='lbk-max', bs_size="sm", value=format(round(1.3,2)), className='boxmaximum'),
             
-			dbc.Label("Keel bulbous lateral area"), html.Br(),
+            dbc.Label("Keel bulbous lateral area"), html.Br(),
             dbc.Input(type='text', id='abk-min', bs_size="sm", value=format(round(0.7,2)), className='boxminimum'),
             html.P(" ", className='spacebox'),
             dbc.Input(type='text', id='abk', bs_size="sm", value=format(round(1,2)), className='boxinput'),
             html.P(" ", className='spacebox'),
             dbc.Input(type='text', id='abk-max', bs_size="sm", value=format(round(1.3,2)), className='boxmaximum'),
             
-			dbc.Label("Keel bulbous wetted area"), html.Br(),
+            dbc.Label("Keel bulbous wetted area"), html.Br(),
             dbc.Input(type='text', id='sbk-min', bs_size="sm", value=format(round(0.7,2)), className='boxminimum'),
             html.P(" ", className='spacebox'),
             dbc.Input(type='text', id='sbk', bs_size="sm", value=format(round(1,2)), className='boxinput'),

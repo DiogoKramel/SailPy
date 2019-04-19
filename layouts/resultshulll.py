@@ -103,7 +103,7 @@ resultsplus = dbc.Container([
             ],
             value='1',
             style={'width': '300pt'},
-			className='regularfont',
+            className='regularfont',
         ),
         dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
         html.Br(),

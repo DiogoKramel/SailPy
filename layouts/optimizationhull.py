@@ -25,10 +25,10 @@ optimizationhull = dbc.Container([
                 placeholder="Select one type of optimization",
                 style={'width': '90%', 'font-size': '10pt'}
             ),
-			html.Div(id="option-optimization"),
-			html.Br(), html.Br(), 
+            html.Div(id="option-optimization"),
+            html.Br(), html.Br(), 
             html.H4("Constraints"),
-			html.P("Constraints help maintain the sailboats feasible. They evaluate safety through the Angle of Vanishing Statibility, maximum angle in which the sailboat still returns to its equilibrium state; and also the Capsize Screening Factor, that empirically evaluate the consider the likelihood of capsizing. Their limits are 110 degrees and 2."),
+            html.P("Constraints help maintain the sailboats feasible. They evaluate safety through the Angle of Vanishing Statibility, maximum angle in which the sailboat still returns to its equilibrium state; and also the Capsize Screening Factor, that empirically evaluate the consider the likelihood of capsizing. Their limits are 110 degrees and 2."),
             dcc.Dropdown(
                 options=[
                     {'label': ' Angle of Vanishing Stability', 'value': 'AVS'},
