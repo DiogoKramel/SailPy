@@ -226,7 +226,12 @@ def test_loadingfactor(cwp, cb, lwl, bwl, tc):
         successfail = 'success'
         alert = 'Within limits'
     return dbc.Row([
-        dbc.Col('4) Loading Factor: {}'.format(round(loadingfactor,2)), width=5), 
+        dbc.Col(
+			html.Span(
+				dbc.Label('4) Loading Factor: {}'.format(round(loadingfactor,2))), 
+			id="loading-factor"),
+		width=5),
+        dbc.Tooltip("Ratio between Waterplane Area and Displacement", target="loading-factor"),
         dbc.Col('Limits: [3.78-12.67]'), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])

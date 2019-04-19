@@ -15,11 +15,11 @@ server = app.server
 
 logoapp = html.Img(src='/assets/static/logoapp.png', height='45px')
 logoappwhite = html.Img(src='/assets/landing/logoappwhite.png', height='50px')
-logousp = html.A([html.Img(src='/assets/static/logousp.png', height='35px')], href="https://www.usp.br/")
-logopoli = html.A([html.Img(src='/assets/static/logopolitecnica.png', height='35px')], href="https://www.poli.usp.br/")
-logopnv = html.A([html.Img(src='/assets/static/pnv.png', height='35px')], href="www.pnv.poli.usp.br/")
-logocapes = html.A([html.Img(src='/assets/static/logocapes.png', height='35px')], href="http://www.capes.gov.br")
-logogit = html.A([html.Img(src='/assets/static/github.svg', height='35px')], href="https://github.com/DiogoKramel/SailPy")
+logousp = html.A([html.Img(src='/assets/static/logousp.png', height='35px')], href='https://www.usp.br/', target='_blank')
+logopoli = html.A([html.Img(src='/assets/static/logopolitecnica.png', height='35px')], href='https://www.poli.usp.br/', target='_blank')
+logopnv = html.A([html.Img(src='/assets/static/pnv.png', height='35px')], href='www.pnv.poli.usp.br/', target='_blank')
+logocapes = html.A([html.Img(src='/assets/static/logocapes.png', height='35px')], href='http://www.capes.gov.br', target='_blank')
+logogit = html.A([html.Img(src='/assets/static/github.svg', height='35px')], href='https://github.com/DiogoKramel/SailPy', target='_blank')
 title = dcc.Link('SailPy - A preliminary design tool for sailboats', className='navbar-brand', style={'color': 'white'})
 
 navitems = html.Ul([
@@ -56,9 +56,9 @@ footer = html.Nav([
             dbc.Col(logocapes, width='auto'),
             dbc.Col([
                 html.P('Source code released under the', style={'display': 'inline-block', 'margin-right': '3px'}),
-                html.A('MIT license', href='https://opensource.org/licenses/MIT/', style={'display': 'inline-block'}),
+                html.A('MIT license', href='https://opensource.org/licenses/MIT/', target='_blank', style={'display': 'inline-block'}),
                 html.P('. Website and documentation licensed under', style={'display': 'inline-block', 'margin-right': '3px'}), 
-                html.A('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', style={'display': 'inline-block'}), 
+                html.A('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', target='_blank', style={'display': 'inline-block'}), 
                 html.P('.', style={'display': 'inline-block', 'margin-top':'10px'}),
             ], style={'display': 'inline-block'}),
             dbc.Col(logogit, width='auto'),

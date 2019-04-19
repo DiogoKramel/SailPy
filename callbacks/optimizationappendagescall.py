@@ -14,8 +14,8 @@ import pandas as pd
 import time
 
 from functions import resistance
-from functions import optimize_nsgaII_appendages
 from functions import vpp
+from functions import optimization_deap_appendages
 
 
 @app.callback(
@@ -42,7 +42,7 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         with open('assets/data/optimizationvpp.csv','w') as fd:
             fd.write("id,AverageVelocity,Comfort,valid"+"\n")
         start = time.time()
-        result = optimize_nsgaII_appendages()
+        result = optimization_deap_appendages()
         done = time.time()
         elapsed = done-start
         file = open("assets/data/optimizationvpp.csv")

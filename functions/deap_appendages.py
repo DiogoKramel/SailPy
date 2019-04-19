@@ -12,7 +12,7 @@ import csv
 
 from functions import vpp_solve
 
-def optimize_nsgaII_appendages():
+def optimization_deap_appendages():
     ### PARAMATERS
     gaconfig_obj = codecs.open('assets/data/parametersga-appendages.json', 'r', encoding='utf-8').read()
     gaconfig = json.loads(gaconfig_obj)

@@ -34,8 +34,19 @@ def update_output(resultshullaxisy, resultshullaxisx):
         p_frontY = [pair[1] for pair in p_front]
         return p_frontX, p_frontY
     
+    gaconfig_obj = codecs.open('assets/data/parametersga.json', 'r', encoding='utf-8').read()
+    gaconfig = json.loads(gaconfig_obj)   
+    weight1 = np.float(gaconfig["weight1"])*(-1)/10
+    weight2 = np.float(gaconfig["weight2"])*(-1)/10
+    
     dfvalid = df.loc[df['valid']==True]
-    dfvalid=dfvalid.reset_index()
+    dfvalid = dfvalid.reset_index()
+    resist_mean = dfvalid["Resistance"].mean()
+    comfort_mean = dfvalid["Comfort"].mean()
+    values = weight1*dfvalid.Resistance/resist_mean+weight2*dfvalid.Comfort/comfort_mean
+    dfvalid['Values'] = values
+    best = dfvalid['Values'].idxmax()
+
     dfnotvalid = df.loc[df["valid"]==False]
     p_front = pareto_frontier(dfvalid["Comfort"], dfvalid["Resistance"], maxX = True, maxY = False)
     paretox=[]
@@ -53,13 +64,18 @@ def update_output(resultshullaxisy, resultshullaxisx):
         paretox=dfinit[resultshullaxisx]
         paretoy=dfinit[resultshullaxisy]
         paretoname="Initial hull"
+    
+    ymin = min(df[resultshullaxisy])*0.9
+    ymax = max(df[resultshullaxisy])
+    if ymax > 7000:
+        ymax = 7000
 
     return {
         'data': [
             go.Scatter(
                 x=dfvalid[resultshullaxisx],
                 y=dfvalid[resultshullaxisy],
-                text=dfvalid["id"],
+                text = dfvalid["id"],
                 textposition='top center',
                 mode='markers',
                 name='Valid individuals',
@@ -98,6 +114,19 @@ def update_output(resultshullaxisy, resultshullaxisx):
                 ),
             ),
             go.Scatter(
+                x = [dfvalid.iloc[best][resultshullaxisx]],
+                y = [dfvalid.iloc[best][resultshullaxisy]],
+                text=dfvalid["id"],
+                textposition='top center',
+                mode='markers',
+                name='Best individual',
+                marker=dict(
+                    symbol='star',
+                    size = 10,
+                    color = "blue",
+                ),
+            ),
+            go.Scatter(
                 x=paretox,
                 y=paretoy,
                 mode='lines',
@@ -130,7 +159,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
                 "showline": True,
                 "mirror": True,
                 "title": resultshullaxisy,
-                "range": [min(df[resultshullaxisy]), max(df[resultshullaxisy])],
+                "range": [ymin, ymax],
             },
         legend=dict(x=0.8, y=1),
         font=dict(size=12),
@@ -584,7 +613,6 @@ def update_y_timeseries(hoverData):
      Output('plot-parallel-dimensions', 'figure'),
     [Input('parallel-datatype', 'value')])
 def update_output(type):
-    print(type)
     if np.float(type) == 1:
         df = pd.read_csv("assets/data/optimizationresistance.csv")
     elif np.float(type) == 2:

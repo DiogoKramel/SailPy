@@ -1,12 +1,6 @@
 import time, array, random, copy, math
 import pandas as pd
 import numpy as np
-#import matplotlib
-#matplotlib.use('TkAgg')
-#import matplotlib.pyplot as plt
-#import matplotlib.cm as cm
-#import networkx                   # genealogic tree
-#from networkx.drawing.nx_agraph import graphviz_layout
 from math import sqrt
 from deap import algorithms, base, creator, gp, benchmarks, tools
 from deap.benchmarks.tools import diversity, convergence, hypervolume
@@ -16,7 +10,7 @@ import csv
 
 from functions import resistance
 
-def optimize_nsgaII():
+def optimization_deap_resistance():
     ### PARAMATERS
     gaconfig_obj = codecs.open('assets/data/parametersga.json', 'r', encoding='utf-8').read()
     gaconfig = json.loads(gaconfig_obj)
@@ -39,6 +33,7 @@ def optimize_nsgaII():
     bound_low9, bound_up9 = 0.65, 0.78                             # cm
     velocityrange = np.array(gaconfig["velocityrange"])
     heelrange = np.array(gaconfig["heelrange"])    
+    constraints = np.array(gaconfig["constraints"])    
     pop_size = np.int(gaconfig["popsize"])                         # number of the population
     children_size = np.int(gaconfig["childrensize"])               # number of children to produce at each generation
     max_gen = np.int(gaconfig["maxgeneration"])                    # number of times the algorithm is run
@@ -46,7 +41,9 @@ def optimize_nsgaII():
     halloffame_number = np.int(gaconfig["halloffamenumber"])       # number of best individuals selected 
     indpb_value = np.int(gaconfig["indpb"])/100                    # independent probability for each attribute to be mutated
     eta_value = np.int(gaconfig["eta"])                            # crowding degree of the crossover. A high eta will produce children resembling to their parents, while a small eta will produce solutions much more different
-    gamethod = np.int(gaconfig["gamethod"])    
+    selectionmethod = np.int(gaconfig["selectionmethod"])
+    mutationmethod = np.int(gaconfig["mutationmethod"])
+    crossovermethod = np.int(gaconfig["crossovermethod"])  
     NDIM = 2                            # numero de dimensoes do problema (objetivos?)
     random.seed(a = 42)					# control randomnesss
     savefile="optimizationresistance"
@@ -70,8 +67,8 @@ def optimize_nsgaII():
         dim = json.loads(dimensions)
         alcb_coefficient = np.float(dim["alcb_coefficient"])
         alcb = lwl*alcb_coefficient*tcan
-        loa = lwl*1.1
-        boa = bwl*1.2
+        loa = lwl*1.05
+        boa = bwl*1.1
         #alcb = np.float(dim["alcb"])
         #loa = np.float(dim["loa"])*0.3048
         #resistance_total = 0
@@ -81,10 +78,35 @@ def optimize_nsgaII():
         vboat = 3
         heel = 20
         savefile="optimizationresistance"
-        resist = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, vboat, heel, savefile)
-        f1 = resist[0]
-        f2 = divcan*1025*2.20462/((boa*3.28084)**(4/3)*0.65*(0.7*lwl*3.28084+0.3*loa*3.28084))  #motion comfort ratio
-        #f2 = divcan/(0.65*(0.7*lwl+0.3*loa)*bwl**1.33)
+
+        Rt = 0
+        CR = 0
+        Rv = 0
+        Ri = 0
+        Rr =0
+        Rincli =0
+        count = 0
+        for vel in range (velocityrange[0], velocityrange[1], 1):
+            for vel in range (heelrange[0], heelrange[1], 5):
+                result = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, vboat, heel)
+                Rt = Rt+result[0]
+                Rv = Rv+result[1]
+                Ri = Ri+result[2]
+                Rr = Rr+result[3]
+                Rincli = Rincli+result[4]
+                CR = CR+result[5]
+                count = count+1
+        Rt = Rt/count
+        CR = CR/count
+        Rv = Rv/count
+        Ri = Ri/count
+        Rr = Rr/count
+        Rincli = Rincli/count
+        f1 = Rt
+        f2 = CR
+
+        exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, Ri, Rr, Rincli, CR)
+            
         return f1, f2
     
     def feasible(individual):  
@@ -93,9 +115,13 @@ def optimize_nsgaII():
     # adicionar um counter para cada violacao
         lwl = individual[0]
         bwl = individual[1]
-        cb = individual[5]
         tc = individual[2]
+        lcf = individual[3]
+        lcb = individual[4]
+        cb = individual[5]
         cwp = individual[6]
+        cp = individual[7]
+        cm = individual[8]
         disp = lwl*bwl*tc*cb
         awp = bwl*lwl*cwp
         br = 0.4		# between 28 and 56
@@ -105,13 +131,19 @@ def optimize_nsgaII():
         ssv = boa**2/(br*tc*disp**(1/3))       
         avs = 110+(400/(ssv-10)) 						# angle of vanishing stability
         cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)   # capsize screening factor
+        avslimit = 90
+        cslimit = 2.5
+        if "AVS" not in constraints:
+            avslimit = 0
+        if "CS" not in constraints:
+            cslimit = 9999
         
         if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
            if (bwl/tc) > 19.39 or (bwl/tc) < 2.46:
                 if (lwl/disp**(1/3)) > 8.5 or (lwl/disp**(1/3)) < 4.34:
                     if (awp/disp**(2/3)) > 12.67 or (awp/disp**(2/3)) < 3.78:
-                        if avs > 50:	#UPDATE
-                            if cs < 2:
+                        if avs > avslimit:
+                            if cs < cslimit:
                                 return True
                             else:
                                 return False
@@ -139,11 +171,24 @@ def optimize_nsgaII():
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)  
     # defines what is the evaluating function                    
     toolbox.register("evaluate", evaluate)                                                          
-    toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7, bound_low8, bound_low9], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7, bound_up8, bound_up9], eta=eta_value)
-    toolbox.register("mutate", tools.mutPolynomialBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7, bound_low8, bound_low9], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7, bound_up8, bound_up9], eta=eta_value, indpb=indpb_value)
-    if gamethod == 1:
+    
+    if crossovermethod == 1:
+        toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7, bound_low8, bound_low9], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7, bound_up8, bound_up9], eta=eta_value)
+    if crossovermethod == 2:
+        toolbox.register("mate", tools.cxOnePoint)
+    if crossovermethod == 3:
+        toolbox.register("mate", tools.cxTwoPoints)
+    if crossovermethod == 4:
+        toolbox.register("mate", tools.cxUniform, indpb=indpb_value)
+    
+    if mutationmethod == 1:
+        toolbox.register("mutate", tools.mutPolynomialBounded, low=[bound_low1, bound_low2, bound_low3, bound_low4, bound_low5, bound_low6, bound_low7, bound_low8, bound_low9], up=[bound_up1, bound_up2, bound_up3, bound_up4, bound_up5, bound_up6, bound_up7, bound_up8, bound_up9], eta=eta_value, indpb=indpb_value)
+    if mutationmethod == 2:
+        toolbox.register("mutate", tools.mutGaussian, mu=[lwl, bwl, tcan, lcf, lcb, cb, cwp, cp, cm], sigma=0.5, indpb=indpb_value)
+    
+    if selectionmethod == 1:
         toolbox.register("select", tools.selNSGA2)
-    elif gamethod == 2:
+    elif selectionmethod == 2:
         toolbox.register("select", tools.selSPEA2)
 
     history = History()                             # store the data to generate the genealogic diagram
@@ -204,3 +249,45 @@ def optimize_nsgaII():
         index[i]=i
 
     return f1, f2, index
+
+def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, Ri, Rr, Rincli, CR):
+    rows = []
+    with open("assets/data/"+savefile+".csv", "r") as csvfile:
+        csvreader = csv.reader(csvfile) 
+        for row in csvreader: 
+            rows.append(row)
+        index = csvreader.line_num
+    print(index)
+    
+    constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7  = False, False, False, False, False, False, False
+    valid = False
+    br = 0.28
+    dispmass = divcan*1025
+    ssv = boa**2/(br*tcan*divcan**(1/3))       
+    avs = 110+(400/(ssv-10))
+    cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
+
+    if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
+        constraint1 = True
+    if (bwl/tcan) > 19.39 or (bwl/tcan) < 2.46:
+        constraint2 = True
+    if (lwl/divcan**(1/3)) > 8.5 or (lwl/divcan**(1/3)) < 4.34:
+        constraint3 = True
+    if (awp/divcan**(2/3)) > 12.67 or (awp/divcan**(2/3)) < 3.78:
+        constraint4 = True
+    if (divcan/(lwl*bwl*tcan)) > 0.4 or (divcan/(lwl*bwl*tcan)) < 0.3:
+        constraint5 = True
+    if avs < 50:
+        constraint6 = True
+    if cs > 2:
+        constraint7 = True
+    if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False and constraint6 == False and constraint7 == False:
+        valid = True
+
+    exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(avs, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid]
+
+    with open("assets/data/"+savefile+".csv", "a") as file:
+        writer = csv.writer(file, delimiter=',')
+        writer.writerow(exportdata)
+    
+    return cs
