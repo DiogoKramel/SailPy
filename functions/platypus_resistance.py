@@ -96,12 +96,12 @@ def optimization_platypus_resistance():
             writer = csv.writer(file, delimiter=',')
             writer.writerow(exportdata)
         
-        return [Rt, CR], [90-avs, cs-2.5]
+        return [Rt, CR], [90-avs, cs-2]
 
     problem = Problem(9, 2, 2)
     problem.types[:] = [Real(bound_low1, bound_up1), Real(bound_low2, bound_up2), Real(bound_low3, bound_up3), Real(bound_low4, bound_up4), Real(bound_low5, bound_up5), Real(bound_low6, bound_up6), Real(bound_low7, bound_up7), Real(bound_low8, bound_up8), Real(bound_low9, bound_up9)]
     problem.directions[:] = [Problem.MINIMIZE, Problem.MAXIMIZE]
-    problem.constraints[:] = "<=0"
+    problem.constraints[:] = "<0"
     problem.function = function_platypus
 
     if gamethod == 'NSGAII':

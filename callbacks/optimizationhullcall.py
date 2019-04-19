@@ -111,6 +111,20 @@ def optionoptimization(typeoptimization):
             html.Br(),
             html.Div(id='estimative-offspring'),
             html.A('Read More about DEAP', href='https://deap.readthedocs.io/en/master/', target="_blank"),
+            dbc.Input(
+                type='number', 
+                id='offsprings-platypus', 
+                value='300', 
+                bs_size="sm", 
+                style={'width': 80, 'display': 'none'}
+            ),
+            dcc.Dropdown(
+                id='ga-method',
+                options=[
+                    {'label': 'NSGAII', 'value': 'NSGAII'},
+                ],
+                style={'width': '90%', 'font-size': '10pt', 'display': 'none'}
+            ),
         ])
     
     elif typeoptimization == 'default':
@@ -131,7 +145,7 @@ def optionoptimization(typeoptimization):
                     {'label': 'SPEA2', 'value': 'SPEA2'},
                     {'label': 'MOEA', 'value': 'MOEA'},
                 ],
-                placeholder="Select one option if you prefer a default method",
+                value='NSGAII',
                 style={'width': '90%', 'font-size': '10pt'}
             ),
             dbc.Label("Number of offsprings"),
@@ -143,7 +157,79 @@ def optionoptimization(typeoptimization):
                 style={'width': 80}
             ),
             dbc.Label("Behave of each algorithm"),
-            html.Img(src='/assets/static/platypus.png', width='80%'),
+            html.Img(src='/assets/static/platypus.png', width='90%'),
+            #### HIDDEN BELOW
+            dbc.Input(
+                type='number', 
+                id='pop-size', 
+                value='10', 
+                bs_size="sm", 
+                style={'width': 80, 'display': 'none'}),
+            dbc.Input(
+                type='number', 
+                id='children-size', 
+                value='4', 
+                bs_size="sm", 
+                style={'width': 80, 'display': 'none'}),
+            dbc.Input(
+                type='number', 
+                id='max-generation', 
+                value='15', 
+                bs_size="sm", 
+                style={'width': 80, 'display': 'none'}),
+            dbc.Input(
+                type='number', 
+                id='halloffame-number', 
+                value='5', 
+                bs_size="sm", 
+                style={'width': 80, 'display': 'none'}),
+            dbc.Input(
+                type='number', 
+                id='mut-prob', 
+                value='20', 
+                bs_size="sm", 
+                style={'width': 80, 'display': 'none'}),
+            dbc.Input(
+                type='number', 
+                id='indpb-value', 
+                value='20', 
+                bs_size="sm", 
+                style={'width': 80, 'display': 'none'}),
+            dbc.Input(
+                type='number', 
+                id='eta_value', 
+                value='20', 
+                bs_size="sm", 
+                style={'width': 80, 'display': 'none'}),
+            dcc.Dropdown(
+                id='crossover-method', 
+                options=[
+                    {'label': 'Simulated Binary Bounded', 'value': '1'},
+                    {'label': 'One-Point', 'value': '2'},
+                    {'label': 'Two-Point', 'value': '3'},
+                    {'label': 'Uniform', 'value': '4'},
+                ],
+                value='1',
+                style={'width': '80%', 'font-size': '10pt', 'display': 'none'}
+            ),
+            dcc.Dropdown(
+                id='mutation-method', 
+                options=[
+                    {'label': 'Polynomial Bounded', 'value': '1'},
+                    {'label': 'Gaussian', 'value': '2'},
+                ],
+                value='1',
+                style={'width': '80%', 'font-size': '10pt', 'display': 'none'}
+            ),
+            dcc.Dropdown(
+                id='selection-method', 
+                options=[
+                    {'label': 'NSGA-II', 'value': '1'},
+                    {'label': 'SPEA-II', 'value': '2'},
+                ],
+                value='1',
+                style={'width': '80%', 'font-size': '10pt', 'display': 'none'}
+            ),
         ])
 
 @app.callback(Output('estimative-offspring', 'children'), [Input('pop-size', 'value'), Input('children-size', 'value'), Input('max-generation', 'value'), Input('mut-prob', 'value')])
@@ -209,33 +295,18 @@ def comfort_weight(value):
         ])
     ])
 
-@app.callback(Output('output-button', 'children'), [Input('export-ga', 'n_clicks')], [State('pop-size', 'value'), State('children-size', 'value'), State('max-generation', 'value'), State('mut-prob', 'value'), State('halloffame-number', 'value'), State('indpb-value', 'value'), State('eta_value', 'value'), State('weight1', 'value'), State('weight2', 'value'), State('velocity-range', 'value'), State('heel-range', 'value'), State('lwl-min', 'value'), State('lwl-max', 'value'), State('bwl-min', 'value'), State('bwl-max', 'value'), State('tc-min', 'value'), State('tc-max', 'value'), State('lcb-min', 'value'), State('lcb-max', 'value'), State('lcf-min', 'value'), State('lcf-max', 'value'), State('crossover-method', 'value'), State('mutation-method', 'value'), State('selection-method', 'value'), State('constraints-check', 'value'), State('offsprings-platypus', 'value'), State('ga-method', 'value')])
-def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, halloffamenumber, indpb, eta, weight1, weight2, velocityrange, heelrange, lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcbmin, lcbmax, lcfmin, lcfmax, crossovermethod, mutationmethod, selectionmethod, constraints, offspringsplatypus, gamethod):
-    if n_clicks == 1:
-        json.dump({'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'constraints': constraints, 'offspringsplatypus': offspringsplatypus, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
-        
-        #dimensionsobj = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
-        #dimensions = json.loads(dimensionsobj)
-        #for item in dimensions:
-        #    item = str(item)
-        #    if item != "category":
-        #        globals()[item] = np.float(dimensions[item])
-        #vboat = np.float((velocityrange[1]+velocityrange[0])/2)
-        #heel = np.float((heelrange[1]+heelrange[0])/2)
-        #savefile = "extracalculations"
-        #results = resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel, savefile)
-        #fields=[0, np.round(results[0],4), np.round(results[1],4), np.round(results[2],4), np.round(results[3],4), np.round(results[4],4), np.round(results[5],4), np.round(lwl,4), np.round(bwl,4), np.round(tc,4), np.round(disp,4), np.round(awp,4), np.round(lcb,4), np.round(lcf,4), np.round(results[0],4)-20000*np.round(results[5],4)]
-        
-        with open('assets/data/initialhull.csv','w') as fd:
-            fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,AVS,CS,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,constraint1,constraint2,constraint3,constraint4,constraint5,constraint6,constraint7,valid"+"\n")
-            writer = csv.writer(fd, delimiter=',')
-            #writer.writerow(fields)
+@app.callback(Output('output-button', 'children'), [Input('export-ga', 'n_clicks')], [State('pop-size', 'value'), State('children-size', 'value'), State('max-generation', 'value'), State('mut-prob', 'value'), State('halloffame-number', 'value'), State('indpb-value', 'value'), State('eta_value', 'value'), State('weight1', 'value'), State('weight2', 'value'), State('velocity-range', 'value'), State('heel-range', 'value'), State('lwl-min', 'value'), State('lwl-max', 'value'), State('bwl-min', 'value'), State('bwl-max', 'value'), State('tc-min', 'value'), State('tc-max', 'value'), State('lcb-min', 'value'), State('lcb-max', 'value'), State('lcf-min', 'value'), State('lcf-max', 'value'), State('crossover-method', 'value'), State('mutation-method', 'value'), State('selection-method', 'value'), State('constraints-check', 'value'), State('offsprings-platypus', 'value'), State('ga-method', 'value'), State('type-optimization', 'value')])
+def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, halloffamenumber, indpb, eta, weight1, weight2, velocityrange, heelrange, lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcbmin, lcbmax, lcfmin, lcfmax, crossovermethod, mutationmethod, selectionmethod, constraints, offspringsplatypus, gamethod, typeoptimization):
+    if n_clicks >= 1:
         with open('assets/data/optimizationresistance.csv','w') as fd:
             fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,AVS,CS,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,constraint1,constraint2,constraint3,constraint4,constraint5,constraint6,constraint7,valid"+"\n")
+        
         start = time.time()
-        if gamethod != None:
+        if typeoptimization == 'default':
+            json.dump({'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'constraints': constraints, 'offspringsplatypus': offspringsplatypus, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
             result = optimization_platypus_resistance()
-        else:
+        elif typeoptimization == 'custom':
+            json.dump({'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'constraints': constraints, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
             result = optimization_deap_resistance()
         done = time.time()
         elapsed = done-start

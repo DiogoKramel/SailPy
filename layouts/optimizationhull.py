@@ -22,7 +22,7 @@ optimizationhull = dbc.Container([
                     {'label': 'Default methods', 'value': 'default'},
                     {'label': 'Personalized configuration', 'value': 'custom'},
                 ],
-                placeholder="Select one type of optimization",
+                value='default',
                 style={'width': '90%', 'font-size': '10pt'}
             ),
             html.Div(id="option-optimization"),

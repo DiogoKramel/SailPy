@@ -166,21 +166,6 @@ def update_output(resultshullaxisy, resultshullaxisx):
         )
     }
 
-@app.callback(
-    Output('plot-constraint-individual', 'children'),
-    [Input('output-optimization', 'hoverData')])
-def update_y_timeseries(hoverData):
-    df = pd.read_csv("assets/data/optimizationresistance.csv")
-    hover = np.int(hoverData["points"][0]['text'])
-    row = df.loc[df['id']==hover]
-    avs = np.float(row.iloc[0]['AVS'])
-    cs = np.float(row.iloc[0]['CS'])
-    return html.Div([
-        dbc.Label("Angle of Vanishing Stability: {} degrees".format(round(avs,2))),
-        html.Br(),
-        dbc.Label("Capsize Screening Factor: {}".format(round(cs,2))),
-        html.Br(),
-    ])
 
 @app.callback(
     Output('plot-resistance-individual', 'figure'),
@@ -335,6 +320,22 @@ def update_y_timeseries(hoverData):
         font=dict(size=10),
         )
     }
+
+@app.callback(
+    Output('plot-constraint-individual', 'children'),
+    [Input('output-optimization', 'hoverData')])
+def update_y_timeseries(hoverData):
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    hover = np.int(hoverData["points"][0]['text'])
+    row = df.loc[df['id']==hover]
+    avs = np.float(row.iloc[0]['AVS'])
+    cs = np.float(row.iloc[0]['CS'])
+    return html.Div([
+        dbc.Label("Angle of Vanishing Stability: {} degrees".format(round(avs,2))),
+        html.Br(),
+        dbc.Label("Capsize Screening Factor: {}".format(round(cs,2))),
+        html.Br(),
+    ])
 
 @app.callback(
     dash.dependencies.Output('plot-limits-bwl-tc', 'figure'),
