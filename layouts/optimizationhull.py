@@ -25,6 +25,8 @@ optimizationhull = dbc.Container([
                 value='default',
                 style={'width': '90%', 'font-size': '10pt'}
             ),
+			html.Br(), html.Br(),
+			html.H4("Optimization Parameters"),
             html.Div(id="option-optimization"),
             html.Br(), html.Br(), 
             html.H4("Constraints"),

@@ -37,7 +37,7 @@ landpage = html.Div([
             html.H3('SailPy', className='display-3'),
             html.P('A preliminary design tool for sailboats', className='lead'),
             html.Hr(className='my-2'),
-            html.P("SailPy is an opensource Python application for conceptual sailboat design with an object-oriented approach. The sailboat is simulated in different conditions, to which optimization tools are applied to evaluate its performance, assisting the definition of the best set of dimensions in order to meet the user's needs. This library encourages suggestions, new features, improvements, and report of bugs. The link to the scripts you can find at the GitHub icon in the page bottom.", className='justify'),
+            html.P("SailPy is an opensource Python application for conceptual sailboat design with an object-oriented approach. The sailboat is simulated in different conditions, to which optimization tools are applied to evaluate its performance, assisting the definition of the best set of dimensions in order to meet the user's needs. This library encourages suggestions, new features, improvements, and report of bugs. The scripts and issues being discussed can be found at the GitHub page linked in the page bottom.", className='justify'),
             html.Hr(className='my-2'),
             html.Br(),
             dbc.Button(dcc.Link(html.Div(html.Div('Start the analysis', className='btnupdate')), href=f'/application', style={'color': 'white'})),
@@ -50,7 +50,7 @@ title = dcc.Link('SailPy - A preliminary design tool for sailboats', className='
 
 # top bar itens
 navitems = html.Ul([
-    dbc.NavItem(dbc.NavLink('Home', href='')),
+    dbc.NavItem(dbc.NavLink('Home', href='/')),
     dbc.DropdownMenu(
         nav=True, 
         in_navbar=True, 
@@ -101,7 +101,7 @@ footer = html.Nav([
                 html.A('MIT license', href='https://opensource.org/licenses/MIT/', target='_blank', style={'display': 'inline-block'}),
                 html.P('. Website and documentation licensed under', style={'display': 'inline-block', 'margin-right': '3px'}), 
                 html.A('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', target='_blank', style={'display': 'inline-block'}),
-            ], style={'display': 'inline-block'}),
+            ], style={'display': 'inline-block', 'margin-top': '5px'}),
             dbc.Col(logogit, width='auto'),
         ]),
     ]),
@@ -120,6 +120,7 @@ app.layout = html.Div([
     html.Div(id='landing-application'),
 ])
 
+# pages called when moving between tabs
 @app.callback(Output('page-content', 'children'), [Input('tabs-styled-with-inline', 'value')])
 def display_page(tab):
     space = html.Div([html.Br(), html.Br(), html.Br(), html.Br(), html.Br()])
@@ -132,6 +133,7 @@ def display_page(tab):
     elif tab == 'tab-4':
         return resultshulll.resultshull, resultshulll.resultsplus, space, footer
     elif tab == 'tab-5':
+		# calling the dimensions to update the callback but does not work yet
         dim = codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read()
         dim = json.loads(dim)
         lwl = np.float(dim['lwl'])
@@ -148,8 +150,9 @@ def display_page(tab):
     else:
         return ''
 
+# a different callback for the landing page due to layout differences
 @app.callback(Output('landing-application', 'children'), [Input('url', 'pathname')])
-def display_page(pathname):
+def display_landing(pathname):
     space = html.Div([html.Br(), html.Br(), html.Br(), html.Br(), html.Br()])
     if pathname == '/':
         return landpage, footer
@@ -160,7 +163,7 @@ def display_page(pathname):
     else:
         return '404'
 
-
+# importing external css to add and configure the icons used
 external_css = ['https://use.fontawesome.com/releases/v5.7.2/css/all.css', 'assets/fonts/et-line-font/style.css']
 for css in external_css:
     app.css.append_css({'external_url': css})

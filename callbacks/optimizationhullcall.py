@@ -22,7 +22,6 @@ from functions import optimization_platypus_resistance
 def optionoptimization(typeoptimization):
     if typeoptimization == 'custom':
         return html.Div([
-            html.Br(),
             html.Span(dbc.Label("Population size"), id="tooltip-population"),
             dbc.Tooltip("A set of individuals randomly generated to start the simulation.", target="tooltip-population"),
             dbc.Input(
@@ -129,7 +128,6 @@ def optionoptimization(typeoptimization):
     
     elif typeoptimization == 'default':
         return html.Div([
-            html.Br(),
             dbc.Label("Method"),
             dcc.Dropdown(
                 id='ga-method',

@@ -20,7 +20,7 @@ def loa_ft(loa):
 @app.callback(Output('main-dimensions', 'children'), [Input('boat-category', 'value'), Input('loa', 'value')])
 def main_dimensions(boatcategory, loa):
     if boatcategory == 'cruiser':
-        lwl = loa*0.3048*0.92
+        lwl = loa*0.3048*0.85
         #bwl = lwl/3.219
         bwl = 0.115*lwl+2.1667
         if lwl < 10:
@@ -135,7 +135,7 @@ def limits_lwl(loa, boat_category):
     if (boat_category == 'cruiser'):
         lwlmin = (np.float(loa)*0.7-2)/3.2804
         lwlest = (np.float(loa)*0.8)/3.2804
-        lwlmax = (np.float(loa)*0.8+1.079)/3.2804
+        lwlmax = (np.float(loa)*0.9+1.079)/3.2804
     elif (boat_category == 'racer'):
         lwlmin = (np.float(loa)*0.8+1.079)/3.2804
         lwlest = (np.float(loa)*0.92)/3.2804
@@ -179,8 +179,8 @@ def test_lwlbwl(lwl, bwl):
         successfail = 'success'
         alert = 'Within limits'
     return dbc.Row([
-        dbc.Col('1) Length/Beam Ratio: {}'.format(round(lwlbwl,2)), width=5), 
-        dbc.Col('Limits: 2.73-5.00'), 
+        dbc.Col('1) Length/Beam Ratio: {}'.format(round(lwlbwl,2)), width=6), 
+        dbc.Col('Limits: 2.73-5.00', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -194,8 +194,8 @@ def test_bwltc(tc, bwl):
         successfail = 'success'
         alert = 'Within limits'
     return dbc.Row([
-        dbc.Col('2) Beam/Draft Ratio: {}'.format(round(bwltc,2)), width=5), 
-        dbc.Col('Limits: 2.46-19.38'), 
+        dbc.Col('2) Beam/Draft Ratio: {}'.format(round(bwltc,2)), width=6), 
+        dbc.Col('Limits: 2.46-19.38', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -210,8 +210,8 @@ def test_lwldisp(lwl, bwl, tc, cb):
         successfail = 'success'
         alert = 'Within limits'
     return dbc.Row([
-        dbc.Col('3) Length/Displacement Factor: {}'.format(round(lwldisp,2)), width=5), 
-        dbc.Col('Limits: 4.34-8.50'), 
+        dbc.Col('3) Length/Displacement Factor: {}'.format(round(lwldisp,2)), width=6), 
+        dbc.Col('Limits: 4.34-8.50', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -229,9 +229,9 @@ def test_loadingfactor(cwp, cb, lwl, bwl, tc):
             html.Span(
                 dbc.Label('4) Loading Factor: {}'.format(round(loadingfactor,2))), 
             id="loading-factor"),
-        width=5),
+        width=6),
         dbc.Tooltip("Ratio between Waterplane Area and Displacement", target="loading-factor"),
-        dbc.Col('Limits: 3.78-12.67'), 
+        dbc.Col('Limits: 3.78-12.67', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -245,8 +245,8 @@ def test_prismatic(cb, bwl, lwl, tc, cm):
         successfail = 'success'
         alert = 'Within limits'
     return dbc.Row([
-        dbc.Col('5) Prismatic Coefficient: {}'.format(round(prismatic,2)), width=5), 
-        dbc.Col('Limits: 0.52-0.6'), 
+        dbc.Col('5) Prismatic Coefficient: {}'.format(round(prismatic,2)), width=6), 
+        dbc.Col('Limits: 0.52-0.6', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -296,8 +296,8 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
 
     keel_obj = codecs.open('assets/data/keelsolution.json', 'r', encoding='utf-8').read()
     keel_solution = json.loads(keel_obj)
-    keel_interpolation_y = np.asarray(keel_solution['y_keel'])
-    keel_interpolation_x = np.asarray(keel_solution['x_keel'])
+    keel_interpolation_y = np.asarray(keel_solution['y_i_keel'])
+    keel_interpolation_x = np.asarray(keel_solution['x_i_keel'])
 
     awp = cwp*lwl*bwl
     disp = cb*lwl*bwl*tc
@@ -348,8 +348,9 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     return dash_table.DataTable(
         columns=[{"name": i, "id": i} for i in df.columns],
         data=df.to_dict("rows"),
-        style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '80px', 'whiteSpace': 'normal'},
+        style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '80px', 'whiteSpace': 'normal', 'font_family': 'Source Sans Pro'},
         style_cell_conditional=[{'if': {'column_id': 'Parameters'}, 'textAlign': 'left'}],
         style_as_list_view=True,
         style_header={'fontWeight': 'bold'},
+        
     )
