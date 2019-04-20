@@ -132,19 +132,19 @@ def optionoptimization(typeoptimization):
             dcc.Dropdown(
                 id='ga-method',
                 options=[
-                    {'label': 'NSGAII', 'value': 'NSGAII'},
-                    {'label': 'NSGAIII', 'value': 'NSGAIII'},
-                    {'label': 'CMAES', 'value': 'CMAES'},
-                    {'label': 'GDE3', 'value': 'GDE3'},
-                    {'label': 'IBEA', 'value': 'IBEA'},
-                    {'label': 'MOEAD', 'value': 'MOEAD'},
-                    {'label': 'OMOPSO', 'value': 'OMOPSO'},
-                    {'label': 'SMPSO', 'value': 'SMPSO'},
-                    {'label': 'SPEA2', 'value': 'SPEA2'},
-                    {'label': 'MOEA', 'value': 'MOEA'},
+                    {'label': 'NSGAII - Nondominated Sorting Genetic Algorithm', 'value': 'NSGAII'},
+                    {'label': 'NSGAIII - Nondominated Sorting Genetic Algorithm', 'value': 'NSGAIII'},
+                    {'label': 'CMAES - Covariance Matrix Adaptation Evolution Strategy', 'value': 'CMAES'},
+                    {'label': 'GDE3 - Generalized Differential Evolution', 'value': 'GDE3'},
+                    {'label': 'IBEA - Indicator Based Evolutionary Algorithm', 'value': 'IBEA'},
+                    {'label': 'MOEAD - Multi-Objective Evolutionary Algorithm Based on Decomposition', 'value': 'MOEAD'},
+                    {'label': 'OMOPSO - Multi-Objective Particle Swarm Optimization', 'value': 'OMOPSO'},
+                    {'label': 'SMPSO - Speed-Constrained Particle Swarm Optimization', 'value': 'SMPSO'},
+                    {'label': 'SPEA2 - Strength Pareto Evolutionary Algorithm', 'value': 'SPEA2'},
+                    {'label': 'MOEA -  Multi-Objective Evolutionary Algorithm', 'value': 'MOEA'},
                 ],
                 value='NSGAII',
-                style={'width': '90%', 'font-size': '10pt'}
+                style={'width': '100%', 'font-size': '10pt'}
             ),
             dbc.Label("Number of offsprings"),
             dbc.Input(
@@ -152,8 +152,9 @@ def optionoptimization(typeoptimization):
                 id='offsprings-platypus', 
                 value='300', 
                 bs_size="sm", 
-                style={'width': 80}
+                style={'width': '25%'}
             ),
+			html.Br(),
             dbc.Label("Behave of each algorithm"),
             html.Img(src='/assets/static/platypus.png', width='90%'),
             #### HIDDEN BELOW
@@ -240,13 +241,13 @@ def resistance_weight(popsize, childrensize, maxgeneration, mutprob):
     Output('resistance-weight', 'children'),
     [Input('weight1', 'value')])
 def resistance_weight(value):
-    return dbc.Label(': {}'.format(value))
+    return dbc.Label('Resistance Weight: {}'.format(value))
 
 @app.callback(
     Output('comfort-weight', 'children'),
     [Input('weight2', 'value')])
 def comfort_weight(value):
-    return dbc.Label(': {}'.format(value))
+    return dbc.Label('Comfort Ratio Weight: {}'.format(value))
 
 @app.callback(
     Output('dimensions-limits', 'children'),

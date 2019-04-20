@@ -327,7 +327,7 @@ def create_section(lwl, beta_n, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, 
                 "showgrid": True,
                 "showline": True,
                 "mirror": True,
-                "title": 'Beam [m]',
+                "title": 'Half Beam [m]',
                 "zeroline": False,
             },
             yaxis = {

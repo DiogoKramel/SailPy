@@ -23,7 +23,7 @@ optimizationhull = dbc.Container([
                     {'label': 'Personalized configuration', 'value': 'custom'},
                 ],
                 value='default',
-                style={'width': '90%', 'font-size': '10pt'}
+                style={'width': '100%', 'font-size': '10pt'}
             ),
 			html.Br(), html.Br(),
 			html.H4("Optimization Parameters"),
@@ -39,7 +39,6 @@ optimizationhull = dbc.Container([
                 value=['AVS', 'CSF'],
                 multi=True,
                 id="constraints-check",
-                style={'width': '90%'}
             ),
         ], className = "justify mt-4", md=6),
         dbc.Col([
@@ -47,25 +46,25 @@ optimizationhull = dbc.Container([
             html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
             dbc.Row([
                 dbc.Col([
-                    dbc.Label('Resistance Weight'),
-                    html.Div(id='resistance-weight', style={'display': 'inline-block'}),
+                    html.Div(id='resistance-weight', style={'display': 'block', 'text-align': 'center'}),
                     daq.Knob(
                         id='weight1',
                         value=9,
                         min=0,
                         max=10,
                         scale={'start':0, 'interval': 1, 'labelInterval': 1},
+						style={'display': 'block', 'text-align': 'center'}
                     ),
                 ]),
                 dbc.Col([
-                    dbc.Label('Comfort Ratio Weight'),
-                    html.Div(id='comfort-weight', style={'display': 'inline-block'}),
+                    html.Div(id='comfort-weight', style={'display': 'block', 'text-align': 'center'}),
                     daq.Knob(
                         id='weight2',
                         value=6.5,
                         min=0,
                         max=10,
                         scale={'start':0, 'interval': 1, 'labelInterval': 1},
+						style={'display': 'block', 'text-align': 'center'}
                     ),
                 ]),
             ]),
@@ -95,6 +94,7 @@ optimizationhull = dbc.Container([
                     html.Br(),html.Br(),
                 ])
             ]),
+			html.Br(),
             html.H4("Dimensions optimized"),
             html.P("""The limits of each dimension optimized at this stage can be set below. Standard values are recommended, but they can be stretched to explore more widely the dimensions space. The algorithm will evaluate which solutions are feasible and automatically exclude the ones that do not fit the criteria. Bear in mind that the values of minimum and maximum may affect performance and convergence. """),
             html.Div(id="dimensions-limits")

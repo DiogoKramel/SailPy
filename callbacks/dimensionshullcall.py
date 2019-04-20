@@ -180,7 +180,7 @@ def test_lwlbwl(lwl, bwl):
         alert = 'Within limits'
     return dbc.Row([
         dbc.Col('1) Length/Beam Ratio: {}'.format(round(lwlbwl,2)), width=6), 
-        dbc.Col('Limits: 2.73-5.00', width=4), 
+        dbc.Col('Limits: 2.73 - 5.00', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -195,7 +195,7 @@ def test_bwltc(tc, bwl):
         alert = 'Within limits'
     return dbc.Row([
         dbc.Col('2) Beam/Draft Ratio: {}'.format(round(bwltc,2)), width=6), 
-        dbc.Col('Limits: 2.46-19.38', width=4), 
+        dbc.Col('Limits: 2.46 - 19.38', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -211,7 +211,7 @@ def test_lwldisp(lwl, bwl, tc, cb):
         alert = 'Within limits'
     return dbc.Row([
         dbc.Col('3) Length/Displacement Factor: {}'.format(round(lwldisp,2)), width=6), 
-        dbc.Col('Limits: 4.34-8.50', width=4), 
+        dbc.Col('Limits: 4.34 - 8.50', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -231,7 +231,7 @@ def test_loadingfactor(cwp, cb, lwl, bwl, tc):
             id="loading-factor"),
         width=6),
         dbc.Tooltip("Ratio between Waterplane Area and Displacement", target="loading-factor"),
-        dbc.Col('Limits: 3.78-12.67', width=4), 
+        dbc.Col('Limits: 3.78 - 12.67', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -246,7 +246,7 @@ def test_prismatic(cb, bwl, lwl, tc, cm):
         alert = 'Within limits'
     return dbc.Row([
         dbc.Col('5) Prismatic Coefficient: {}'.format(round(prismatic,2)), width=6), 
-        dbc.Col('Limits: 0.52-0.6', width=4), 
+        dbc.Col('Limits: 0.52 - 0.6', width=4), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -272,8 +272,9 @@ def test_feasibility(cwp, bwl, lwl, cb, tc, cm):
     else:
         successfail = 'success'
         alert = 'The study sailboat is feasible. You can proceed'
-    return dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '5pt', 'display': 'inline-block'})
+    return dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '5pt'})
 
+style={}
 @app.callback(Output('other-dimensions', 'children'), [Input('lwl','value'), Input('bwl','value'), Input('cb', 'value'), Input('cwp', 'value'), Input('lcf', 'value'), Input('lcb', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('beta_n', 'value')])
 def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     cwp = np.float(cwp)
@@ -342,13 +343,13 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     
     json.dump({'alcb': alcb, 'lwl': lwl, 'disp': disp, 'awp': awp, 'lcf': lcf, 'lcb': lcb, 'tc': tc, 'beta_n': beta_n, 'cwp': cwp, 'cb': cb, 'cm': cm, 'cp': cp, 'bwl': bwl, 'scb': scb, 'am': am, 'itwp': itwp, 'bmt': bmt, 'kb': kb, 'kg': kg, 'gmt': gmt, 'gmlong': gmlong, 'alcb_coefficient': alcb_coefficient}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     
-    data = {'Parameters' : ['Displacement', 'Waterplane Area', 'Canoe Body Lateral Area', 'Wetted Surface Area', 'Transverse Moment of Inertia', 'Metacentric Radius', 'Vertical Centre of Buoyancy (KB)', 'Metacentric Height(GM)'], 'Values' : [round(disp,2), round(awp,2), round(alcb,2), round(scb,2), round(itwp,2), round(bmt,2), round(kg,2), round(gmt,2)], 'Unit' : ['m3', 'm2', 'm2', 'm2', 'm4', 'm', 'm', 'm']}
+    data = {'Parameters' : ['Displacement', 'Waterplane Area', 'Canoe Body Lateral Area', 'Wetted Surface Area', 'Transverse Moment of Inertia', 'Metacentric Radius', 'Vertical Centre of Buoyancy (KB)', 'Metacentric Height (GM)'], 'Values' : [round(disp,2), round(awp,2), round(alcb,2), round(scb,2), round(itwp,2), round(bmt,2), round(kg,2), round(gmt,2)], 'Unit' : ['m3', 'm2', 'm2', 'm2', 'm4', 'm', 'm', 'm']}
     df = pd.DataFrame(data)
 
     return dash_table.DataTable(
         columns=[{"name": i, "id": i} for i in df.columns],
         data=df.to_dict("rows"),
-        style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '80px', 'whiteSpace': 'normal', 'font_family': 'Source Sans Pro'},
+        style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '50px', 'whiteSpace': 'normal', 'font_family': 'Source Sans Pro'},
         style_cell_conditional=[{'if': {'column_id': 'Parameters'}, 'textAlign': 'left'}],
         style_as_list_view=True,
         style_header={'fontWeight': 'bold'},

@@ -61,7 +61,7 @@ hull = dbc.Container([
             html.Div(id='test-lwldisp', className='regularfont'),
             html.Div(id='test-loadingfactor', className='regularfont'),
         	html.Div(id='test-prismatic', className='regularfont'),
-            html.Div(id='test-feasibility'),
+            html.Div(id='test-feasibility', style={'display': 'block', 'text-align': 'center'}),
         ], className = 'justify', md=8)
     ]),
 ], className='mt-4',)
