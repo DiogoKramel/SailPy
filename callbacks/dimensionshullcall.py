@@ -8,7 +8,6 @@ import dash_table
 import json, codecs
 import numpy as np
 from scipy.integrate import simps
-import plotly.graph_objs as go  #DELETE
 import pandas as pd
 
 from functions import keel_solve, sac_solve, section_solve, wl_solve
@@ -181,7 +180,7 @@ def test_lwlbwl(lwl, bwl):
         alert = 'Within limits'
     return dbc.Row([
         dbc.Col('1) Length/Beam Ratio: {}'.format(round(lwlbwl,2)), width=5), 
-        dbc.Col('Limits: [2.73-5.00]'), 
+        dbc.Col('Limits: 2.73-5.00'), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -196,7 +195,7 @@ def test_bwltc(tc, bwl):
         alert = 'Within limits'
     return dbc.Row([
         dbc.Col('2) Beam/Draft Ratio: {}'.format(round(bwltc,2)), width=5), 
-        dbc.Col('Limits: [2.46-19.38]'), 
+        dbc.Col('Limits: 2.46-19.38'), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -212,7 +211,7 @@ def test_lwldisp(lwl, bwl, tc, cb):
         alert = 'Within limits'
     return dbc.Row([
         dbc.Col('3) Length/Displacement Factor: {}'.format(round(lwldisp,2)), width=5), 
-        dbc.Col('Limits: [4.34-8.50]'), 
+        dbc.Col('Limits: 4.34-8.50'), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -232,7 +231,7 @@ def test_loadingfactor(cwp, cb, lwl, bwl, tc):
             id="loading-factor"),
         width=5),
         dbc.Tooltip("Ratio between Waterplane Area and Displacement", target="loading-factor"),
-        dbc.Col('Limits: [3.78-12.67]'), 
+        dbc.Col('Limits: 3.78-12.67'), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 
@@ -247,7 +246,7 @@ def test_prismatic(cb, bwl, lwl, tc, cm):
         alert = 'Within limits'
     return dbc.Row([
         dbc.Col('5) Prismatic Coefficient: {}'.format(round(prismatic,2)), width=5), 
-        dbc.Col('Limits: [0.52-0.6]'), 
+        dbc.Col('Limits: 0.52-0.6'), 
         dbc.Col(dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '2px', 'display': 'inline-block'}))
     ])
 

@@ -2,9 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
-from dash_table_experiments import DataTable
-import plotly.graph_objs as go
+from dash.dependencies import Input, Output
 import json, codecs
 import numpy as np
 
@@ -13,17 +11,46 @@ from layouts import introduction, dimensionshull, optimizationhull, resultshulll
 
 server = app.server
 
-logoapp = html.Img(src='/assets/static/logoapp.png', height='45px')
-logoappwhite = html.Img(src='/assets/landing/logoappwhite.png', height='50px')
-logousp = html.A([html.Img(src='/assets/static/logousp.png', height='35px')], href='https://www.usp.br/', target='_blank')
-logopoli = html.A([html.Img(src='/assets/static/logopolitecnica.png', height='35px')], href='https://www.poli.usp.br/', target='_blank')
-logopnv = html.A([html.Img(src='/assets/static/pnv.png', height='35px')], href='www.pnv.poli.usp.br/', target='_blank')
-logocapes = html.A([html.Img(src='/assets/static/logocapes.png', height='35px')], href='http://www.capes.gov.br', target='_blank')
-logogit = html.A([html.Img(src='/assets/static/github.svg', height='35px')], href='https://github.com/DiogoKramel/SailPy', target='_blank')
+# logos and hyperlinks
+logoapp = html.Img(src='assets/static/logoappwhite.png', height='50px')
+logousp = html.A([
+	html.Img(src='assets/static/logousp.png', height='35px')], 
+	href='https://www.usp.br', target='_blank')
+logopoli = html.A([
+	html.Img(src='assets/static/logopolitecnica.png', height='35px')], 
+	href='https://www.poli.usp.br/', target='_blank')
+logopnv = html.A([
+	html.Img(src='assets/static/logopnv.png', height='35px')], 
+	href='https://www.pnv.poli.usp.br/', target='_blank')
+logocapes = html.A([
+	html.Img(src='assets/static/logocapes.png', height='35px')], 
+	href='https://www.capes.gov.br', target='_blank')
+logogit = html.A([
+	html.Img(src='assets/static/logogithub.svg', height='35px')], 
+	href='https://github.com/DiogoKramel/SailPy', target='_blank')
+
+# landing page
+landpage = html.Div([
+    dbc.Row(dbc.Col(logoapp, width='auto', style={'padding-top': '10pt', 'padding-left':'20pt'})),
+    dbc.Row([
+        dbc.Jumbotron([
+            html.H3('SailPy', className='display-3'),
+            html.P('A preliminary design tool for sailboats', className='lead'),
+            html.Hr(className='my-2'),
+            html.P("SailPy is an opensource Python application for conceptual sailboat design with an object-oriented approach. The sailboat is simulated in different conditions, to which optimization tools are applied to evaluate its performance, assisting the definition of the best set of dimensions in order to meet the user's needs. This library encourages suggestions, new features, improvements, and report of bugs. The link to the scripts you can find at the GitHub icon in the page bottom.", className='justify'),
+            html.Hr(className='my-2'),
+            html.Br(),
+            dbc.Button(dcc.Link(html.Div(html.Div('Start the analysis', className='btnupdate')), href=f'/application', style={'color': 'white'})),
+        ], className='landingjumbo'),
+    ], className='middle'),
+], className='backgroundlanding')
+
+# title at top bar
 title = dcc.Link('SailPy - A preliminary design tool for sailboats', className='navbar-brand', style={'color': 'white'})
 
+# top bar itens
 navitems = html.Ul([
-    dbc.NavItem(dbc.NavLink('Home', href='/')),
+    dbc.NavItem(dbc.NavLink('Home', href='')),
     dbc.DropdownMenu(
         nav=True, 
         in_navbar=True, 
@@ -35,18 +62,33 @@ navitems = html.Ul([
             dbc.DropdownMenuItem('Contact'),
         ],
     ),
-], className = "navbar-nav")
+], className = 'navbar-nav')
 
-navbar = html.Nav([
+# top bar
+topbar = html.Nav([
     dbc.Container([
         dbc.Row([
-            dbc.Col(logoappwhite, width='auto'),
+            dbc.Col(logoapp, width='auto'),
             dbc.Col(title, width='auto'),
             dbc.Col(navitems, width='auto'),
         ], justify='between', align='center', style={'width': '100%'}),
     ]),
-], className='navbar navbar-expand-lg navbar-dark bg-dark')		# bg-dark or bg-primary
+], className='navbar navbar-expand-lg navbar-dark bg-dark') # bg-dark or bg-primary
 
+# navigation tabs
+tabs = html.Div([
+    dcc.Tabs(id='tabs-styled-with-inline', value='tab-1', children=[
+        dcc.Tab(label='Introduction', value='tab-1'),
+        dcc.Tab(label='Hull Dimensions', value='tab-2'),
+        dcc.Tab(label='Optimization I', value='tab-3'),
+        dcc.Tab(label='Results I', value='tab-4'),
+        dcc.Tab(label='Appendages & Sail', value='tab-5'),
+        dcc.Tab(label='Optimization II', value='tab-6'),
+        dcc.Tab(label='Results II', value='tab-7'),
+    ], style={'height': '30pt', 'font-size': '11pt', 'line-height': '11pt', 'margin-bottom': '5pt'}),
+])
+
+# bottom 
 footer = html.Nav([
     dbc.Container([
         dbc.Row([
@@ -58,47 +100,22 @@ footer = html.Nav([
                 html.P('Source code released under the', style={'display': 'inline-block', 'margin-right': '3px'}),
                 html.A('MIT license', href='https://opensource.org/licenses/MIT/', target='_blank', style={'display': 'inline-block'}),
                 html.P('. Website and documentation licensed under', style={'display': 'inline-block', 'margin-right': '3px'}), 
-                html.A('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', target='_blank', style={'display': 'inline-block'}), 
-                html.P('.', style={'display': 'inline-block', 'margin-top':'10px'}),
+                html.A('CC BY 4.0', href='https://creativecommons.org/licenses/by/4.0/', target='_blank', style={'display': 'inline-block'}),
             ], style={'display': 'inline-block'}),
             dbc.Col(logogit, width='auto'),
         ]),
     ]),
 ], className='navbar footer footerbottom')
 
-landpage = html.Div([
-    dbc.Row(dbc.Col(logoappwhite, width='auto', style={'padding-top': '10pt', 'padding-left':'20pt'})),
-    dbc.Row([
-        dbc.Jumbotron([
-            html.H3('SailPy', className='display-3'),
-            html.P('A preliminary design tool for sailboats', className='lead'),
-            html.Hr(className='my-2'),
-            html.P("SailPy is an opensource Python application for conceptual sailboat design with an object-oriented approach. The sailboat is simulated in different conditions, to which optimization tools are applied to evaluate its performance, assisting the definition of the best set of dimensions in order to meet the user's needs. This library encourages suggestions, new features, improvements, and report of bugs. The link to the scripts you can find at the GitHub icon in the page bottom.", className='justify'),
-            html.Hr(className='my-2'),
-            html.Br(),
-            html.P(dbc.Button(dcc.Link(html.Div(html.Div('Start the analysis', className='btnupdate'), className='fa fa-arrow-circle-right btnupdate'), href=f'/application', style={'color': 'white'}))),
-        ], className='landingjumbo'),
-    ], className='middle'),
-], className='backgroundlanding')
-
-tabs = html.Div([
-    dcc.Tabs(id="tabs-styled-with-inline", value='tab-1', children=[
-        dcc.Tab(label='Introduction', value='tab-1'),
-        dcc.Tab(label='Hull Dimensions', value='tab-2'),
-        dcc.Tab(label='Optimization I', value='tab-3'),
-        dcc.Tab(label='Results I', value='tab-4'),
-        dcc.Tab(label='Appendages & Sail', value='tab-5'),
-        dcc.Tab(label='Optimization II', value='tab-6'),
-        dcc.Tab(label='Results II', value='tab-7'),
-    ], style={'height': '30pt', 'font-size': '11pt', 'line-height': '11pt', 'margin-bottom': '5pt'}),
-])
-
+# title in tab browser
 app.title = 'SailPy'
+
+# meta data and favicon
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Meta(name='viewport', 
         content='width=device-width, initial-scale=1.0',
-        title='SailPy. Developed by Diogo Kramel. 2019.'),
+        title='SailPy - Developed by Diogo Kramel in 2019'),
     html.Link(href='/assets/static/favicon.ico'),
     html.Div(id='landing-application'),
 ])
@@ -117,12 +134,12 @@ def display_page(tab):
     elif tab == 'tab-5':
         dim = codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read()
         dim = json.loads(dim)
-        lwl = np.float(dim["lwl"])
-        bwl = np.float(dim["bwl"])
-        lcb = np.float(dim["lcb"])
-        lcf = np.float(dim["lcf"])
-        disp = np.float(dim["disp"])
-        tc = np.float(dim["tc"])
+        lwl = np.float(dim['lwl'])
+        bwl = np.float(dim['bwl'])
+        lcb = np.float(dim['lcb'])
+        lcf = np.float(dim['lcf'])
+        disp = np.float(dim['disp'])
+        tc = np.float(dim['tc'])
         return dimensionsappendages.appendages, space, footer
     elif tab == 'tab-6':
         return optimizationappendages.optimizationappendages, space, footer
@@ -137,9 +154,9 @@ def display_page(pathname):
     if pathname == '/':
         return landpage, footer
     elif pathname == '/application':
-        return navbar, tabs, html.Div(id='page-content')
+        return topbar, tabs, html.Div(id='page-content')
     elif pathname == '/saildata':
-        return navbar, saildata.saildata, space, footer
+        return topbar, saildata.saildata, space, footer
     else:
         return '404'
 
