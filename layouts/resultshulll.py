@@ -157,8 +157,7 @@ resultsplus = dbc.Container([
 								{'label': "Hull #{}".format(i), 'value': i} for i in datatable.index.unique()
 							],
 							value='1',
-							placeholder='Select one hull to be optimised in the next phase',
-							style={'width': '100px', 'font-size': '10pt'}
+							style={'width': '200px', 'font-size': '10pt'}
 						),
 					], md=5),
 					dbc.Col([
@@ -170,8 +169,16 @@ resultsplus = dbc.Container([
 		]),
 		dbc.Row([
 			dbc.Col([
-				html.Div(id="insert-section-choosen")
-			])
+				dbc.Label('SAC angle at the bow [degrees]'),
+				dbc.Input(type='text', id='alpha_f_sac2', bs_size='sm', value=5, style={'width': '75%'}),
+				dbc.Label('SAC angle at the stern [degrees]'),
+				dbc.Input(type='text', id='alpha_i_sac2', bs_size='sm', value=15, style={'width': '75%'}),
+				dbc.Label('Hull bottom angle [degrees]'),
+				dbc.Input(type='text', id='beta_n2', bs_size='sm', value=0, style={'width': '75%'})
+			], md=4),
+			dbc.Col([
+				html.Div(dcc.Graph(id='insert-section-choosen'))
+			], md=8)
 		]),
     ], className="mt-4")
 ])

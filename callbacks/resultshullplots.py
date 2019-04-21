@@ -721,8 +721,8 @@ def export_hull_dimensions(id):
             html.P("Waterline Length: {}m -- Waterline Beam: {}m -- Draft: {}m".format(round(np.float(lwl),2), round(np.float(bwl),2), round(np.float(tc),2)), style={'padding-left': '20px', 'display': 'inline-block'})
         ])
 
-@app.callback(Output('insert-section-choosen', 'figure'), [Input("dropdown-hull-dimensions", "value")])
-def insert_section_choosen(id):
+@app.callback(Output('insert-section-choosen', 'figure'), [Input("dropdown-hull-dimensions", "value"), Input("alpha_f_sac2", "value"), Input("alpha_i_sac2", "value"), Input("beta_n2", "value")])
+def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
     row = df.iloc[np.int(id)]
     bwl = df.iloc[np.int(id)]['BWL']
@@ -735,10 +735,10 @@ def insert_section_choosen(id):
     cb = disp/(lwl*bwl*tc)
     cwp = awp/(lwl*bwl)
     cm = 0.55
-    alpha_f_sac = 5
-    alpha_i_sac = 20
+    alpha_f_sac = np.float(alpha_f_sac2)
+    alpha_i_sac = np.float(alpha_i_sac2)
     beamtransom = 0
-    beta_n = 0
+    beta_n = np.float(beta_n2)
     sn_sections_sol = sac_solve(np.float(lwl), np.float(cb), np.float(lcb), np.float(alpha_f_sac), np.float(alpha_i_sac), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
     sn_sections = sn_sections_sol[0][6]
     bn_sections_sol = wl_solve(np.float(lcf), np.float(cwp), np.float(lwl), np.float(beamtransom), np.float(bwl))
@@ -749,80 +749,90 @@ def insert_section_choosen(id):
     return {
         'data': [
             go.Scatter(
-                x = -section_solution[0][1][0],
-                y = section_solution[0][2][0],
-                name = "Section 10",
+                x = -section_solution[0][1][4],
+                y = section_solution[0][2][4],
                 mode = 'lines',
-                cliponaxis = False,
-            ),
-            go.Scatter(
-                x = -section_solution[0][1][1],
-                y = section_solution[0][2][1],
-                name = "Section 9",
-                mode = 'lines',
-                cliponaxis = False,
-            ),
-            go.Scatter(
-                x = -section_solution[0][1][2],
-                y = section_solution[0][2][2],
-                name = "Section 8",
-                mode = 'lines',
+                marker = dict(color = 'rgb(254,224,139)'),
+                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
                 x = -section_solution[0][1][3],
                 y = section_solution[0][2][3],
-                name = "Section 7",
                 mode = 'lines',
+                marker = dict(color = 'rgb(253,174,97)'),
+                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
-                x = -section_solution[0][1][4],
-                y = section_solution[0][2][4],
-                name = "Section 6",
+                x = -section_solution[0][1][2],
+                y = section_solution[0][2][2],
                 mode = 'lines',
+                marker = dict(color = 'rgb(244,109,67)'),
+                fill = "tozerox",
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = -section_solution[0][1][1],
+                y = section_solution[0][2][1],
+                mode = 'lines',
+                marker = dict(color = 'rgb(213,62,79)'),
+                fill = "tozerox",
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = -section_solution[0][1][0],
+                y = section_solution[0][2][0],
+                mode = 'lines',
+                marker = dict(color = 'rgb(158,1,66)'),
+                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][5],
                 y = section_solution[0][2][5],
-                name = "Section 5",
                 mode = 'lines',
+                marker = dict(color = 'rgb(230,245,152)'),
+                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][6],
                 y = section_solution[0][2][6],
-                name = "Section 4",
                 mode = 'lines',
+                marker = dict(color = 'rgb(171,221,164)'),
+                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][7],
                 y = section_solution[0][2][7],
-                name = "Section 3",
                 mode = 'lines',
+                marker = dict(color = 'rgb(102,194,165)'),
+                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][8],
                 y = section_solution[0][2][8],
-                name = "Section 2",
                 mode = 'lines',
+                marker = dict(color = 'rgb(50,136,189)'),
+                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
                 x = section_solution[0][1][9],
                 y = section_solution[0][2][9],
-                name = "Section 1",
                 mode = 'lines',
+                marker = dict(color = 'rgb(94,79,162)'),
+                fill = "tozerox",
                 cliponaxis = False,
             ),
         ],
         'layout': go.Layout(
             title = "Body Plan",
-            height = 300,
-            hovermode = "closest",
+            showlegend = False,
+            height = 230,
             margin = {
                 "r": 20,
                 "t": 30,
@@ -839,13 +849,16 @@ def insert_section_choosen(id):
                 "zeroline": False,
             },
             yaxis = {
-                "autorange": True,
+                "autorange": False,
                 "linewidth": 1,
                 "showgrid": True,
                 "showline": True,
                 "mirror": True,
                 "title": "Draft [m]",
                 "zeroline": False,
+                "scaleanchor": "x",
+                "scaleratio": 1,
+                "range": [-1.2*tc, 0.2]
             },
             annotations=[
                 dict(
@@ -859,7 +872,6 @@ def insert_section_choosen(id):
                     showarrow=False,
                     text='Stern'),
             ],
-            legend=dict(x=0, y=-0.4, orientation="h"),
             font=dict(size=10),
         )
     }
