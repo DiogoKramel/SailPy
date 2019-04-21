@@ -653,12 +653,12 @@ def update_output(type):
             font=dict(size=12),
         )
     }
-datatable_all = pd.read_csv("assets/data/optimizationresistance.csv")
-datatable_valid = datatable_all.loc[datatable_all['valid']==True]
-datatable_unvalid = datatable_all.loc[datatable_all['valid']==False]
 
 @app.callback(Output("plot-dimensions", "children"), [Input("resultshullaxisx", "value"), Input('datatable-interactivity', 'selected_rows')])
 def update_graph(resultshullaxisx, selected_row_indices):
+    datatable_all = pd.read_csv("assets/data/optimizationresistance.csv")
+    datatable_valid = datatable_all.loc[datatable_all['valid']==True]
+    datatable_unvalid = datatable_all.loc[datatable_all['valid']==False]
     if selected_row_indices is None:
         selected_row_indices = []
     return html.Div([
