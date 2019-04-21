@@ -154,7 +154,7 @@ def optionoptimization(typeoptimization):
                 bs_size="sm", 
                 style={'width': '25%'}
             ),
-			html.Br(),
+            html.Br(),
             dbc.Label("Behave of each algorithm"),
             html.Img(src='/assets/static/platypus.png', width='90%'),
             #### HIDDEN BELOW
@@ -300,15 +300,62 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         with open('assets/data/optimizationresistance.csv','w') as fd:
             fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,AVS,CS,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,constraint1,constraint2,constraint3,constraint4,constraint5,constraint6,constraint7,valid"+"\n")
         
+        # initial hull
+        dim_obj = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
+        dim = json.loads(dim_obj) 
+        lwl = np.float(dim["lwl"])
+        bwl = np.float(dim["bwl"])
+        tc = np.float(dim["tc"])
+        alcb = np.float(dim["alcb"])
+        cp = np.float(dim["cp"])
+        cm = np.float(dim["cm"])
+        awp = np.float(dim["awp"])
+        disp = np.float(dim["disp"])
+        lcf = np.float(dim["lcf"])
+        lcb = np.float(dim["lcb"])
+        Rt = 0
+        CR = 0
+        Rv = 0
+        Ri = 0
+        Rr =0
+        Rincli =0
+        count = 0
+        for velocity in range (velocityrange[0], velocityrange[1], 1):
+            for heel in range (heelrange[0], heelrange[1], 5):
+                result = resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, velocity, heel)
+                Rt = Rt+result[0]
+                Rv = Rv+result[1]
+                Ri = Ri+result[2]
+                Rr = Rr+result[3]
+                Rincli = Rincli+result[4]
+                CR = CR+result[5]
+                count = count+1
+        Rt = Rt/count
+        CR = CR/count
+        Rv = Rv/count
+        Ri = Ri/count
+        Rr = Rr/count
+        br = 0.28
+        boa = bwl*1.1
+        dispmass = disp*1025
+        ssv = boa**2/(br*tc*disp**(1/3))       
+        avs = 110+(400/(ssv-10))
+        cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
+        exportdata = [1, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(avs, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), False, False, False, False, False, False, False, False]
+        with open("assets/data/optimizationresistance.csv", "a") as file:
+            writer = csv.writer(file, delimiter=',')
+            writer.writerow(exportdata)
+        
+        # optimization process
         start = time.time()
         if typeoptimization == 'default':
             json.dump({'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'constraints': constraints, 'offspringsplatypus': offspringsplatypus, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
             result = optimization_platypus_resistance()
         elif typeoptimization == 'custom':
-            json.dump({'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'constraints': constraints, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
+            json.dump({'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'constraints': constraints, 'gamethod': 'NSGA II'}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
             result = optimization_deap_resistance()
         done = time.time()
         elapsed = done-start
         file = open("assets/data/optimizationresistance.csv")
-        numoffsprings = len(file.readlines())-1
+        numoffsprings = len(file.readlines())-2
         return html.Div(dbc.Alert("Optimization finished in {} seconds after generating {} offsprings".format(round(elapsed, 2), numoffsprings), color="success", style={'padding': '5px', 'display': 'inline-block'}))

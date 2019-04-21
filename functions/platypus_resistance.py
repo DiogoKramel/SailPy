@@ -42,20 +42,34 @@ def optimization_platypus_resistance():
         dimensions = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
         dim = json.loads(dimensions)
         alcb_coefficient = np.float(dim["alcb_coefficient"])
+        velocityrange = np.array(gaconfig["velocityrange"])
+        heelrange = np.array(gaconfig["heelrange"])    
         alcb = lwl*alcb_coefficient*tcan
         divcan = lwl*bwl*tcan*cb
         awp = bwl*lwl*cwp
         
-        vboat = 3
-        heel = 20
-        
-        result = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, vboat, heel)
-        Rt = result[0]
-        Rv = result[1]
-        Ri = result[2]
-        Rr = result[3]
-        Rincli = result[4]
-        CR = result[5]
+        Rt = 0
+        CR = 0
+        Rv = 0
+        Ri = 0
+        Rr =0
+        Rincli =0
+        count = 0
+        for velocity in range (velocityrange[0], velocityrange[1], 1):
+            for heel in range (heelrange[0], heelrange[1], 5):
+                result = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, velocity, heel)
+                Rt = Rt+result[0]
+                Rv = Rv+result[1]
+                Ri = Ri+result[2]
+                Rr = Rr+result[3]
+                Rincli = Rincli+result[4]
+                CR = CR+result[5]
+                count = count+1
+        Rt = Rt/count
+        CR = CR/count
+        Rv = Rv/count
+        Ri = Ri/count
+        Rr = Rr/count
 
         savefile = "optimizationresistance"
         rows = []

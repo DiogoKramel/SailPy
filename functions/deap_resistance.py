@@ -71,12 +71,6 @@ def optimization_deap_resistance():
         boa = bwl*1.1
         #alcb = np.float(dim["alcb"])
         #loa = np.float(dim["loa"])*0.3048
-        #resistance_total = 0
-        #for i in range (velocityrange[0], velocityrange[1]+1):
-        #    for j in range (heelrange[0], heelrange[1]+1):
-        #f1 = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, np.float(velocityrange[0]), np.float(heelrange[0]), savefile)
-        vboat = 3
-        heel = 20
         savefile="optimizationresistance"
 
         Rt = 0
@@ -86,8 +80,8 @@ def optimization_deap_resistance():
         Rr =0
         Rincli =0
         count = 0
-        for vel in range (velocityrange[0], velocityrange[1], 1):
-            for vel in range (heelrange[0], heelrange[1], 5):
+        for vboat in range (velocityrange[0], velocityrange[1], 1):
+            for heel in range (heelrange[0], heelrange[1], 5):
                 result = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, vboat, heel)
                 Rt = Rt+result[0]
                 Rv = Rv+result[1]
@@ -277,7 +271,7 @@ def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, 
         constraint4 = True
     if (divcan/(lwl*bwl*tcan)) > 0.4 or (divcan/(lwl*bwl*tcan)) < 0.3:
         constraint5 = True
-    if avs < 50:
+    if avs < 110:
         constraint6 = True
     if cs > 2:
         constraint7 = True

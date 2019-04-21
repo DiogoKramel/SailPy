@@ -23,7 +23,8 @@ resultshull = dbc.Container([
                 html.P("""Besides that, a list with all the individuals generated is displayed in the following table. In this table, the user can sort the values combining ascending and descending sorting in each column. Another import asset is the parallel dimensions plot. It shows how the dimension set of the hull evolved throughout the optimization process. The concentration at one of the extremes may indicate space for further exploration."""),
             ], className = 'justify'),
         ]),
-        html.Br(),
+        html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'),
+        html.Br(), html.Br(),
         dbc.Row(dbc.Col(html.H5('What do you want to view?'))),
         dbc.Row([
             dbc.Col([
@@ -70,12 +71,12 @@ resultshull = dbc.Container([
             dbc.Col([
                 html.Div(dcc.Graph(id='output-optimization')),
                 html.Div(id='plot-constraint-individual'),
-                html.Br(),
-                html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'),
+                
             ], width=10),
             dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
         ]),
         html.Br(),
+		dbc.Row(dbc.Col(html.H5('Dimensions Constraints'))),
         dbc.Row([
             dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-bwl')), width=3),
             dbc.Col(html.Div(dcc.Graph(id='plot-limits-bwl-tc'))),
@@ -94,21 +95,24 @@ datatable = datatable.loc[:,"id":"LCB"]
 resultsplus = dbc.Container([
     dbc.Col([
         dbc.Row(dbc.Col(html.H5("Dimensions Parallel Plot"))),
-         dcc.Dropdown(
-            id='parallel-datatype', 
-            options=[
-                {'label': "All individuals", 'value': 1},
-                {'label': "Only valid individuals", 'value': 2},
-                {'label': "Only not valid individuals", 'value': 3},
-            ],
-            value='1',
-            style={'width': '300pt'},
-            className='regularfont',
-        ),
+        dbc.Row([dbc.Col(
+			dcc.Dropdown(
+				id='parallel-datatype', 
+				options=[
+					{'label': "All individuals", 'value': 1},
+					{'label': "Only valid individuals", 'value': 2},
+					{'label': "Only not valid individuals", 'value': 3},
+				],
+				value='1',
+				style={'width': '300pt'},
+				className='regularfont',
+			),
+		)]),
         dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
         html.Br(),
         dbc.Row(dbc.Col([
             html.H5("List of all individuals"),
+			html.P("All the valid individuals are listed below. By reordering the columns, the hulls with least resistance or displacement can be found. When selected, the following plots will be automatically update ith their position in the optimization course."),
             html.Div(
             dash_table.DataTable(
                 id='datatable-interactivity',
@@ -140,17 +144,29 @@ resultsplus = dbc.Container([
         )),
         html.Br(),
         dbc.Row(dbc.Col(html.H4("Select one individual"))),
-        dbc.Row([
-            dcc.Dropdown(
-                id='dropdown-hull-dimensions', 
-                options=[
-                    {'label': "Hull #{}".format(i), 'value': i} for i in datatable.index.unique()
-                ],
-                value='1',
-                placeholder='Select one hull to be optimised in the next phase',
-                style={'width': '300pt', 'font-size': '10pt'}
-            ),
-            html.Div(id="export-hull-dimensions", style={'padding-left': '50px'})
-        ]),
+		dbc.Row([
+			dbc.Col([
+				html.P("Among all the individuals generated throughout the optimization proccess, select one below. The table above and the Pareto Frontier will help you to find the specific hull number, equivalent to the individual ID, that fits your needs."),
+			], className="justify"),
+			dbc.Col([
+				dbc.Row([
+					dbc.Col([
+						dcc.Dropdown(
+							id='dropdown-hull-dimensions', 
+							options=[
+								{'label': "Hull #{}".format(i), 'value': i} for i in datatable.index.unique()
+							],
+							value='1',
+							placeholder='Select one hull to be optimised in the next phase',
+							style={'width': '100px', 'font-size': '10pt'}
+						),
+					], md=3),
+					dbc.Col([
+						html.Div(id="export-hull-alert")
+					], md=9),
+				]),
+				dbc.Row(html.Div(id="export-hull-dimensions"))
+			]),
+		])
     ], className="mt-4")
 ])

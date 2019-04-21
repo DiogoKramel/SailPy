@@ -41,11 +41,11 @@ def update_output(resultshullaxisy, resultshullaxisx):
     
     dfvalid = df.loc[df['valid']==True]
     dfvalid = dfvalid.reset_index()
-    resist_mean = dfvalid["Resistance"].mean()
-    comfort_mean = dfvalid["Comfort"].mean()
-    values = weight1*dfvalid.Resistance/resist_mean+weight2*dfvalid.Comfort/comfort_mean
-    dfvalid['Values'] = values
-    best = dfvalid['Values'].idxmax()
+    #resist_mean = dfvalid["Resistance"].mean()
+    #comfort_mean = dfvalid["Comfort"].mean()
+    #values = weight1*dfvalid.Resistance/resist_mean+weight2*dfvalid.Comfort/comfort_mean
+    #dfvalid['Values'] = values
+    #best = dfvalid['Values'].idxmax()
 
     dfnotvalid = df.loc[df["valid"]==False]
     p_front = pareto_frontier(dfvalid["Comfort"], dfvalid["Resistance"], maxX = True, maxY = False)
@@ -69,6 +69,8 @@ def update_output(resultshullaxisy, resultshullaxisx):
     ymax = max(df[resultshullaxisy])
     if ymax > 7000:
         ymax = 7000
+    
+    gamethod = gaconfig["gamethod"]
 
     return {
         'data': [
@@ -84,7 +86,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
                     cmin=1,
                     color=df["id"],
                     colorbar=dict(
-                        title='Offspring'
+                        title='#Offspring'
                     ),
                     colorscale='Viridis',
                     opacity = 0.5+0.5*df["id"]/max(df["id"]),
@@ -103,27 +105,16 @@ def update_output(resultshullaxisy, resultshullaxisx):
                 ),
             ),
             go.Scatter(
-                x=dfinit[resultshullaxisx],
-                y=dfinit[resultshullaxisy],
-                text=dfinit["id"],
+                x = [df.iloc[0][resultshullaxisx]],
+                y = [df.iloc[0][resultshullaxisy]],
+                text=dfvalid["id"],
                 textposition='top center',
                 mode='markers',
                 name='Initial hull',
                 marker=dict(
                     symbol='star',
-                ),
-            ),
-            go.Scatter(
-                x = [dfvalid.iloc[best][resultshullaxisx]],
-                y = [dfvalid.iloc[best][resultshullaxisy]],
-                text=dfvalid["id"],
-                textposition='top center',
-                mode='markers',
-                name='Best individual',
-                marker=dict(
-                    symbol='star',
                     size = 10,
-                    color = "blue",
+                    color = "black",
                 ),
             ),
             go.Scatter(
@@ -135,14 +126,14 @@ def update_output(resultshullaxisy, resultshullaxisx):
             ),
             ],
         'layout': go.Layout(
-            title="NSGA II Optimization",
+            title="{} Optimization".format(gamethod),
             height=500,
             hovermode="closest",
             margin={
                 "r": 20,
                 "t": 30,
                 "b": 50,
-                "l": 50
+                "l": 80
             },
             xaxis={
                 "autorange": True,
@@ -161,7 +152,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
                 "title": resultshullaxisy,
                 "range": [ymin, ymax],
             },
-        legend=dict(x=0.8, y=1),
+        legend=dict(x=0.75, y=1),
         font=dict(size=12),
         )
     }
@@ -635,7 +626,7 @@ def update_output(type):
                     cmin=1,
                     cmax=max(df["id"]),
                     colorbar=dict(
-                        title='Generation'
+                        title='#Offspring'
                     ),
                 ),
                 dimensions = list([
@@ -707,8 +698,15 @@ def update_graph(resultshullaxisx, selected_row_indices):
         ]
     )
 
+@app.callback(Output("export-hull-alert", "children"), [Input("dropdown-hull-dimensions", "value")])
+def export_hull_alert(index):
+    index = np.int(index)
+    return html.Div([
+            dbc.Alert("Exported hull number {}".format(index), color="success", style={'padding': '5px', 'display': 'inline-block'}),
+        ])
+
 @app.callback(Output("export-hull-dimensions", "children"), [Input("dropdown-hull-dimensions", "value")])
-def update_y_timeseries(id):
+def export_hull_dimensions(id):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
     row = df.iloc[np.int(id)]
     bwl = df.iloc[np.int(id)]['BWL']
@@ -719,7 +717,6 @@ def update_y_timeseries(id):
     disp = df.iloc[np.int(id)]['Displacement']
     json.dump({'lwl': lwl, 'bwl': bwl, 'tc': tc, 'disp': disp, 'lcb': lcb, 'lcf': lcf}, codecs.open('assets/data/dimensions-hull.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     return html.Div([
-            dbc.Alert("Exported hull number {}".format(id), color="success", style={'padding': '5px', 'display': 'inline-block'}),
             html.P("Waterline Length: {}m -- Waterline Beam: {}m -- Draft: {}m".format(round(np.float(lwl),2), round(np.float(bwl),2), round(np.float(tc),2)), style={'padding-left': '20px', 'display': 'inline-block'})
         ])
     

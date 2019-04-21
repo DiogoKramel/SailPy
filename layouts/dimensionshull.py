@@ -11,8 +11,8 @@ hull = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H4('Main parameters'),
-            html.P("Set the category and overall length that will serve to build the regressions for each of the dimensions below. First, the main linear dimensions can be set, later the form coefficients can be adjusted, and lastly refinements on the curvature are performed. Following how the plots behave, you can understand how your choices affect the hull"),
-            html.P("Have in mind that the plots are mere representations and tend not to be accurate for extreme cases. Even if the sections are incongruent, you can advance once the limits are respected"),
+            html.P("Set the category and overall length that will serve to build the regressions for each of the dimensions below. First, the main linear dimensions can be set, later the form coefficients can be adjusted, and lastly refinements on the curvature are performed. Following how the plots behave, you can understand how your choices affect the hull."),
+            html.P("Have in mind that the plots are mere representations and tend not to be accurate for extreme cases. Even if the sections are incongruent, you can advance once the limits are respected."),
             dbc.FormGroup([
                 dbc.Label('Category'),
                 dbc.RadioItems(
