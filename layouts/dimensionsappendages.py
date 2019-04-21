@@ -11,15 +11,6 @@ import json, codecs
 from callbacks import dimensionsappendagescall, dimensionsappendagesplots
 
 
-dim = codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read()
-dim = json.loads(dim)
-lwl = np.float(dim["lwl"])
-bwl = np.float(dim["bwl"])
-lcb = np.float(dim["lcb"])
-lcf = np.float(dim["lcf"])
-disp = np.float(dim["disp"])
-tc = np.float(dim["tc"])
-
 appendages = dbc.Container([
     dbc.Row(
         dbc.Col(
@@ -35,9 +26,9 @@ appendages = dbc.Container([
             dbc.Row([
                 dbc.Col([
                     dbc.Label("Waterline length [m]"),
-                    dbc.Input(type='text', id='lwl-new', bs_size="sm", value=format(round(lwl, 2))),
+                    dbc.Input(type='text', id='lwl-new', bs_size="sm", value=format(round(json.loads(codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read())["lwl"],2))),
                     dbc.Label("Waterline beam [m]"),
-                    dbc.Input(type='text', id='bwl-new', bs_size="sm", value=format(round(bwl,2))),
+                    dbc.Input(type='text', id='bwl-new', bs_size="sm", value=format(round(json.loads(codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read())["bwl"],2))),
                     dbc.Label("Draft [m]"),
                     dbc.Input(type='text', id='tc-new', bs_size="sm", value=format(round(json.loads(codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read())["tc"],2))),
                 ]),

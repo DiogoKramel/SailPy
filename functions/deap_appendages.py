@@ -131,9 +131,7 @@ def optimization_deap_appendages():
         #vboat = 3
         #heel = 20
         savefile="optimizationvpp"
-        print(loa)
         results = vpp_solve(sailset, lwl, loa, bwl, tc, disp, lcb, lcf, cb, cm, cp, cwp, awp, alcb, am, boa, scb, kb, kg, itwp, GMtrans, bmt, fb, lr, xcea, mcrew, psail, esail, isail, jsail, bad, spl, lpg, spanR, tipcR, rootcR, tiptcksR, roottcksR, sweepRdeg, spanK, tipcK, rootcK, tiptcksK, roottcksK, sweepKdeg, marcaK, marcaR, ehm, emdc, hsr, savefile)
-        print(results)
         f1 = results[0]
         f2 = results[1]
 

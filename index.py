@@ -138,15 +138,6 @@ def display_page(tab):
         datatable = datatable.loc[:,"id":"LCB"]
         return resultshulll.resultshull, resultshulll.resultsplus, space, footer
     elif tab == 'tab-5':
-        # calling the dimensions to update the callback but does not work yet
-        dim = codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read()
-        dim = json.loads(dim)
-        lwl = np.float(dim['lwl'])
-        bwl = np.float(dim['bwl'])
-        lcb = np.float(dim['lcb'])
-        lcf = np.float(dim['lcf'])
-        disp = np.float(dim['disp'])
-        tc = np.float(dim['tc'])
         return dimensionsappendages.appendages, space, footer
     elif tab == 'tab-6':
         return space, footer # optimizationappendages.optimizationappendages

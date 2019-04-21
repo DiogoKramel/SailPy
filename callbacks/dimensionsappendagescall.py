@@ -323,9 +323,7 @@ def dimensionloa(lwl, overhang, bowangle, freeboard, disp, br, tc, bwl):
     dispmass = np.float(disp)*1025
     br = np.float(br)/100
     ssv = boa**2/(br*np.float(tc)*np.float(disp)**(1/3))
-    print(ssv)       
     avs = 110+(400/(ssv-10))
-    print(avs)
     cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
     cr = np.float(disp)*1025*2.20462/((boa*3.28084)**(4/3)*0.65*(0.7*np.float(lwl)*3.28084+0.3*loa*3.28084))
 
@@ -340,7 +338,7 @@ def dimensionloa(lwl, overhang, bowangle, freeboard, disp, br, tc, bwl):
                 dash_table.DataTable(
                     columns=[{"name": i, "id": i} for i in df.columns],
                     data=df.to_dict("rows"),
-                    style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '150px', 'whiteSpace': 'normal'},
+                    style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '150px', 'whiteSpace': 'normal', 'font_family': 'Source Sans Pro', 'font-size': '10pt',},
                     style_cell_conditional=[{'if': {'column_id': 'Parameters'}, 'textAlign': 'left'}],
                     style_as_list_view=True,
                     style_header={'fontWeight': 'bold'},
