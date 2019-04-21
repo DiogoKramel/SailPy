@@ -753,7 +753,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][4],
                 mode = 'lines',
                 marker = dict(color = 'rgb(254,224,139)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
@@ -761,7 +760,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][3],
                 mode = 'lines',
                 marker = dict(color = 'rgb(253,174,97)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
@@ -769,7 +767,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][2],
                 mode = 'lines',
                 marker = dict(color = 'rgb(244,109,67)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
@@ -777,7 +774,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][1],
                 mode = 'lines',
                 marker = dict(color = 'rgb(213,62,79)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
@@ -785,7 +781,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][0],
                 mode = 'lines',
                 marker = dict(color = 'rgb(158,1,66)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
@@ -793,7 +788,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][5],
                 mode = 'lines',
                 marker = dict(color = 'rgb(230,245,152)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
@@ -801,7 +795,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][6],
                 mode = 'lines',
                 marker = dict(color = 'rgb(171,221,164)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
@@ -809,7 +802,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][7],
                 mode = 'lines',
                 marker = dict(color = 'rgb(102,194,165)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
@@ -817,7 +809,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][8],
                 mode = 'lines',
                 marker = dict(color = 'rgb(50,136,189)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
             go.Scatter(
@@ -825,7 +816,6 @@ def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
                 y = section_solution[0][2][9],
                 mode = 'lines',
                 marker = dict(color = 'rgb(94,79,162)'),
-                fill = "tozerox",
                 cliponaxis = False,
             ),
         ],

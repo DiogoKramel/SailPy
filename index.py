@@ -5,6 +5,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import json, codecs
 import numpy as np
+import pandas as pd
 
 from app import app
 from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages, optimizationappendages, resultsappendages, saildata
@@ -14,20 +15,20 @@ server = app.server
 # logos and hyperlinks
 logoapp = html.Img(src='assets/static/logoappwhite.png', height='50px')
 logousp = html.A([
-	html.Img(src='assets/static/logousp.png', height='35px')], 
-	href='https://www.usp.br', target='_blank')
+    html.Img(src='assets/static/logousp.png', height='35px')], 
+    href='https://www.usp.br', target='_blank')
 logopoli = html.A([
-	html.Img(src='assets/static/logopolitecnica.png', height='35px')], 
-	href='https://www.poli.usp.br/', target='_blank')
+    html.Img(src='assets/static/logopolitecnica.png', height='35px')], 
+    href='https://www.poli.usp.br/', target='_blank')
 logopnv = html.A([
-	html.Img(src='assets/static/logopnv.png', height='35px')], 
-	href='https://www.pnv.poli.usp.br/', target='_blank')
+    html.Img(src='assets/static/logopnv.png', height='35px')], 
+    href='https://www.pnv.poli.usp.br/', target='_blank')
 logocapes = html.A([
-	html.Img(src='assets/static/logocapes.png', height='35px')], 
-	href='https://www.capes.gov.br', target='_blank')
+    html.Img(src='assets/static/logocapes.png', height='35px')], 
+    href='https://www.capes.gov.br', target='_blank')
 logogit = html.A([
-	html.Img(src='assets/static/logogithub.svg', height='35px')], 
-	href='https://github.com/DiogoKramel/SailPy', target='_blank')
+    html.Img(src='assets/static/logogithub.svg', height='35px')], 
+    href='https://github.com/DiogoKramel/SailPy', target='_blank')
 
 # landing page
 landpage = html.Div([
@@ -131,9 +132,13 @@ def display_page(tab):
     elif tab == 'tab-3':
         return optimizationhull.optimizationhull, space, footer
     elif tab == 'tab-4':
+        df = pd.read_csv("assets/data/optimizationresistance.csv")
+        datatable = pd.read_csv("assets/data/optimizationresistance.csv")
+        datatable = datatable.loc[datatable['valid']==True]
+        datatable = datatable.loc[:,"id":"LCB"]
         return resultshulll.resultshull, resultshulll.resultsplus, space, footer
     elif tab == 'tab-5':
-		# calling the dimensions to update the callback but does not work yet
+        # calling the dimensions to update the callback but does not work yet
         dim = codecs.open('assets/data/dimensions-hull.json', 'r', encoding='utf-8').read()
         dim = json.loads(dim)
         lwl = np.float(dim['lwl'])
