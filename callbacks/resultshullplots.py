@@ -12,6 +12,7 @@ from scipy.integrate import simps
 import csv
 import pandas as pd
 
+from functions import keel_solve, sac_solve, section_solve, wl_solve
 
 @app.callback(Output('output-optimization', 'figure'), [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value')])
 def update_output(resultshullaxisy, resultshullaxisx):
@@ -107,7 +108,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
             go.Scatter(
                 x = [df.iloc[0][resultshullaxisx]],
                 y = [df.iloc[0][resultshullaxisy]],
-                text=dfvalid["id"],
+                text=df["id"],
                 textposition='top center',
                 mode='markers',
                 name='Initial hull',
@@ -719,4 +720,146 @@ def export_hull_dimensions(id):
     return html.Div([
             html.P("Waterline Length: {}m -- Waterline Beam: {}m -- Draft: {}m".format(round(np.float(lwl),2), round(np.float(bwl),2), round(np.float(tc),2)), style={'padding-left': '20px', 'display': 'inline-block'})
         ])
-    
+
+@app.callback(Output('insert-section-choosen', 'figure'), [Input("dropdown-hull-dimensions", "value")])
+def insert_section_choosen(id):
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    row = df.iloc[np.int(id)]
+    bwl = df.iloc[np.int(id)]['BWL']
+    lwl = df.iloc[np.int(id)]['LWL']
+    tc = df.iloc[np.int(id)]['Draft']
+    lcb = df.iloc[np.int(id)]['LCB']
+    lcf = df.iloc[np.int(id)]['LCF']
+    disp = df.iloc[np.int(id)]['Displacement']
+    awp = df.iloc[np.int(id)]['AWP']
+    cb = disp/(lwl*bwl*tc)
+    cwp = awp/(lwl*bwl)
+    cm = 0.55
+    alpha_f_sac = 5
+    alpha_i_sac = 20
+    beamtransom = 0
+    beta_n = 0
+    sn_sections_sol = sac_solve(np.float(lwl), np.float(cb), np.float(lcb), np.float(alpha_f_sac), np.float(alpha_i_sac), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
+    sn_sections = sn_sections_sol[0][6]
+    bn_sections_sol = wl_solve(np.float(lcf), np.float(cwp), np.float(lwl), np.float(beamtransom), np.float(bwl))
+    bn_sections = bn_sections_sol[6]
+    tn_sections_sol = keel_solve(np.float(lwl), np.float(tc))
+    tn_sections = tn_sections_sol[5]
+    section_solution = section_solve(tn_sections, bn_sections, sn_sections, np.float(lwl), np.float(beta_n)),
+    return {
+        'data': [
+            go.Scatter(
+                x = -section_solution[0][1][0],
+                y = section_solution[0][2][0],
+                name = "Section 10",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = -section_solution[0][1][1],
+                y = section_solution[0][2][1],
+                name = "Section 9",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = -section_solution[0][1][2],
+                y = section_solution[0][2][2],
+                name = "Section 8",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = -section_solution[0][1][3],
+                y = section_solution[0][2][3],
+                name = "Section 7",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = -section_solution[0][1][4],
+                y = section_solution[0][2][4],
+                name = "Section 6",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = section_solution[0][1][5],
+                y = section_solution[0][2][5],
+                name = "Section 5",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = section_solution[0][1][6],
+                y = section_solution[0][2][6],
+                name = "Section 4",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = section_solution[0][1][7],
+                y = section_solution[0][2][7],
+                name = "Section 3",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = section_solution[0][1][8],
+                y = section_solution[0][2][8],
+                name = "Section 2",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+            go.Scatter(
+                x = section_solution[0][1][9],
+                y = section_solution[0][2][9],
+                name = "Section 1",
+                mode = 'lines',
+                cliponaxis = False,
+            ),
+        ],
+        'layout': go.Layout(
+            title = "Body Plan",
+            height = 300,
+            hovermode = "closest",
+            margin = {
+                "r": 20,
+                "t": 30,
+                "b": 50,
+                "l": 50
+            },
+            xaxis = {
+                "autorange": True,
+                "linewidth": 1,
+                "showgrid": True,
+                "showline": True,
+                "mirror": True,
+                "title": 'Half Beam [m]',
+                "zeroline": False,
+            },
+            yaxis = {
+                "autorange": True,
+                "linewidth": 1,
+                "showgrid": True,
+                "showline": True,
+                "mirror": True,
+                "title": "Draft [m]",
+                "zeroline": False,
+            },
+            annotations=[
+                dict(
+                    x=0.5,
+                    y=0.1,
+                    showarrow=False,
+                    text='Bow'),
+                dict(
+                    x=-0.5,
+                    y=0.1,
+                    showarrow=False,
+                    text='Stern'),
+            ],
+            legend=dict(x=0, y=-0.4, orientation="h"),
+            font=dict(size=10),
+        )
+    }

@@ -160,13 +160,18 @@ resultsplus = dbc.Container([
 							placeholder='Select one hull to be optimised in the next phase',
 							style={'width': '100px', 'font-size': '10pt'}
 						),
-					], md=3),
+					], md=5),
 					dbc.Col([
 						html.Div(id="export-hull-alert")
-					], md=9),
+					], md=7),
 				]),
 				dbc.Row(html.Div(id="export-hull-dimensions"))
 			]),
-		])
+		]),
+		dbc.Row([
+			dbc.Col([
+				html.Div(id="insert-section-choosen")
+			])
+		]),
     ], className="mt-4")
 ])

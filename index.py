@@ -144,9 +144,9 @@ def display_page(tab):
         tc = np.float(dim['tc'])
         return dimensionsappendages.appendages, space, footer
     elif tab == 'tab-6':
-        return optimizationappendages.optimizationappendages, space, footer
+        return space, footer # optimizationappendages.optimizationappendages
     elif tab == 'tab-7':
-        return resultsappendages.resultsappendages, space, footer
+        return space, footer # resultsappendages.resultsappendages
     else:
         return ''
 
