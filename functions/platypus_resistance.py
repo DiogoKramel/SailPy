@@ -4,6 +4,8 @@ import csv
 from platypus import NSGAII, GDE3, OMOPSO, SMPSO, SPEA2, EpsMOEA, Problem, Real, EPSILON
 from functions import resistance
 
+# more information here:
+# https://platypus.readthedocs.io/en/latest/_modules/platypus/algorithms.html
 
 def optimization_platypus_resistance():
     gaconfig_obj = codecs.open('assets/data/parametersga.json', 'r', encoding='utf-8').read()

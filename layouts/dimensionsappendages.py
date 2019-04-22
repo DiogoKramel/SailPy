@@ -157,6 +157,8 @@ appendages = dbc.Container([
             html.Div(dcc.Graph(id='plot-appendages', style={'width': 'inherit'})),
             html.Br(), html.Br(),
             html.Div(id="dimension-loa"),
+			html.Br(), html.Br(),
+            html.Div(id="dimension-area", style = {'width': '50%'} ),
         ], width=6),
     ]),
 ], className="mt-4",)

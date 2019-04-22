@@ -33,8 +33,12 @@ def dimensionssail(sailset, disp, lwl):
     sm = sa*0.6
     p = (2*sm*ar)**0.5
     e=2*sm/p
-    i=p*0.9
-    j=2*(sa-sm)/i
+    if sailset == "1" or sailset == "3":
+        i=p*0.9
+        j=2*(sa-sm)/i
+    elif sailset == "2" or sailset == "4":
+        i=0
+        j=0
     lpg = 1.5*j
     spl = 1.1*p
     mastheight = 1.2+np.float(p)+0.2
@@ -340,6 +344,30 @@ def dimensionloa(lwl, overhang, bowangle, freeboard, disp, br, tc, bwl):
                     data=df.to_dict("rows"),
                     style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '150px', 'whiteSpace': 'normal', 'font_family': 'Source Sans Pro', 'font-size': '10pt',},
                     style_cell_conditional=[{'if': {'column_id': 'Parameters'}, 'textAlign': 'left'}],
+                    style_as_list_view=True,
+                    style_header={'fontWeight': 'bold'},
+                )
+            ]),
+        ),
+    ]),
+
+@app.callback(Output('dimension-area', 'children'), [Input('rootchord-rudder', 'value'), Input('tipchord-rudder', 'value'), Input('span-rudder', 'value'), Input('rootchord-keel', 'value'), Input('tipchord-keel', 'value'), Input('span-keel', 'value'), Input('psail', 'value'), Input('esail', 'value'), Input('isail', 'value'), Input('jsail', 'value')])
+def dimensionloa(rootrudder, tiprudder, spanrudder, rootkeel, tipkeel, spankeel, psail, esail, isail, jsail):
+    arearudder = np.float(spanrudder)*(np.float(rootrudder)+np.float(tiprudder))/2
+    areakeel = np.float(spankeel)*(np.float(rootkeel)+np.float(tipkeel))/2
+    areasail = np.float(psail)*np.float(esail)/2+np.float(isail)*np.float(jsail)/2
+
+    data = {'Dimensions' : ['Rudder Area', 'Keel Area', 'Sail Area'], 'Values' : [round(arearudder,2), round(areakeel,2), round(areasail,2)], 'Unit' : ['m2', 'm2', 'm2']}
+    df = pd.DataFrame(data)
+
+    return html.Div([
+        dbc.Row(
+            dbc.Col([
+                dash_table.DataTable(
+                    columns=[{"name": i, "id": i} for i in df.columns],
+                    data=df.to_dict("rows"),
+                    style_cell={'textAlign': 'center', 'minWidth': '0px', 'maxWidth': '90px', 'whiteSpace': 'normal', 'font_family': 'Source Sans Pro', 'font-size': '10pt',},
+                    style_cell_conditional=[{'if': {'column_id': 'Dimensions'}, 'textAlign': 'left'}],
                     style_as_list_view=True,
                     style_header={'fontWeight': 'bold'},
                 )
