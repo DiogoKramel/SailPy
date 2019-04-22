@@ -152,7 +152,7 @@ def optionoptimization(typeoptimization):
             ),
             html.Br(),
             dbc.Label("Behave of each algorithm"),
-            html.Img(src='/assets/static/platypus.png', width='90%'),
+            html.Img(src='/assets/static/platypus2.png', width='100%'),
             #### HIDDEN BELOW
             dbc.Input(
                 type='number', 
