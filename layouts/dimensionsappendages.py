@@ -108,8 +108,7 @@ appendages = dbc.Container([
             html.H5("Extra data"),
             dbc.Label("Crew mass [kg]"), html.Br(),
             dbc.Input(type='text', id='crewmass', bs_size="sm", value=format(round(280,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            
+            html.Br(),
             dbc.Label("Ballast Ratio [%]"), html.Br(),
             dbc.Input(type='text', id='ballast-ratio-min', bs_size="sm", value=format(round(26,2)), className='boxminimum'),
             html.P(" ", className='spacebox'),
