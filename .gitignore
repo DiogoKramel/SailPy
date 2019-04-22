@@ -4,5 +4,5 @@
 .venv
 env/
 venv/
-#.assets
-#assets/
+.assets
+assets/
