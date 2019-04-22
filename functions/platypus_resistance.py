@@ -1,7 +1,7 @@
 import codecs, json
 import numpy as np
 import csv
-from platypus import NSGAII, IBEA, Problem, Real
+from platypus import NSGAII, NSGAIII, CMAES, GDE3, IBEA, MOEAD, OMOPSO, SMPSO, SPEA2, EpsMOEA, Problem, Real
 from functions import resistance
 
 
@@ -120,23 +120,21 @@ def optimization_platypus_resistance():
 
     if gamethod == 'NSGAII':
         algorithm = NSGAII(problem)
-    elif gamethod == 'NSGAIII':
-        algorithm = (NSGAIII(problem), {"divisions_outer":12})
     elif gamethod == 'CMAES':
-        algorithm = (CMAES(problem), {"epsilons":[0.05]})
+        algorithm = CMAES(problem, epsilons=0.05)
     elif gamethod == 'GDE3':
         algorithm = GDE3(problem)
     elif gamethod == 'IBEA':
         algorithm = IBEA(problem)
     elif gamethod == 'MOEAD':
-        algorithm = (MOEAD(problem), {"weight_generator":normal_boundary_weights, "divisions_outer":12})
+        algorithm = MOEAD(problem, weight_generator = normal_boundary_weights, divisions_outer = 12)
     elif gamethod == 'OMOPSO':
-        algorithm = (OMOPSO(problem), {"epsilons":[0.05]})
+        algorithm = OMOPSO(problem, epsilons = 0.05)
     elif gamethod == 'SMPSO':
         algorithm = SMPSO(problem)
     elif gamethod == 'SPEA2':
         algorithm = SPEA2(problem)
-    elif gamethod == 'MOEA':
-        algorithm = (EpsMOEA(problem), {"epsilons":[0.05]})
+    elif gamethod == 'EpsMOEA':
+        algorithm = EpsMOEA(problem, epsilons = 0.05)
 
     algorithm.run(np.int(offspringsplatypus))

@@ -123,7 +123,7 @@ def create(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tipchord
     cekeelx = -(poskeel-(keelx2+keelx3)/2)/spankeel*cekeely
     d=rootchordkeel
     c=tipchordkeel
-    ceruddery = spanrudder/3*((2*c+d)/(c+d))
+    ceruddery = spanrudder/3*((2*d+c)/(c+d))
     cerudderx = -(posrudder-(rudderx2+rudderx3)/2)/spanrudder*ceruddery
     cehidrox = ((cekeelx+poskeel)*areakeel+(cerudderx+posrudder)*arearudder+lwl/2*(areahull))/(areakeel+arearudder+areahull)
     cehidroy = (-(cekeely+tc)*areakeel-(ceruddery+heightsurfacerudder)*arearudder-tc*0.25*(areahull))/(areakeel+arearudder+areahull)
@@ -219,12 +219,7 @@ def create(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tipchord
                 "l": 30
             },
             shapes= [
-            {#deckcurve
-                'type': 'path',
-                'path': ' M 0,0 L{},{} L{},{} L{},{}, L{},{} L{},{} Z'.format(deckx1, decky1, deckx2, decky2, deckx3, decky3, deckx4, decky4, deckx5, decky5),
-                'layer': 'above',
-                'line': {'width': 1},
-            },
+            
             {#cockpit
                 'type': 'path',
                 'path': ' M {},{} L {},{} L {},{} L {},{}'.format(cockpitx1, cockpity1, cockpitx2, cockpity2, cockpitx3, cockpity3, cockpitx4, cockpity4),
@@ -243,6 +238,13 @@ def create(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tipchord
                 'layer': 'below',
                 'line': {'width': 1},
             },
+            {#deckcurve
+                'type': 'path',
+                'path': ' M 0,0 L{},{} L{},{} L{},{}, L{},{} L{},{} Z'.format(deckx1, decky1, deckx2, decky2, deckx3, decky3, deckx4, decky4, deckx5, decky5),
+                'fillcolor': 'white',
+                'layer': 'below',
+                'line': {'width': 1},
+            },
             {#keel curve
                 'type': 'path',
                 'path': 'M 0,0 C {},{} {},{} {},0'.format(lwl/3, -tc*1.35, 2*lwl/3, -tc*1.35, lwl),
@@ -254,7 +256,7 @@ def create(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tipchord
             {#boom
                 'type': 'path',
                 'path': ' M {},{} L{},{} L{},{} L{},{} Z'.format(boomx1, boomy1, boomx2-mastdiameter, boomy2, boomx3-mastdiameter, boomy3, boomx4, boomy4),
-                'layer': 'below',
+                'layer': 'above',
                 'fillcolor': 'white',
                 'line': {'width': 1},
             },
@@ -372,7 +374,7 @@ def create(overhang, bowangle, freeboard, poskeel, sweepkeel, spankeel, tipchord
             {#boom
                 'type': 'path',
                 'path': ' M {},{} L{},{} L{},{} L{},{} Z'.format(deckx3, decky3+badmz, deckx3-emz*1.1, decky3+badmz, deckx3-emz*1.1, decky3+badmz-mastdiameter, deckx3, decky3+badmz-mastdiameter) if mzncheck == 1 else '',
-                'layer': 'below',
+                'layer': 'above',
                 'fillcolor': 'white',
                 'line': {'width': 1},
             },

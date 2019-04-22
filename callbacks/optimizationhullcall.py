@@ -133,7 +133,6 @@ def optionoptimization(typeoptimization):
                 id='ga-method',
                 options=[
                     {'label': 'NSGAII - Nondominated Sorting Genetic Algorithm', 'value': 'NSGAII'},
-                    {'label': 'NSGAIII - Nondominated Sorting Genetic Algorithm', 'value': 'NSGAIII'},
                     {'label': 'CMAES - Covariance Matrix Adaptation Evolution Strategy', 'value': 'CMAES'},
                     {'label': 'GDE3 - Generalized Differential Evolution', 'value': 'GDE3'},
                     {'label': 'IBEA - Indicator Based Evolutionary Algorithm', 'value': 'IBEA'},
@@ -141,7 +140,7 @@ def optionoptimization(typeoptimization):
                     {'label': 'OMOPSO - Multi-Objective Particle Swarm Optimization', 'value': 'OMOPSO'},
                     {'label': 'SMPSO - Speed-Constrained Particle Swarm Optimization', 'value': 'SMPSO'},
                     {'label': 'SPEA2 - Strength Pareto Evolutionary Algorithm', 'value': 'SPEA2'},
-                    {'label': 'MOEA -  Multi-Objective Evolutionary Algorithm', 'value': 'MOEA'},
+                    {'label': 'MOEA -  Multi-Objective Evolutionary Algorithm', 'value': 'EpsMOEA'},
                 ],
                 value='NSGAII',
                 style={'width': '100%', 'font-size': '10pt'}
