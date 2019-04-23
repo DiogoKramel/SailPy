@@ -4,6 +4,7 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
+import dash_table
 import dash_daq as daq
 from app import app
 import plotly.graph_objs as go
@@ -588,6 +589,57 @@ def update_y_timeseries(hoverData):
         )
     }
 
+@app.callback(Output("plot-constraints-count", "children"), [Input('resultshullaxisy', 'value')])
+def update_graph(resultshullaxisy):
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
+    constraint1 = df.constraint1.value_counts().loc[True]
+    constraint2 = df.constraint2.value_counts().loc[True]
+    constraint3 = df.constraint3.value_counts().loc[True]
+    constraint4 = df.constraint4.value_counts().loc[True]
+    constraint6 = df.constraint6.value_counts().loc[True]
+    constraint7 = df.constraint7.value_counts().loc[True]
+    return html.Div([
+            dcc.Graph(
+                figure={
+                    'data': [
+                        go.Bar(
+                            x=[1, 2, 3, 4, 6, 7],
+                            y=[constraint1,constraint2, constraint3, constraint4, constraint6, constraint7],
+                            name='Valid',
+                        ),
+                    ],
+                    'layout': go.Layout(
+                        height=400,
+                        margin={
+                            "r": 10,
+                            "t": 20,
+                            "b": 30,
+                            "l": 30
+                        },
+                        xaxis=go.layout.XAxis(
+                            autorange= True,
+                            linewidth= 1,
+                            showgrid= True,
+                            showline= True,
+                            mirror= True,
+                            ticktext= ['lwl/bwl', 'bwl/tcan', 'lwl/disp', 'awp/divcan', 'disp', 'cs'],
+                            title= "Constraint",
+                        ),
+                        yaxis=go.layout.YAxis(
+                            autorange= True,
+                            linewidth= 1,
+                            showgrid= True,
+                            showline= True,
+                            mirror= True,
+                            title= "Number of times",
+                        ),
+                    font=dict(size=10),
+                    )
+                },
+            )
+        ]
+    )
+
 @app.callback(
      Output('plot-parallel-dimensions', 'figure'),
     [Input('parallel-datatype', 'value')])
@@ -637,8 +689,39 @@ def update_output(type):
         )
     }
 
-@app.callback(Output("plot-dimensions", "children"), [Input("resultshullaxisx", "value"), Input('datatable-interactivity', 'selected_rows')])
-def update_graph(resultshullaxisx, selected_row_indices):
+@app.callback(Output("table-all-individuals", "children"), [Input("resultshullaxisx", "value")])
+def update_graph(resultshullaxisx):
+    datatable = pd.read_csv("assets/data/optimizationresistance.csv")
+    datatable = datatable.loc[datatable['valid']==True]
+    datatable = datatable.loc[:,"id":"LCF"]
+    return html.Div(
+        dash_table.DataTable(
+            id='datatable-interactivity',
+            columns=[{"name": i, "id": i, "deletable": True} for i in datatable.columns],
+            data=datatable.to_dict("rows"),
+            editable=True,
+            #filtering=True,
+            sorting=True,
+            sorting_type="multi",
+            row_selectable="multi",
+            row_deletable=True,
+            selected_rows=[],
+            n_fixed_rows=1,
+            style_cell={'font-size': '8pt', 'font_family': 'Source Sans Pro'},
+            style_as_list_view=True,
+            style_header={'fontWeight': 'bold'},
+            #pagination_mode="fe",
+            #pagination_settings={
+            #	"displayed_pages": 1,
+            #	"current_page": 0,
+            #	"page_size": 10,
+            #},
+            #navigation="page",
+        ),
+    )
+
+@app.callback(Output("plot-dimensions", "children"), [Input('datatable-interactivity', 'selected_rows')])
+def update_graph(selected_row_indices):
     datatable_all = pd.read_csv("assets/data/optimizationresistance.csv")
     datatable_valid = datatable_all.loc[datatable_all['valid']==True]
     datatable_unvalid = datatable_all.loc[datatable_all['valid']==False]

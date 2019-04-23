@@ -136,7 +136,7 @@ def display_page(tab):
         datatable = pd.read_csv("assets/data/optimizationresistance.csv")
         datatable = datatable.loc[datatable['valid']==True]
         datatable = datatable.loc[:,"id":"LCB"]
-        return resultshulll.resultshull, resultshulll.resultsplus, space, footer
+        return resultshulll.resultshull, space, footer
     elif tab == 'tab-5':
         return dimensionsappendages.appendages, space, footer
     elif tab == 'tab-6':

@@ -6,7 +6,6 @@ import dash_daq as daq
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import dash_daq as daq
-import dash_table
 import pandas as pd
 
 from callbacks import resultshullplots
@@ -98,6 +97,7 @@ resultshull = dbc.Container([
 				dbc.Col(html.Div(dcc.Graph(id='plot-limits-bwl-tc'))),
 				dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-disp'))),
 				dbc.Col(html.Div(dcc.Graph(id='plot-limits-awp-disp'))),
+				dbc.Col(html.Div(id='plot-constraints-count')),
 			]),
 		]),
 		html.Details([
@@ -116,47 +116,13 @@ resultshull = dbc.Container([
 			),
 			html.Div(dcc.Graph(id='plot-parallel-dimensions')),
 		]),
-    ], className="mt-4")
-])
-
-df = pd.read_csv("assets/data/optimizationresistance.csv")
-datatable = pd.read_csv("assets/data/optimizationresistance.csv")
-datatable = datatable.loc[datatable['valid']==True]
-datatable = datatable.loc[:,"id":"LCF"]
-
-resultsplus = dbc.Container([
-    dbc.Col([
-		
 		html.Details([
 			html.Summary('Data of all individuals'),
 			dbc.Row(dbc.Col([
 				html.H5("List of all individuals"),
 				html.P("All the valid individuals are listed below. By reordering the columns, the hulls with least resistance or displacement can be found. When selected, the following plots will be automatically update ith their position in the optimization course."),
-				html.Div(
-				dash_table.DataTable(
-					id='datatable-interactivity',
-					columns=[{"name": i, "id": i, "deletable": True} for i in datatable.columns],
-					data=datatable.to_dict("rows"),
-					editable=True,
-					#filtering=True,
-					sorting=True,
-					sorting_type="multi",
-					row_selectable="multi",
-					row_deletable=True,
-					selected_rows=[],
-					n_fixed_rows=1,
-					style_cell={'font-size': '8pt', 'font_family': 'Source Sans Pro'},
-					style_as_list_view=True,
-					style_header={'fontWeight': 'bold'},
-					#pagination_mode="fe",
-					#pagination_settings={
-					#	"displayed_pages": 1,
-					#	"current_page": 0,
-					#	"page_size": 10,
-					#},
-					#navigation="page",
-				),
-			)])),
+				html.Div(id="table-all-individuals"),
+				])),
 			html.Br(),
 			dbc.Row(dbc.Col(
 				html.Div(id="plot-dimensions"),
