@@ -2,11 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_daq as daq
-from dash.dependencies import Input, Output
-import plotly.graph_objs as go
-import dash_daq as daq
-import pandas as pd
+from dash.dependencies import Input
 
 from callbacks import resultshullplots
 from app import app
@@ -16,10 +12,10 @@ resultshull = dbc.Container([
         dbc.Row(dbc.Col(html.H4('Results'))),
         dbc.Row([
             dbc.Col([
-                html.P("""The main results are displayed below. First, you can view the evolutionary process in the first main plot. Colors will indicate how the individual evolved towards the optimal solution after each new generation. When hovering each individual, you can see the plot around updating with its value. The data includes also individuals that are not valid, and the constraints disrespected can be seen in the smaller plots below. The same plot also allows visualizing and understanding the Pareto frontier, in which further improvement is not possible."""),
+                html.P("The main results are displayed below. First, you can view the evolutionary process in the first main plot. Colors will indicate how the individual evolved towards the optimal solution after each new generation. When hovering each individual, you can see the plot around updating with its value. The data includes also individuals that are not valid, and the constraints disrespected can be seen in the smaller plots below. The same plot also allows visualizing and understanding the Pareto frontier, in which further improvement is not possible."),
             ], className = 'justify'),
             dbc.Col([
-                html.P("""Besides that, a list with all the individuals generated is displayed in the following table. In this table, the user can sort the values combining ascending and descending sorting in each column. Another import asset is the parallel dimensions plot. It shows how the dimension set of the hull evolved throughout the optimization process. The concentration at one of the extremes may indicate space for further exploration."""),
+                html.P("Besides that, a list with all the individuals generated is displayed in the following table. In this table, the user can sort the values combining ascending and descending sorting in each column. Another import asset is the parallel dimensions plot. It shows how the dimension set of the hull evolved throughout the optimization process. The concentration at one of the extremes may indicate space for further exploration."),
             ], className = 'justify'),
         ]),
         html.A('Export all individuals generated', download='optimizationresistance.csv', href='assets/data/optimizationresistance.csv'),
@@ -43,7 +39,6 @@ resultshull = dbc.Container([
                     value='Resistance',
                     className='regularfont',
                 ),
-                html.Br()
             ]),
             dbc.Col([html.P('versus')], width=1, align='center'),
             dbc.Col([
@@ -63,15 +58,15 @@ resultshull = dbc.Container([
                     value='Comfort',
                     className='regularfont',
                 ),
-                html.Br()
             ]),
         ]),
+		html.Br(),
         dbc.Row([
             dbc.Col([
                 html.Div(dcc.Graph(id='output-optimization')),
-				html.H4("Select one individual"),
+				html.H4('Select one individual'),
 				html.P("Among all the individuals generated throughout the optimization proccess, select one below. The table above and the Pareto Frontier will help you to find the specific hull number, equivalent to the individual ID, that fits your needs."),
-				html.Div(id="export-hull-dimensions")
+				html.Div(id='export-hull-dimensions')
             ], width=10),
             dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
         ]),
@@ -92,20 +87,12 @@ resultshull = dbc.Container([
 		html.Details([
 			html.Summary('Constraints Analysis'),
 			dbc.Row([
-				dbc.Col([
-					html.Div(dcc.Graph(id='plot-limits-lwl-bwl')),
-				]),
-				dbc.Col([
-					html.Div(dcc.Graph(id='plot-limits-bwl-tc')),
-				]),
+				dbc.Col([html.Div(dcc.Graph(id='plot-limits-lwl-bwl'))]),
+				dbc.Col([html.Div(dcc.Graph(id='plot-limits-bwl-tc'))]),
 			]),
 			dbc.Row([
-				dbc.Col([
-					html.Div(dcc.Graph(id='plot-limits-lwl-disp')),
-				]),
-				dbc.Col([
-					html.Div(dcc.Graph(id='plot-limits-awp-disp')),
-				]),
+				dbc.Col([html.Div(dcc.Graph(id='plot-limits-lwl-disp'))]),
+				dbc.Col([html.Div(dcc.Graph(id='plot-limits-awp-disp')),]),
 			]),
 			dbc.Row(html.Div(id='plot-constraints-count')),
 		]),
@@ -114,9 +101,9 @@ resultshull = dbc.Container([
 			dcc.Dropdown(
 					id='parallel-datatype', 
 					options=[
-						{'label': "All individuals", 'value': 1},
-						{'label': "Only valid individuals", 'value': 2},
-						{'label': "Only not valid individuals", 'value': 3},
+						{'label': 'All individuals', 'value': 1},
+						{'label': 'Only valid individuals', 'value': 2},
+						{'label': 'Only not valid individuals', 'value': 3},
 					],
 					value='1',
 					style={'width': '300pt'},
@@ -126,14 +113,14 @@ resultshull = dbc.Container([
 		]),
 		html.Details([
 			html.Summary('Data of all individuals'),
-			dbc.Row(dbc.Col([
-				html.P("All the valid individuals are listed below. By reordering the columns, the hulls with least resistance or displacement can be found. When selected, the following plots will be automatically update ith their position in the optimization course."),
-				html.Div(id="table-all-individuals"),
-				])),
+			dbc.Row(
+				dbc.Col([
+					html.P("All the valid individuals are listed below. By reordering the columns, the hulls with least resistance or displacement can be found. When selected, the following plots will be automatically update ith their position in the optimization course."),
+					html.Div(id='table-all-individuals'),
+				])
+			),
 			html.Br(),
-			dbc.Row(dbc.Col(
-				html.Div(id="plot-dimensions"),
-			)),
+			dbc.Row(dbc.Col(html.Div(id='plot-dimensions'))),
 		]),
-    ], className="mt-4")
+    ], className='mt-4')
 ])

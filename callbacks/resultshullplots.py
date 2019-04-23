@@ -747,6 +747,7 @@ def update_graph(selected_row_indices):
                         "xaxis": {"automargin": False, "range": [xmin, xmax]},
                         "yaxis": {"automargin": True},
                         "height": 100,
+                        "width": "100%",
                         "margin": {"t": 30, "l": 10, "r": 10, "b":0},
                         "title": column,
                         'font': dict(size=9),
