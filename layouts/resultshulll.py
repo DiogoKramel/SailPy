@@ -92,11 +92,22 @@ resultshull = dbc.Container([
 		html.Details([
 			html.Summary('Constraints Analysis'),
 			dbc.Row([
-				dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-bwl'))),
-				dbc.Col(html.Div(dcc.Graph(id='plot-limits-bwl-tc'))),
-				dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-disp'))),
-				dbc.Col(html.Div(dcc.Graph(id='plot-limits-awp-disp'))),
-				dbc.Col(html.Div(id='plot-constraints-count')),
+				dbc.Col([
+					html.Div(dcc.Graph(id='plot-limits-lwl-bwl')),
+				]),
+				dbc.Col([
+					html.Div(dcc.Graph(id='plot-limits-bwl-tc')),
+				]),
+			]),
+			dbc.Row([
+				dbc.Col([
+					html.Div(dcc.Graph(id='plot-limits-lwl-disp')),
+				]),
+				dbc.Col([
+					html.Div(dcc.Graph(id='plot-limits-awp-disp')),
+				]),
+			]),
+			dbc.Row(html.Div(id='plot-constraints-count')),
 			]),
 		]),
 		html.Details([
@@ -112,7 +123,7 @@ resultshull = dbc.Container([
 					style={'width': '300pt'},
 					className='regularfont',
 			),
-			html.Div(dcc.Graph(id='plot-parallel-dimensions'), style={"width": "100%"}),
+			html.Div(dcc.Graph(id='plot-parallel-dimensions')),
 		]),
 		html.Details([
 			html.Summary('Data of all individuals'),
