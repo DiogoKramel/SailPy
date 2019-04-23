@@ -600,7 +600,6 @@ def update_graph(resultshullaxisy):
                     ],
                     'layout': go.Layout(
                         height=250,
-                        width= "100%",
                         margin={
                             "r": 10,
                             "t": 20,
@@ -769,20 +768,20 @@ def export_hull_dimensions(hoverData):
         index = np.int(1)
     else:
         index = np.int(hoverData["points"][0]['text'])
-        row = df.loc[df['id']==index]
-        bwl = np.float(row.iloc[0]['BWL'])
-        lwl = np.float(row.iloc[0]['LWL'])
-        tc = np.float(row.iloc[0]['Draft'])
-        lcb = np.float(row.iloc[0]['LCB'])
-        lcf = np.float(row.iloc[0]['LCF'])
-        disp = np.float(row.iloc[0]['Displacement'])
-        awp = np.float(row.iloc[0]['AWP'])
-        cs = np.float(row.iloc[0]['CS'])
-        json.dump({'lwl': lwl, 'bwl': bwl, 'tc': tc, 'disp': disp, 'lcb': lcb, 'lcf': lcf}, codecs.open('assets/data/dimensions-hull.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
-        return html.Div([
-                html.P("Capsize Screening Factor: {}".format(round(np.float(cs),2)), style={'padding-left': '20px', 'display': 'inline-block'}),
-                html.P("Waterline Length: {}m -- Waterline Beam: {}m -- Draft: {}m".format(round(np.float(lwl),2), round(np.float(bwl),2), round(np.float(tc),2)), style={'padding-left': '20px', 'display': 'inline-block'})
-            ])
+    row = df.loc[df['id']==index]
+    bwl = np.float(row.iloc[0]['BWL'])
+    lwl = np.float(row.iloc[0]['LWL'])
+    tc = np.float(row.iloc[0]['Draft'])
+    lcb = np.float(row.iloc[0]['LCB'])
+    lcf = np.float(row.iloc[0]['LCF'])
+    disp = np.float(row.iloc[0]['Displacement'])
+    awp = np.float(row.iloc[0]['AWP'])
+    cs = np.float(row.iloc[0]['CS'])
+    json.dump({'lwl': lwl, 'bwl': bwl, 'tc': tc, 'disp': disp, 'lcb': lcb, 'lcf': lcf}, codecs.open('assets/data/dimensions-hull.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    return html.Div([
+            html.P("Capsize Screening Factor: {}".format(round(np.float(cs),2)), style={'padding-left': '20px', 'display': 'inline-block'}),
+            html.P("Waterline Length: {}m -- Waterline Beam: {}m -- Draft: {}m".format(round(np.float(lwl),2), round(np.float(bwl),2), round(np.float(tc),2)), style={'padding-left': '20px', 'display': 'inline-block'})
+        ])
 
 @app.callback(Output('insert-section-choosen', 'figure'), [Input('output-optimization', 'hoverData'), Input("alpha_f_sac2", "value"), Input("alpha_i_sac2", "value"), Input("beta_n2", "value")])
 def insert_section_choosen(hoverData, alpha_f_sac2, alpha_i_sac2, beta_n2):
