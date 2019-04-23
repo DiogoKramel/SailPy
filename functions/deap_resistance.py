@@ -248,7 +248,7 @@ def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, 
         index = csvreader.line_num
     print(index)
     
-    constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid  = False, False, False, False, False, False, False, False
+    constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, valid  = False, False, False, False, False, False, False, False
     dispmass = divcan*1025
     cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
 
@@ -260,16 +260,14 @@ def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, 
         constraint3 = True
     if (awp/divcan**(2/3)) > 12.67 or (awp/divcan**(2/3)) < 3.78:
         constraint4 = True
-    if (divcan/(lwl*bwl*tcan)) > 0.4 or (divcan/(lwl*bwl*tcan)) < 0.3:
-        constraint5 = True
     if divcan < dispmin:
-        constraint6 = True
+        constraint5 = True
     if cs > 2:
-        constraint7 = True
-    if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False and constraint6 == False and constraint7 == False:
+        constraint6 = True
+    if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False and constraint6 == False:
         valid = True
 
-    exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid]
+    exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, valid]
 
     with open("assets/data/"+savefile+".csv", "a") as file:
         writer = csv.writer(file, delimiter=',')

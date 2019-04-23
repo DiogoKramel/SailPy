@@ -1,30 +1,23 @@
 import dash
-import numpy as np
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
-import dash_bootstrap_components as dbc
 import dash_html_components as html
 import dash_table
-import dash_daq as daq
 from app import app
+import numpy as np
+import pandas as pd
 import plotly.graph_objs as go
 import json, codecs
-from scipy.integrate import simps
 import csv
-import pandas as pd
 
 from functions import keel_solve, sac_solve, section_solve, wl_solve
 
 @app.callback(Output('output-optimization', 'figure'), [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value')])
 def update_output(resultshullaxisy, resultshullaxisx):
-    df = pd.read_csv("assets/data/optimizationresistance.csv")
-    dfinit = pd.read_csv("assets/data/initialhull.csv")
-    
     # calculate pareto frontier
     def pareto_frontier(Xs, Ys, maxX = True, maxY = True):
         myList = sorted([[Xs[i], Ys[i]] for i in range(len(Xs))], reverse=maxX)
         p_front = [myList[0]]    
-        
         for pair in myList[1:]:
             if maxY: 
                 if pair[1] >= p_front[-1][1]:
@@ -35,25 +28,14 @@ def update_output(resultshullaxisy, resultshullaxisx):
         p_frontX = [pair[0] for pair in p_front]
         p_frontY = [pair[1] for pair in p_front]
         return p_frontX, p_frontY
-    
-    gaconfig_obj = codecs.open('assets/data/parametersga.json', 'r', encoding='utf-8').read()
-    gaconfig = json.loads(gaconfig_obj)   
-    weight1 = np.float(gaconfig["weight1"])*(-1)/10
-    weight2 = np.float(gaconfig["weight2"])*(-1)/10
-    
+
+    df = pd.read_csv("assets/data/optimizationresistance.csv")
     dfvalid = df.loc[df['valid']==True]
     dfvalid = dfvalid.reset_index()
-    #resist_mean = dfvalid["Resistance"].mean()
-    #comfort_mean = dfvalid["Comfort"].mean()
-    #values = weight1*dfvalid.Resistance/resist_mean+weight2*dfvalid.Comfort/comfort_mean
-    #dfvalid['Values'] = values
-    #best = dfvalid['Values'].idxmax()
-
     dfnotvalid = df.loc[df["valid"]==False]
+    
     p_front = pareto_frontier(dfvalid["Comfort"], dfvalid["Resistance"], maxX = True, maxY = False)
-    paretox=[]
-    paretoy=[]
-    paretoname=[]
+    paretox, paretoy = [], []
     if (resultshullaxisx == "Comfort" and resultshullaxisy == "Resistance"):
         paretox=p_front[0]
         paretoy=p_front[1]
@@ -62,16 +44,14 @@ def update_output(resultshullaxisy, resultshullaxisx):
         paretoy=p_front[0]
         paretox=p_front[1]
         paretoname='Pareto'
-    else:
-        paretox=dfinit[resultshullaxisx]
-        paretoy=dfinit[resultshullaxisy]
-        paretoname="Initial hull"
     
     ymin = min(df[resultshullaxisy])*0.9
     ymax = max(df[resultshullaxisy])
     if ymax > 7000:
         ymax = 7000
     
+    gaconfig_obj = codecs.open('assets/data/parametersga.json', 'r', encoding='utf-8').read()
+    gaconfig = json.loads(gaconfig_obj)   
     gamethod = gaconfig["gamethod"]
 
     return {
@@ -229,11 +209,15 @@ def update_resistance(hoverData):
 @app.callback(Output('plot-limits-lwl-bwl', 'figure'), [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
-    dfinit = pd.read_csv("assets/data/initialhull.csv")
     xmin = min(df["BWL"])
     xmax = max(df["BWL"])
+    
     hover = np.int(hoverData["points"][0]['text'])
     row = df.loc[df['id']==hover]
+    
+    init = df.loc[df['id']==1]
+    lwlinit = [init.iloc[0]['LWL']]
+    bwlinit = [init.iloc[0]['BWL']]
     return {
         'data': [
             go.Scatter(
@@ -269,8 +253,8 @@ def update_y_timeseries(hoverData):
                 ),
             ),
             go.Scatter(
-                x=dfinit["BWL"],
-                y=dfinit["LWL"],
+                x=bwlinit,
+                y=lwlinit,
                 mode='markers',
                 marker = dict(color = 'green', symbol = 'star'),
             ),
@@ -321,11 +305,13 @@ def update_y_timeseries(hoverData):
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
-    dfinit = pd.read_csv("assets/data/initialhull.csv")
     xmin = min(df["BWL"])
     xmax = max(df["BWL"])
     hover = np.int(hoverData["points"][0]['text'])
     row = df.loc[df['id']==hover]
+    init = df.loc[df['id']==1]
+    bwlinit = [init.iloc[0]['BWL']]
+    tcinit = [init.iloc[0]['Draft']]
     return {
         'data': [
             go.Scatter(
@@ -361,8 +347,8 @@ def update_y_timeseries(hoverData):
                 fillcolor='rgba(255,0,0,0.2)',
             ),
             go.Scatter(
-                x=dfinit["BWL"],
-                y=dfinit["Draft"],
+                x=bwlinit,
+                y=tcinit,
                 mode='markers',
                 marker = dict(color = 'green', symbol = 'star'),
             ),
@@ -412,11 +398,13 @@ def update_y_timeseries(hoverData):
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
-    dfinit = pd.read_csv("assets/data/initialhull.csv")
     xmin = min(df["LWL"])
     xmax = max(df["LWL"])
     hover = np.int(hoverData["points"][0]['text'])
     row = df.loc[df['id']==hover]
+    init = df.loc[df['id']==1]
+    lwlinit = [init.iloc[0]['LWL']]
+    dispinit = [init.iloc[0]['Displacement']]
     return {
         'data': [
             go.Scatter(
@@ -452,8 +440,8 @@ def update_y_timeseries(hoverData):
                 line = dict(color = 'red', dash = 'dash'),
             ),
             go.Scatter(
-                x=dfinit["LWL"],
-                y=dfinit["Displacement"],
+                x=lwlinit,
+                y=dispinit,
                 mode='markers',
                 marker = dict(color = 'green', symbol = 'star'),
             ),
@@ -503,11 +491,13 @@ def update_y_timeseries(hoverData):
     [Input('output-optimization', 'hoverData')])
 def update_y_timeseries(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
-    dfinit = pd.read_csv("assets/data/initialhull.csv")
     xmin = min(df["AWP"])
     xmax = max(df["AWP"])
     hover = np.int(hoverData["points"][0]['text'])
     row = df.loc[df['id']==hover]
+    init = df.loc[df['id']==1]
+    awpinit = [init.iloc[0]['AWP']]
+    dispinit = [init.iloc[0]['Displacement']]
     return {
         'data': [
             go.Scatter(
@@ -543,8 +533,8 @@ def update_y_timeseries(hoverData):
                 fillcolor='rgba(255,0,0,0.2)',
             ),
             go.Scatter(
-                x=dfinit["AWP"],
-                y=dfinit["Displacement"],
+                x=awpinit,
+                y=dispinit,
                 mode='markers',
                 marker = dict(color = 'green', symbol = 'star'),
             ),
@@ -596,15 +586,14 @@ def update_graph(resultshullaxisy):
     constraint2 = df.constraint2.value_counts().loc[True]
     constraint3 = df.constraint3.value_counts().loc[True]
     constraint4 = df.constraint4.value_counts().loc[True]
-    constraint6 = df.constraint6.value_counts().loc[True]
-    constraint7 = df.constraint7.value_counts().loc[True]
+    constraint5 = df.constraint5.value_counts().loc[True]
     return html.Div([
             dcc.Graph(
                 figure={
                     'data': [
                         go.Bar(
                             x=[1, 2, 3, 4, 5, 6],
-                            y=[constraint1,constraint2, constraint3, constraint4, constraint6, constraint7],
+                            y=[constraint1,constraint2, constraint3, constraint4, constraint5],
                             name='Valid',
                         ),
                     ],
@@ -940,3 +929,11 @@ def insert_section_choosen(hoverData, alpha_f_sac2, alpha_i_sac2, beta_n2):
             font=dict(size=10),
         )
     }
+
+    #weight1 = np.float(gaconfig["weight1"])*(-1)/10
+    #weight2 = np.float(gaconfig["weight2"])*(-1)/10
+    #resist_mean = dfvalid["Resistance"].mean()
+    #comfort_mean = dfvalid["Comfort"].mean()
+    #values = weight1*dfvalid.Resistance/resist_mean+weight2*dfvalid.Comfort/comfort_mean
+    #dfvalid['Values'] = values
+    #best = dfvalid['Values'].idxmax()
