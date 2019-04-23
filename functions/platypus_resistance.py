@@ -22,10 +22,14 @@ def optimization_platypus_resistance():
     bound_up4 = np.float(gaconfig["lcfmax"])
     bound_low5 = np.float(gaconfig["lcbmin"])
     bound_up5 = np.float(gaconfig["lcbmax"])
-    bound_low6, bound_up6 = 0.3, 0.4 # cb
-    bound_low7, bound_up7 = 0.68, 0.71 # cwp
-    bound_low8, bound_up8 = 0.52, 0.6 # cp
-    bound_low9, bound_up9 = 0.65, 0.78 # cm
+    bound_low6 = np.float(gaconfig["cbmin"])
+    bound_up6 = np.float(gaconfig["cbmax"])
+    bound_low7 = np.float(gaconfig["cwpmin"])
+    bound_up7 = np.float(gaconfig["cwpmax"])
+    bound_low8 = np.float(gaconfig["cpmin"])
+    bound_up8 = np.float(gaconfig["cpmax"])
+    bound_low9 = np.float(gaconfig["cmmin"])
+    bound_up9 = np.float(gaconfig["cmmax"])
     
     offspringsplatypus = np.float(gaconfig["offspringsplatypus"])
     gamethod = gaconfig["gamethod"]

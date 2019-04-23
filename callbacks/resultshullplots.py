@@ -159,12 +159,13 @@ def update_output(resultshullaxisy, resultshullaxisx):
     }
 
 
-@app.callback(
-    Output('plot-resistance-individual', 'figure'),
-    [Input('output-optimization', 'hoverData')])
-def update_y_timeseries(hoverData):
+@app.callback(Output('plot-resistance-individual', 'figure'), [Input('output-optimization', 'hoverData')])
+def update_resistance(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
-    hover = np.int(hoverData["points"][0]['text'])
+    if hoverData is None:
+        hover = np.int(2)
+    else:
+        hover = np.int(hoverData["points"][0]['text'])
     row = df.loc[df['id']==hover]
     Rv = [row.iloc[0]['Rv']]
     Ri = [row.iloc[0]['Ri']]
@@ -207,7 +208,7 @@ def update_y_timeseries(hoverData):
             ],
         'layout': go.Layout(
             barmode="stack",
-            title="Resistance",
+            title="Resistance #{}".format(hover),
             hovermode="closest",
             height=600,
             margin={
@@ -313,21 +314,6 @@ def update_y_timeseries(hoverData):
         )
     }
 
-@app.callback(
-    Output('plot-constraint-individual', 'children'),
-    [Input('output-optimization', 'hoverData')])
-def update_y_timeseries(hoverData):
-    df = pd.read_csv("assets/data/optimizationresistance.csv")
-    if hoverData is not None:
-        hover = np.int(hoverData["points"][0]['text'])
-        row = df.loc[df['id']==hover]
-        cs = np.float(row.iloc[0]['CS'])
-        return html.Div([
-            dbc.Label("Capsize Screening Factor: {}".format(round(cs,2))),
-            html.Br(),
-        ])
-    else:
-        return dbc.Label(" ")
 
 @app.callback(
     dash.dependencies.Output('plot-limits-bwl-tc', 'figure'),
@@ -696,32 +682,36 @@ def update_graph(resultshullaxisx, selected_row_indices):
         ]
     )
 
-@app.callback(Output("export-hull-alert", "children"), [Input("dropdown-hull-dimensions", "value")])
-def export_hull_alert(index):
-    index = np.int(index)
-    return html.Div([
-            dbc.Alert("Exported hull number {}".format(index), color="success", style={'padding': '5px', 'display': 'inline-block'}),
-        ])
 
-@app.callback(Output("export-hull-dimensions", "children"), [Input("dropdown-hull-dimensions", "value")])
-def export_hull_dimensions(id):
+@app.callback(Output("export-hull-dimensions", "children"), [Input('output-optimization', 'hoverData')])
+def export_hull_dimensions(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
-    row = df.iloc[np.int(id)]
-    bwl = df.iloc[np.int(id)]['BWL']
-    lwl = df.iloc[np.int(id)]['LWL']
-    tc = df.iloc[np.int(id)]['Draft']
-    lcb = df.iloc[np.int(id)]['LCB']
-    lcf = df.iloc[np.int(id)]['LCF']
-    disp = df.iloc[np.int(id)]['Displacement']
-    json.dump({'lwl': lwl, 'bwl': bwl, 'tc': tc, 'disp': disp, 'lcb': lcb, 'lcf': lcf}, codecs.open('assets/data/dimensions-hull.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
-    return html.Div([
-            html.P("Waterline Length: {}m -- Waterline Beam: {}m -- Draft: {}m".format(round(np.float(lwl),2), round(np.float(bwl),2), round(np.float(tc),2)), style={'padding-left': '20px', 'display': 'inline-block'})
-        ])
+    if hoverData is None:
+        return html.Div(html.P(" "))
+    else:
+        index = np.int(hoverData["points"][0]['text'])
+        row = df.loc[df['id']==index]
+        bwl = np.float(row.iloc[0]['BWL'])
+        lwl = np.float(row.iloc[0]['LWL'])
+        tc = np.float(row.iloc[0]['Draft'])
+        lcb = np.float(row.iloc[0]['LCB'])
+        lcf = np.float(row.iloc[0]['LCF'])
+        disp = np.float(row.iloc[0]['Displacement'])
+        awp = np.float(row.iloc[0]['AWP'])
+        cs = np.float(row.iloc[0]['CS'])
+        json.dump({'lwl': lwl, 'bwl': bwl, 'tc': tc, 'disp': disp, 'lcb': lcb, 'lcf': lcf}, codecs.open('assets/data/dimensions-hull.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+        return html.Div([
+                html.P("Capsize Screening Factor: {}".format(round(np.float(cs),2)), style={'padding-left': '20px', 'display': 'inline-block'}),
+                html.P("Waterline Length: {}m -- Waterline Beam: {}m -- Draft: {}m".format(round(np.float(lwl),2), round(np.float(bwl),2), round(np.float(tc),2)), style={'padding-left': '20px', 'display': 'inline-block'})
+            ])
 
 @app.callback(Output('insert-section-choosen', 'figure'), [Input('output-optimization', 'hoverData'), Input("alpha_f_sac2", "value"), Input("alpha_i_sac2", "value"), Input("beta_n2", "value")])
 def insert_section_choosen(hoverData, alpha_f_sac2, alpha_i_sac2, beta_n2):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
-    index = np.int(hoverData["points"][0]['text'])
+    if hoverData is None:
+        index = np.int(1)
+    else:
+        index = np.int(hoverData["points"][0]['text'])
     row = df.loc[df['id']==index]
     bwl = np.float(row.iloc[0]['BWL'])
     lwl = np.float(row.iloc[0]['LWL'])
@@ -818,7 +808,7 @@ def insert_section_choosen(hoverData, alpha_f_sac2, alpha_i_sac2, beta_n2):
             ),
         ],
         'layout': go.Layout(
-            title = "Body Plan",
+            title = "Body Plan: Hull #{}".format(index),
             showlegend = False,
             height = 230,
             margin = {

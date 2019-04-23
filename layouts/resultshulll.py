@@ -70,29 +70,12 @@ resultshull = dbc.Container([
         dbc.Row([
             dbc.Col([
                 html.Div(dcc.Graph(id='output-optimization')),
-                html.Div(id='plot-constraint-individual'),
-                
+				html.H4("Select one individual"),
+				html.P("Among all the individuals generated throughout the optimization proccess, select one below. The table above and the Pareto Frontier will help you to find the specific hull number, equivalent to the individual ID, that fits your needs."),
+				html.Div(id="export-hull-dimensions")
             ], width=10),
             dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
         ]),
-        html.Br(),
-		dbc.Row(dbc.Col(html.H5('Dimensions Constraints'))),
-        dbc.Row([
-            dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-bwl')), width=3),
-            dbc.Col(html.Div(dcc.Graph(id='plot-limits-bwl-tc'))),
-            dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-disp'))),
-            dbc.Col(html.Div(dcc.Graph(id='plot-limits-awp-disp'))),
-        ]),
-        html.Br(),
-		dbc.Row(dbc.Col(html.H4("Select one individual"))),
-		dbc.Row([
-			dbc.Col([
-				html.P("Among all the individuals generated throughout the optimization proccess, select one below. The table above and the Pareto Frontier will help you to find the specific hull number, equivalent to the individual ID, that fits your needs."),
-			], className="justify"),
-			dbc.Col([
-				dbc.Row(html.Div(id="export-hull-dimensions"))
-			]),
-		]),
 		dbc.Row([
 			dbc.Col([
 				dbc.Label('SAC angle at the bow [degrees]'),
@@ -106,6 +89,33 @@ resultshull = dbc.Container([
 				html.Div(dcc.Graph(id='insert-section-choosen'))
 			], md=8)
 		]),
+        html.Br(),
+		html.Details([
+			html.Summary('Constraints Analysis'),
+			dbc.Row(dbc.Col(html.H5('Dimensions Constraints'))),
+			dbc.Row([
+				dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-bwl'))),
+				dbc.Col(html.Div(dcc.Graph(id='plot-limits-bwl-tc'))),
+				dbc.Col(html.Div(dcc.Graph(id='plot-limits-lwl-disp'))),
+				dbc.Col(html.Div(dcc.Graph(id='plot-limits-awp-disp'))),
+			]),
+		]),
+		html.Details([
+			html.Summary('Parallel Plot'),
+			html.H5("Dimensions Parallel Plot"),
+			dcc.Dropdown(
+					id='parallel-datatype', 
+					options=[
+						{'label': "All individuals", 'value': 1},
+						{'label': "Only valid individuals", 'value': 2},
+						{'label': "Only not valid individuals", 'value': 3},
+					],
+					value='1',
+					style={'width': '300pt'},
+					className='regularfont',
+			),
+			html.Div(dcc.Graph(id='plot-parallel-dimensions')),
+		]),
     ], className="mt-4")
 ])
 
@@ -116,25 +126,7 @@ datatable = datatable.loc[:,"id":"LCF"]
 
 resultsplus = dbc.Container([
     dbc.Col([
-		html.Details([
-			html.Summary('Parallel Plot'),
-			dbc.Row(dbc.Col(html.H5("Dimensions Parallel Plot"))),
-			dbc.Row([dbc.Col(
-				dcc.Dropdown(
-					id='parallel-datatype', 
-					options=[
-						{'label': "All individuals", 'value': 1},
-						{'label': "Only valid individuals", 'value': 2},
-						{'label': "Only not valid individuals", 'value': 3},
-					],
-					value='1',
-					style={'width': '300pt'},
-					className='regularfont',
-				),
-			)]),
-			dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
-		]),
-        html.Br(),
+		
 		html.Details([
 			html.Summary('Data of all individuals'),
 			dbc.Row(dbc.Col([
