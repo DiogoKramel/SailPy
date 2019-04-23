@@ -108,7 +108,6 @@ resultshull = dbc.Container([
 				]),
 			]),
 			dbc.Row(html.Div(id='plot-constraints-count')),
-			]),
 		]),
 		html.Details([
 			html.Summary('Parallel Plot'),
