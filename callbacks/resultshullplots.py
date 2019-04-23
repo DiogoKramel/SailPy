@@ -587,13 +587,14 @@ def update_graph(resultshullaxisy):
     constraint3 = df.constraint3.value_counts().loc[True]
     constraint4 = df.constraint4.value_counts().loc[True]
     constraint5 = df.constraint5.value_counts().loc[True]
+    constraint6 = df.constraint6.value_counts().loc[True]
     return html.Div([
             dcc.Graph(
                 figure={
                     'data': [
                         go.Bar(
                             x=[1, 2, 3, 4, 5, 6],
-                            y=[constraint1,constraint2, constraint3, constraint4, constraint5],
+                            y=[constraint1,constraint2, constraint3, constraint4, constraint5, constraint6],
                             name='Valid',
                         ),
                     ],
@@ -670,7 +671,6 @@ def update_output(type):
         'layout': go.Layout(
             title="Dimension set per hull",
             hovermode="closest",
-            width= "100%",
             margin={
                 "r": 20,
                 "t": 100,
