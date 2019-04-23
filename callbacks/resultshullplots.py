@@ -609,7 +609,7 @@ def update_graph(resultshullaxisy):
                         ),
                     ],
                     'layout': go.Layout(
-                        height=400,
+                        height=250,
                         margin={
                             "r": 10,
                             "t": 20,
@@ -623,7 +623,8 @@ def update_graph(resultshullaxisy):
                             showline= True,
                             mirror= True,
                             ticktext= ['lwl/bwl', 'bwl/tcan', 'lwl/disp', 'awp/divcan', 'disp', 'cs'],
-                            title= "Constraint",
+                            tickvals=[1, 2, 3, 4, 6, 7]
+                            tickmode='array',
                         ),
                         yaxis=go.layout.YAxis(
                             autorange= True,
