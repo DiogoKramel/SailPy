@@ -603,7 +603,7 @@ def update_graph(resultshullaxisy):
                 figure={
                     'data': [
                         go.Bar(
-                            x=[1, 2, 3, 4, 6, 7],
+                            x=[1, 2, 3, 4, 5, 6],
                             y=[constraint1,constraint2, constraint3, constraint4, constraint6, constraint7],
                             name='Valid',
                         ),
@@ -623,7 +623,7 @@ def update_graph(resultshullaxisy):
                             showline= True,
                             mirror= True,
                             ticktext= ['lwl/bwl', 'bwl/tcan', 'lwl/disp', 'awp/divcan', 'disp', 'cs'],
-                            tickvals=[1, 2, 3, 4, 6, 7]
+                            tickvals=[1, 2, 3, 4, 5, 6],
                             tickmode='array',
                         ),
                         yaxis=go.layout.YAxis(
