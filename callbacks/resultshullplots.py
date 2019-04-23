@@ -599,6 +599,7 @@ def update_graph(resultshullaxisy):
                     ],
                     'layout': go.Layout(
                         height=250,
+                        width= "100%",
                         margin={
                             "r": 10,
                             "t": 20,
@@ -669,6 +670,7 @@ def update_output(type):
         'layout': go.Layout(
             title="Dimension set per hull",
             hovermode="closest",
+            width= "100%",
             margin={
                 "r": 20,
                 "t": 100,
@@ -748,7 +750,7 @@ def update_graph(selected_row_indices):
                         "yaxis": {"automargin": True},
                         "height": 100,
                         "width": "100%",
-                        "margin": {"t": 30, "l": 10, "r": 10, "b":0},
+                        "margin": {"t": 30, "l": 10, "r": 10, "b": 20},
                         "title": column,
                         'font': dict(size=9),
                         'barmode': 'overlay',

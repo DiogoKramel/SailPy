@@ -86,6 +86,7 @@ resultshull = dbc.Container([
         html.Br(),
 		html.Details([
 			html.Summary('Constraints Analysis'),
+			html.Br(),
 			dbc.Row([
 				dbc.Col([html.Div(dcc.Graph(id='plot-limits-lwl-bwl'))]),
 				dbc.Col([html.Div(dcc.Graph(id='plot-limits-bwl-tc'))]),
@@ -98,6 +99,7 @@ resultshull = dbc.Container([
 		]),
 		html.Details([
 			html.Summary('Parallel Plot'),
+			html.Br(),
 			dcc.Dropdown(
 					id='parallel-datatype', 
 					options=[
@@ -113,6 +115,7 @@ resultshull = dbc.Container([
 		]),
 		html.Details([
 			html.Summary('Data of all individuals'),
+			html.Br(),
 			dbc.Row(
 				dbc.Col([
 					html.P("All the valid individuals are listed below. By reordering the columns, the hulls with least resistance or displacement can be found. When selected, the following plots will be automatically update ith their position in the optimization course."),
