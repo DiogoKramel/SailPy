@@ -112,7 +112,7 @@ resultshull = dbc.Container([
 					style={'width': '300pt'},
 					className='regularfont',
 			),
-			html.Div(dcc.Graph(id='plot-parallel-dimensions', style={"width": "100%"})),
+			html.Div(dcc.Graph(id='plot-parallel-dimensions'), style={"width": "100%"}),
 		]),
 		html.Details([
 			html.Summary('Data of all individuals'),
