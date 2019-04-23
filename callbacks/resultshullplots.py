@@ -728,6 +728,9 @@ def update_graph(selected_row_indices):
     datatable_unvalid = datatable_all.loc[datatable_all['valid']==False]
     if selected_row_indices is None:
         selected_row_indices = []
+    file = open("assets/data/optimizationresistance.csv")
+    xmax = len(file.readlines())-1
+    xmin = 0
     return html.Div([
             dcc.Graph(
                 id=column,
@@ -758,7 +761,8 @@ def update_graph(selected_row_indices):
                         "margin": {"t": 30, "l": 10, "r": 10, "b":0},
                         "title": column,
                         'font': dict(size=9),
-                        'barmode': 'overlay'
+                        'barmode': 'overlay',
+                        "range": [xmin, xmax],
                     },	
                 },
             )
@@ -771,7 +775,7 @@ def update_graph(selected_row_indices):
 def export_hull_dimensions(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
     if hoverData is None:
-        return html.Div(html.P(" "))
+        index = np.int(1)
     else:
         index = np.int(hoverData["points"][0]['text'])
         row = df.loc[df['id']==index]

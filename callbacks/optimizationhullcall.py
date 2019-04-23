@@ -380,7 +380,7 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         done = time.time()
         elapsed = done-start
         file = open("assets/data/optimizationresistance.csv")
-        numoffsprings = len(file.readlines())-2
+        numoffsprings = len(file.readlines())-1
         return html.Div(dbc.Alert("Optimization finished in {} seconds after generating {} offsprings".format(round(elapsed, 2), numoffsprings), color="success", style={'padding': '5px', 'display': 'inline-block'}))
 
 @app.callback(Output('disp-tc-min', 'children'), [Input('velocity-range', 'value')])

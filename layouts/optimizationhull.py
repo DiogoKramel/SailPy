@@ -31,7 +31,7 @@ optimizationhull = dbc.Container([
             html.Br(), html.Br(), 
             html.H4("Constraints"),
             html.P("Constraints help maintain the sailboats feasible. They evaluate safety the Capsize Screening Factor, that empirically evaluate the likelihood of capsizing."),
-			html.Img(src='/assets/static/CS.png', height='28pt'),
+			html.Img(src='/assets/static/cs.png', height='28pt'),
 			html.Br(),html.Br(),
 			dbc.Label("Capsize Screening Factor"),
 			dbc.Input(
