@@ -84,86 +84,12 @@ resultshull = dbc.Container([
             dbc.Col(html.Div(dcc.Graph(id='plot-limits-awp-disp'))),
         ]),
         html.Br(),
-    ], className="mt-4")
-])
-
-df = pd.read_csv("assets/data/optimizationresistance.csv")
-datatable = pd.read_csv("assets/data/optimizationresistance.csv")
-datatable = datatable.loc[datatable['valid']==True]
-datatable = datatable.loc[:,"id":"LCB"]
-
-resultsplus = dbc.Container([
-    dbc.Col([
-        dbc.Row(dbc.Col(html.H5("Dimensions Parallel Plot"))),
-        dbc.Row([dbc.Col(
-			dcc.Dropdown(
-				id='parallel-datatype', 
-				options=[
-					{'label': "All individuals", 'value': 1},
-					{'label': "Only valid individuals", 'value': 2},
-					{'label': "Only not valid individuals", 'value': 3},
-				],
-				value='1',
-				style={'width': '300pt'},
-				className='regularfont',
-			),
-		)]),
-        dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
-        html.Br(),
-        dbc.Row(dbc.Col([
-            html.H5("List of all individuals"),
-			html.P("All the valid individuals are listed below. By reordering the columns, the hulls with least resistance or displacement can be found. When selected, the following plots will be automatically update ith their position in the optimization course."),
-            html.Div(
-            dash_table.DataTable(
-                id='datatable-interactivity',
-                columns=[{"name": i, "id": i, "deletable": True} for i in datatable.columns],
-                data=datatable.to_dict("rows"),
-                editable=True,
-                #filtering=True,
-                sorting=True,
-                sorting_type="multi",
-                row_selectable="multi",
-                row_deletable=True,
-                selected_rows=[],
-                n_fixed_rows=1,
-                style_cell={'font-size': '8pt', 'font_family': 'Source Sans Pro'},
-                style_as_list_view=True,
-                style_header={'fontWeight': 'bold'},
-                #pagination_mode="fe",
-                #pagination_settings={
-                #	"displayed_pages": 1,
-                #	"current_page": 0,
-                #	"page_size": 10,
-                #},
-                #navigation="page",
-            ),
-        )])),
-        html.Br(),
-        dbc.Row(dbc.Col(
-            html.Div(id="plot-dimensions"),
-        )),
-        html.Br(),
-        dbc.Row(dbc.Col(html.H4("Select one individual"))),
+		dbc.Row(dbc.Col(html.H4("Select one individual"))),
 		dbc.Row([
 			dbc.Col([
 				html.P("Among all the individuals generated throughout the optimization proccess, select one below. The table above and the Pareto Frontier will help you to find the specific hull number, equivalent to the individual ID, that fits your needs."),
 			], className="justify"),
 			dbc.Col([
-				dbc.Row([
-					dbc.Col([
-						dcc.Dropdown(
-							id='dropdown-hull-dimensions', 
-							options=[
-								{'label': "Hull #{}".format(i), 'value': i} for i in datatable.index.unique()
-							],
-							value='1',
-							style={'width': '200px', 'font-size': '10pt'}
-						),
-					], md=5),
-					dbc.Col([
-						html.Div(id="export-hull-alert")
-					], md=7),
-				]),
 				dbc.Row(html.Div(id="export-hull-dimensions"))
 			]),
 		]),
@@ -179,6 +105,70 @@ resultsplus = dbc.Container([
 			dbc.Col([
 				html.Div(dcc.Graph(id='insert-section-choosen'))
 			], md=8)
+		]),
+    ], className="mt-4")
+])
+
+df = pd.read_csv("assets/data/optimizationresistance.csv")
+datatable = pd.read_csv("assets/data/optimizationresistance.csv")
+datatable = datatable.loc[datatable['valid']==True]
+datatable = datatable.loc[:,"id":"LCF"]
+
+resultsplus = dbc.Container([
+    dbc.Col([
+		html.Details([
+			html.Summary('Parallel Plot'),
+			dbc.Row(dbc.Col(html.H5("Dimensions Parallel Plot"))),
+			dbc.Row([dbc.Col(
+				dcc.Dropdown(
+					id='parallel-datatype', 
+					options=[
+						{'label': "All individuals", 'value': 1},
+						{'label': "Only valid individuals", 'value': 2},
+						{'label': "Only not valid individuals", 'value': 3},
+					],
+					value='1',
+					style={'width': '300pt'},
+					className='regularfont',
+				),
+			)]),
+			dbc.Row(dbc.Col(html.Div(dcc.Graph(id='plot-parallel-dimensions')))),
+		]),
+        html.Br(),
+		html.Details([
+			html.Summary('Data of all individuals'),
+			dbc.Row(dbc.Col([
+				html.H5("List of all individuals"),
+				html.P("All the valid individuals are listed below. By reordering the columns, the hulls with least resistance or displacement can be found. When selected, the following plots will be automatically update ith their position in the optimization course."),
+				html.Div(
+				dash_table.DataTable(
+					id='datatable-interactivity',
+					columns=[{"name": i, "id": i, "deletable": True} for i in datatable.columns],
+					data=datatable.to_dict("rows"),
+					editable=True,
+					#filtering=True,
+					sorting=True,
+					sorting_type="multi",
+					row_selectable="multi",
+					row_deletable=True,
+					selected_rows=[],
+					n_fixed_rows=1,
+					style_cell={'font-size': '8pt', 'font_family': 'Source Sans Pro'},
+					style_as_list_view=True,
+					style_header={'fontWeight': 'bold'},
+					#pagination_mode="fe",
+					#pagination_settings={
+					#	"displayed_pages": 1,
+					#	"current_page": 0,
+					#	"page_size": 10,
+					#},
+					#navigation="page",
+				),
+			)])),
+			html.Br(),
+			dbc.Row(dbc.Col(
+				html.Div(id="plot-dimensions"),
+			)),
 		]),
     ], className="mt-4")
 ])

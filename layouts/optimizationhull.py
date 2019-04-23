@@ -30,16 +30,17 @@ optimizationhull = dbc.Container([
             html.Div(id="option-optimization"),
             html.Br(), html.Br(), 
             html.H4("Constraints"),
-            html.P("Constraints help maintain the sailboats feasible. They evaluate safety through the Angle of Vanishing Statibility, maximum angle in which the sailboat still returns to its equilibrium state; and also the Capsize Screening Factor, that empirically evaluate the consider the likelihood of capsizing. Their limits are 110 degrees and 2."),
-            dcc.Dropdown(
-                options=[
-                    {'label': ' Angle of Vanishing Stability', 'value': 'AVS'},
-                    {'label': ' Capsize Screening Factor', 'value': 'CSF'},
-                ],
-                value=['AVS', 'CSF'],
-                multi=True,
-                id="constraints-check",
-            ),
+            html.P("Constraints help maintain the sailboats feasible. They evaluate safety the Capsize Screening Factor, that empirically evaluate the likelihood of capsizing."),
+			html.Img(src='/assets/static/CS.png', height='28pt'),
+			html.Br(),html.Br(),
+			dbc.Label("Capsize Screening Factor"),
+			dbc.Input(
+                type='number', 
+                id='capsize-factor', 
+                value='2', 
+                bs_size="sm", 
+                style={'width': 80}),
+			html.Div(id="disp-tc-min")
         ], className = "justify mt-4", md=6),
         dbc.Col([
             html.H4("Weighted Objectives"),

@@ -321,11 +321,8 @@ def update_y_timeseries(hoverData):
     if hoverData is not None:
         hover = np.int(hoverData["points"][0]['text'])
         row = df.loc[df['id']==hover]
-        avs = np.float(row.iloc[0]['AVS'])
         cs = np.float(row.iloc[0]['CS'])
         return html.Div([
-            dbc.Label("Angle of Vanishing Stability: {} degrees".format(round(avs,2))),
-            html.Br(),
             dbc.Label("Capsize Screening Factor: {}".format(round(cs,2))),
             html.Br(),
         ])
@@ -721,17 +718,18 @@ def export_hull_dimensions(id):
             html.P("Waterline Length: {}m -- Waterline Beam: {}m -- Draft: {}m".format(round(np.float(lwl),2), round(np.float(bwl),2), round(np.float(tc),2)), style={'padding-left': '20px', 'display': 'inline-block'})
         ])
 
-@app.callback(Output('insert-section-choosen', 'figure'), [Input("dropdown-hull-dimensions", "value"), Input("alpha_f_sac2", "value"), Input("alpha_i_sac2", "value"), Input("beta_n2", "value")])
-def insert_section_choosen(id, alpha_f_sac2, alpha_i_sac2, beta_n2):
+@app.callback(Output('insert-section-choosen', 'figure'), [Input('output-optimization', 'hoverData'), Input("alpha_f_sac2", "value"), Input("alpha_i_sac2", "value"), Input("beta_n2", "value")])
+def insert_section_choosen(hoverData, alpha_f_sac2, alpha_i_sac2, beta_n2):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
-    row = df.iloc[np.int(id)]
-    bwl = df.iloc[np.int(id)]['BWL']
-    lwl = df.iloc[np.int(id)]['LWL']
-    tc = df.iloc[np.int(id)]['Draft']
-    lcb = df.iloc[np.int(id)]['LCB']
-    lcf = df.iloc[np.int(id)]['LCF']
-    disp = df.iloc[np.int(id)]['Displacement']
-    awp = df.iloc[np.int(id)]['AWP']
+    index = np.int(hoverData["points"][0]['text'])
+    row = df.loc[df['id']==index]
+    bwl = np.float(row.iloc[0]['BWL'])
+    lwl = np.float(row.iloc[0]['LWL'])
+    tc = np.float(row.iloc[0]['Draft'])
+    lcb = np.float(row.iloc[0]['LCB'])
+    lcf = np.float(row.iloc[0]['LCF'])
+    disp = np.float(row.iloc[0]['Displacement'])
+    awp = np.float(row.iloc[0]['AWP'])
     cb = disp/(lwl*bwl*tc)
     cwp = awp/(lwl*bwl)
     cm = 0.55

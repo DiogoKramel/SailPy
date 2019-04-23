@@ -26,9 +26,10 @@ def optimization_platypus_resistance():
     bound_low7, bound_up7 = 0.68, 0.71 # cwp
     bound_low8, bound_up8 = 0.52, 0.6 # cp
     bound_low9, bound_up9 = 0.65, 0.78 # cm
-
+    
     offspringsplatypus = np.float(gaconfig["offspringsplatypus"])
     gamethod = gaconfig["gamethod"]
+    dispmin = np.float(gaconfig["dispmin"])
     
     def function_platypus(vars):
         lwl = vars[0]
@@ -81,13 +82,9 @@ def optimization_platypus_resistance():
                 rows.append(row)
             index = csvreader.line_num
         
-        constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7  = False, False, False, False, False, False, False
-        valid = False
-        br = 0.28
+        constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid  = False, False, False, False, False, False, False, False
         boa = bwl*1.1
         dispmass = divcan*1025
-        ssv = boa**2/(br*tcan*divcan**(1/3))       
-        avs = 110+(400/(ssv-10))
         cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
 
         if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
@@ -100,19 +97,19 @@ def optimization_platypus_resistance():
             constraint4 = True
         if (divcan/(lwl*bwl*tcan)) > 0.4 or (divcan/(lwl*bwl*tcan)) < 0.3:
             constraint5 = True
-        if avs < 90:
+        if divcan < dispmin:
             constraint6 = True
-        if cs > 2.5:
+        if cs > 2:
             constraint7 = True
         if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False and constraint6 == False and constraint7 == False:
             valid = True
 
-        exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(avs, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid]
+        exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid]
         with open("assets/data/"+savefile+".csv", "a") as file:
             writer = csv.writer(file, delimiter=',')
             writer.writerow(exportdata)
         
-        return [Rt, CR], [90-avs, cs-2]
+        return [Rt, CR], [divcan-dispmin, cs-2]
 
     problem = Problem(9, 2, 2)
     problem.types[:] = [Real(bound_low1, bound_up1), Real(bound_low2, bound_up2), Real(bound_low3, bound_up3), Real(bound_low4, bound_up4), Real(bound_low5, bound_up5), Real(bound_low6, bound_up6), Real(bound_low7, bound_up7), Real(bound_low8, bound_up8), Real(bound_low9, bound_up9)]

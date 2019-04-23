@@ -269,7 +269,7 @@ def comfort_weight(value):
                 dbc.Input(value="{}".format(round(lwl/2.73,2)), id='bwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
 
                 html.Br(), dbc.Label("Draft"), html.Br(),
-                dbc.Input(value="{}".format(round(bwl/15,2)), type='text', id='tc-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                dbc.Input(value="{}".format(round(lwl/21,2)), type='text', id='tc-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 html.P("{}m".format(round(tc,2)), style={'display': 'inline-block', 'padding': '5px'}),
                 dbc.Input(value="{}".format(round(bwl/2.46,2)), type='text', id='tc-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
             ]),
@@ -290,11 +290,11 @@ def comfort_weight(value):
         ])
     ])
 
-@app.callback(Output('output-button', 'children'), [Input('export-ga', 'n_clicks')], [State('pop-size', 'value'), State('children-size', 'value'), State('max-generation', 'value'), State('mut-prob', 'value'), State('halloffame-number', 'value'), State('indpb-value', 'value'), State('eta_value', 'value'), State('weight1', 'value'), State('weight2', 'value'), State('velocity-range', 'value'), State('heel-range', 'value'), State('lwl-min', 'value'), State('lwl-max', 'value'), State('bwl-min', 'value'), State('bwl-max', 'value'), State('tc-min', 'value'), State('tc-max', 'value'), State('lcb-min', 'value'), State('lcb-max', 'value'), State('lcf-min', 'value'), State('lcf-max', 'value'), State('crossover-method', 'value'), State('mutation-method', 'value'), State('selection-method', 'value'), State('constraints-check', 'value'), State('offsprings-platypus', 'value'), State('ga-method', 'value'), State('type-optimization', 'value')])
-def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, halloffamenumber, indpb, eta, weight1, weight2, velocityrange, heelrange, lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcbmin, lcbmax, lcfmin, lcfmax, crossovermethod, mutationmethod, selectionmethod, constraints, offspringsplatypus, gamethod, typeoptimization):
+@app.callback(Output('output-button', 'children'), [Input('export-ga', 'n_clicks')], [State('pop-size', 'value'), State('children-size', 'value'), State('max-generation', 'value'), State('mut-prob', 'value'), State('halloffame-number', 'value'), State('indpb-value', 'value'), State('eta_value', 'value'), State('weight1', 'value'), State('weight2', 'value'), State('velocity-range', 'value'), State('heel-range', 'value'), State('lwl-min', 'value'), State('lwl-max', 'value'), State('bwl-min', 'value'), State('bwl-max', 'value'), State('tc-min', 'value'), State('tc-max', 'value'), State('lcb-min', 'value'), State('lcb-max', 'value'), State('disp-min', 'value'), State('lcf-min', 'value'), State('lcf-max', 'value'), State('crossover-method', 'value'), State('mutation-method', 'value'), State('selection-method', 'value'), State('capsize-factor', 'value'), State('offsprings-platypus', 'value'), State('ga-method', 'value'), State('type-optimization', 'value')])
+def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, halloffamenumber, indpb, eta, weight1, weight2, velocityrange, heelrange, lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcbmin, lcbmax, dispmin, lcfmin, lcfmax, crossovermethod, mutationmethod, selectionmethod, capsizefactor, offspringsplatypus, gamethod, typeoptimization):
     if n_clicks >= 1:
         with open('assets/data/optimizationresistance.csv','w') as fd:
-            fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,AVS,CS,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,constraint1,constraint2,constraint3,constraint4,constraint5,constraint6,constraint7,valid"+"\n")
+            fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,CS,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,constraint1,constraint2,constraint3,constraint4,constraint5,constraint6,constraint7,valid"+"\n")
         
         # initial hull
         dim_obj = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
@@ -331,13 +331,10 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         Rv = Rv/count
         Ri = Ri/count
         Rr = Rr/count
-        br = 0.28
         boa = bwl*1.1
         dispmass = disp*1025
-        ssv = boa**2/(br*tc*disp**(1/3))       
-        avs = 110+(400/(ssv-10))
         cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
-        exportdata = [1, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(avs, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), False, False, False, False, False, False, False, False]
+        exportdata = [1, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), False, False, False, False, False, False, False, False]
         with open("assets/data/optimizationresistance.csv", "a") as file:
             writer = csv.writer(file, delimiter=',')
             writer.writerow(exportdata)
@@ -345,13 +342,29 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         # optimization process
         start = time.time()
         if typeoptimization == 'default':
-            json.dump({'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'constraints': constraints, 'offspringsplatypus': offspringsplatypus, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
+            json.dump({'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'capsize-factor': capsizefactor, 'offspringsplatypus': offspringsplatypus, 'gamethod': gamethod, 'dispmin': dispmin}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
             result = optimization_platypus_resistance()
         elif typeoptimization == 'custom':
-            json.dump({'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'constraints': constraints, 'gamethod': 'NSGA II'}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
-            result = optimization_deap_resistance()
+            json.dump({'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'capsize-factor': capsizefactor, 'gamethod': 'NSGA II', 'dispmin': dispmin}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
+            result = optimization_deap_resistance(np.float(dispmin))
         done = time.time()
         elapsed = done-start
         file = open("assets/data/optimizationresistance.csv")
         numoffsprings = len(file.readlines())-2
         return html.Div(dbc.Alert("Optimization finished in {} seconds after generating {} offsprings".format(round(elapsed, 2), numoffsprings), color="success", style={'padding': '5px', 'display': 'inline-block'}))
+
+@app.callback(Output('disp-tc-min', 'children'), [Input('velocity-range', 'value')])
+def limits_lcb(lwl):
+    dimensionsobj = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
+    dimensions = json.loads(dimensionsobj)
+    lwl = np.float(dimensions["lwl"])
+    dispmin = (np.float(lwl)/5.5)**3
+    return html.Div([
+        dbc.Label("Minimum Displacement"),
+        dbc.Input(
+            type='text', 
+            id='disp-min', 
+            value=round(dispmin, 2), 
+            bs_size="sm", 
+            style={'width': 80}),
+    ])

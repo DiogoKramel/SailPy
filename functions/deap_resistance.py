@@ -10,7 +10,7 @@ import csv
 
 from functions import resistance
 
-def optimization_deap_resistance():
+def optimization_deap_resistance(dispmin):
     ### PARAMATERS
     gaconfig_obj = codecs.open('assets/data/parametersga.json', 'r', encoding='utf-8').read()
     gaconfig = json.loads(gaconfig_obj)
@@ -32,8 +32,7 @@ def optimization_deap_resistance():
     bound_low8, bound_up8 = 0.52, 0.6                              # cp
     bound_low9, bound_up9 = 0.65, 0.78                             # cm
     velocityrange = np.array(gaconfig["velocityrange"])
-    heelrange = np.array(gaconfig["heelrange"])    
-    constraints = np.array(gaconfig["constraints"])    
+    heelrange = np.array(gaconfig["heelrange"])
     pop_size = np.int(gaconfig["popsize"])                         # number of the population
     children_size = np.int(gaconfig["childrensize"])               # number of children to produce at each generation
     max_gen = np.int(gaconfig["maxgeneration"])                    # number of times the algorithm is run
@@ -43,7 +42,7 @@ def optimization_deap_resistance():
     eta_value = np.int(gaconfig["eta"])                            # crowding degree of the crossover. A high eta will produce children resembling to their parents, while a small eta will produce solutions much more different
     selectionmethod = np.int(gaconfig["selectionmethod"])
     mutationmethod = np.int(gaconfig["mutationmethod"])
-    crossovermethod = np.int(gaconfig["crossovermethod"])  
+    crossovermethod = np.int(gaconfig["crossovermethod"])
     NDIM = 2                            # numero de dimensoes do problema (objetivos?)
     random.seed(a = 42)					# control randomnesss
     savefile="optimizationresistance"
@@ -99,7 +98,7 @@ def optimization_deap_resistance():
         f1 = Rt
         f2 = CR
 
-        exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, Ri, Rr, Rincli, CR)
+        exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, Ri, Rr, Rincli, CR, dispmin)
             
         return f1, f2
     
@@ -118,26 +117,18 @@ def optimization_deap_resistance():
         cm = individual[8]
         disp = lwl*bwl*tc*cb
         awp = bwl*lwl*cwp
-        br = 0.4		# between 28 and 56
         boa = bwl*1.2
         loa = lwl*1.05
         dispmass = disp*1025
-        ssv = boa**2/(br*tc*disp**(1/3))       
-        avs = 110+(400/(ssv-10)) 						# angle of vanishing stability
         cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)   # capsize screening factor
-        avslimit = 90
-        cslimit = 2.5
-        if "AVS" not in constraints:
-            avslimit = 0
-        if "CS" not in constraints:
-            cslimit = 9999
+        csmax = 2
         
         if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
            if (bwl/tc) > 19.39 or (bwl/tc) < 2.46:
                 if (lwl/disp**(1/3)) > 8.5 or (lwl/disp**(1/3)) < 4.34:
                     if (awp/disp**(2/3)) > 12.67 or (awp/disp**(2/3)) < 3.78:
-                        if avs > avslimit:
-                            if cs < cslimit:
+                        if cs > csmax:
+                            if disp < dispmin:
                                 return True
                             else:
                                 return False
@@ -244,7 +235,7 @@ def optimization_deap_resistance():
 
     return f1, f2, index
 
-def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, Ri, Rr, Rincli, CR):
+def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, Ri, Rr, Rincli, CR, dispmin):
     rows = []
     with open("assets/data/"+savefile+".csv", "r") as csvfile:
         csvreader = csv.reader(csvfile) 
@@ -253,12 +244,8 @@ def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, 
         index = csvreader.line_num
     print(index)
     
-    constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7  = False, False, False, False, False, False, False
-    valid = False
-    br = 0.28
+    constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid  = False, False, False, False, False, False, False, False
     dispmass = divcan*1025
-    ssv = boa**2/(br*tcan*divcan**(1/3))       
-    avs = 110+(400/(ssv-10))
     cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
 
     if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
@@ -271,14 +258,14 @@ def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, 
         constraint4 = True
     if (divcan/(lwl*bwl*tcan)) > 0.4 or (divcan/(lwl*bwl*tcan)) < 0.3:
         constraint5 = True
-    if avs < 110:
+    if divcan < dispmin:
         constraint6 = True
     if cs > 2:
         constraint7 = True
     if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False and constraint6 == False and constraint7 == False:
         valid = True
 
-    exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(avs, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid]
+    exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid]
 
     with open("assets/data/"+savefile+".csv", "a") as file:
         writer = csv.writer(file, delimiter=',')
