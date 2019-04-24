@@ -2,11 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.graph_objs as go
 import dash_daq as daq
-from app import app
-from dash.dependencies import Input, Output, State
-import json, codecs
 import numpy as np
 
 from callbacks import optimizationhullcall
@@ -14,8 +10,8 @@ from callbacks import optimizationhullcall
 optimizationhull = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.H4("Genetic Algorithm Configuration"),
-            html.P("""The algorithm applied is the NSGA II - Nondominated Sorting Genetic Algorithm developed by Professor Kalyanmoy Deb. It needs seven parameters to be configured. In case you are not familiar with them, more details are provided when hoving the parameters or reading the documentation in the link below. In any case, the standard configuration will provide satisfactory results."""),
+            html.H4('Genetic Algorithm Configuration'),
+            html.P("The algorithm applied is the NSGA II - Nondominated Sorting Genetic Algorithm developed by Professor Kalyanmoy Deb. It needs seven parameters to be configured. In case you are not familiar with them, more details are provided when hoving the parameters or reading the documentation in the link below. In any case, the standard configuration will provide satisfactory results."),
             dcc.Dropdown(
                 id='type-optimization',
                 options=[
@@ -23,7 +19,7 @@ optimizationhull = dbc.Container([
                     {'label': 'Personalized configuration', 'value': 'custom'},
                 ],
                 value='default',
-                style={'width': '100%', 'font-size': '10pt'}
+                style={'width': '70%', 'font-size': '10pt'}
             ),
 			html.Br(), html.Br(),
 			html.H4("Optimization Parameters"),

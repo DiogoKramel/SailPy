@@ -35,7 +35,7 @@ def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcma
             for heel in range (heelrange[0], heelrange[1], 5):
                 result = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, velocity, heel)
                 Rt, Rv, Ri, Rr, Rincli, CR, count = Rt+result[0], Rv+result[1], Ri+result[2], Rr+result[3], Rincli+result[4], CR+result[5], count+1
-        Rt, CR, Rv, Ri, Rr = Rt/count, CR/count, Rv/count, Ri/count, Rr/count
+        Rt, CR, Rv, Ri, Rr, Rincli = Rt/count, CR/count, Rv/count, Ri/count, Rr/count, Rincli/count
 
         # count the number of lines to set the index number
         rows = []

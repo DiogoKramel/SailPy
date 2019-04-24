@@ -35,7 +35,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
     dfnotvalid = df.loc[df["valid"]==False]
     
     p_front = pareto_frontier(dfvalid["Comfort"], dfvalid["Resistance"], maxX = True, maxY = False)
-    paretox, paretoy = [], []
+    paretox, paretoy, paretoname = [], [], []
     if (resultshullaxisx == "Comfort" and resultshullaxisy == "Resistance"):
         paretox=p_front[0]
         paretoy=p_front[1]
@@ -144,7 +144,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
 def update_resistance(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
     if hoverData is None:
-        hover = np.int(2)
+        hover = np.int(1)
     else:
         hover = np.int(hoverData["points"][0]['text'])
     row = df.loc[df['id']==hover]

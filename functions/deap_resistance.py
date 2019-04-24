@@ -10,33 +10,26 @@ import csv
 
 from functions import resistance
 
-def optimization_deap_resistance(dispmin):
+def optimization_deap_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, cbmin, cbmax, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, dispmin):
     ### PARAMATERS
     gaconfig_obj = codecs.open('assets/data/parametersga.json', 'r', encoding='utf-8').read()
     gaconfig = json.loads(gaconfig_obj)
     # weight objectives (values) and whether minimized (negative) or maximized (positive)     
     weight1 = np.float(gaconfig["weight1"])*(-1)/10 # resistance weight - multiplied by one to be minimized
     weight2 = np.float(gaconfig["weight2"])/10 # comfort ratio weight
-    bound_low1 = np.float(gaconfig["lwlmin"])
-    bound_up1 = np.float(gaconfig["lwlmax"])
-    bound_low2 = np.float(gaconfig["bwlmin"])
-    bound_up2 = np.float(gaconfig["bwlmax"])
-    bound_low3 = np.float(gaconfig["tcmin"])
-    bound_up3 = np.float(gaconfig["tcmax"])
-    bound_low4 = np.float(gaconfig["lcfmin"])
-    bound_up4 = np.float(gaconfig["lcfmax"])
-    bound_low5 = np.float(gaconfig["lcbmin"])
-    bound_up5 = np.float(gaconfig["lcbmax"])
-    bound_low6 = np.float(gaconfig["cbmin"])
-    bound_up6 = np.float(gaconfig["cbmax"])
-    bound_low7 = np.float(gaconfig["cwpmin"])
-    bound_up7 = np.float(gaconfig["cwpmax"])
-    bound_low8 = np.float(gaconfig["cpmin"])
-    bound_up8 = np.float(gaconfig["cpmax"])
-    bound_low9 = np.float(gaconfig["cmmin"])
-    bound_up9 = np.float(gaconfig["cmmax"])
     velocityrange = np.array(gaconfig["velocityrange"])
     heelrange = np.array(gaconfig["heelrange"])
+
+    bound_low1, bound_up1 = lwlmin, lwlmax
+    bound_low2, bound_up2 = bwlmin, bwlmax
+    bound_low3, bound_up3 = tcmin, tcmax
+    bound_low4, bound_up4 = lcfmin, lcfmax
+    bound_low5, bound_up5 = lcbmin, lcbmax
+    bound_low6, bound_up6 = cbmin, cbmax
+    bound_low7, bound_up7 = cwpmin, cwpmax
+    bound_low8, bound_up8 = cpmin, cpmax
+    bound_low9, bound_up9 = cmmin, cmmax
+    
     pop_size = np.int(gaconfig["popsize"])                         # number of the population
     children_size = np.int(gaconfig["childrensize"])               # number of children to produce at each generation
     max_gen = np.int(gaconfig["maxgeneration"])                    # number of times the algorithm is run
@@ -55,50 +48,25 @@ def optimization_deap_resistance(dispmin):
     def uniform(low1, up1, low2, up2, low3, up3, low4, up4, low5, up5, low6, up6, low7, up7, low8, up8, low9, up9, size=None):         # function to generate the attributes of the initial population
         return [random.uniform(low1, up1), random.uniform(low2, up2), random.uniform(low3, up3), random.uniform(low4, up4), random.uniform(low5, up5), random.uniform(low6, up6), random.uniform(low7, up7), random.uniform(low8, up8), random.uniform(low9, up9)]
     def evaluate(individual):       # calculate the evaluating functions (objetive 1 = f1 and objective = f2)  
-        lwl = individual[0]
-        bwl = individual[1]
-        tcan = individual[2]
-        lcf = individual[3]
-        lcb = individual[4]
-        cb = individual[5]
-        cwp = individual[6]
-        cp = individual[7]
-        cm = individual[8]
+        lwl, bwl, tcan, lcf, lcb, cb, cwp, cp, cm = individual[0], individual[1], individual[2], individual[3], individual[4], individual[5], individual[6], individual[7], individual[8]
         divcan = lwl*bwl*tcan*cb
         awp = bwl*lwl*cwp
+        
         dimensions = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
         dim = json.loads(dimensions)
         alcb_coefficient = np.float(dim["alcb_coefficient"])
         alcb = lwl*alcb_coefficient*tcan
         loa = lwl*1.05
         boa = bwl*1.1
-        #alcb = np.float(dim["alcb"])
-        #loa = np.float(dim["loa"])*0.3048
         savefile="optimizationresistance"
 
-        Rt = 0
-        CR = 0
-        Rv = 0
-        Ri = 0
-        Rr =0
-        Rincli =0
-        count = 0
+        Rt, CR, Rv, Ri, Rr, Rincli, count = 0, 0, 0, 0, 0, 0, 0
         for vboat in range (velocityrange[0], velocityrange[1], 1):
             for heel in range (heelrange[0], heelrange[1], 5):
                 result = resistance(lwl, bwl, tcan, alcb, cp, cm, awp, divcan, lcb, lcf, vboat, heel)
-                Rt = Rt+result[0]
-                Rv = Rv+result[1]
-                Ri = Ri+result[2]
-                Rr = Rr+result[3]
-                Rincli = Rincli+result[4]
-                CR = CR+result[5]
-                count = count+1
-        Rt = Rt/count
-        CR = CR/count
-        Rv = Rv/count
-        Ri = Ri/count
-        Rr = Rr/count
-        Rincli = Rincli/count
+                Rt, Rv, Ri, Rr, Rincli, CR, count = Rt+result[0], Rv+result[1], Ri+result[2], Rr+result[3], Rincli+result[4], CR+result[5], count+1
+        Rt, CR, Rv, Ri, Rr, Rincli = Rt/count, CR/count, Rv/count, Ri/count, Rr/count, Rincli/count
+
         f1 = Rt
         f2 = CR
 
@@ -110,15 +78,8 @@ def optimization_deap_resistance(dispmin):
     # https://deap.readthedocs.io/en/master/tutorials/advanced/constraints.html
     # returns true if feasible, false otherwise
     # adicionar um counter para cada violacao
-        lwl = individual[0]
-        bwl = individual[1]
-        tc = individual[2]
-        lcf = individual[3]
-        lcb = individual[4]
-        cb = individual[5]
-        cwp = individual[6]
-        cp = individual[7]
-        cm = individual[8]
+        lwl, bwl, tc, lcf, lcb, cb, cwp, cp, cm = individual[0], individual[1], individual[2], individual[3], individual[4], individual[5], individual[6], individual[7], individual[8]
+        
         disp = lwl*bwl*tc*cb
         awp = bwl*lwl*cwp
         boa = bwl*1.2
@@ -241,7 +202,7 @@ def optimization_deap_resistance(dispmin):
 
 def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, Ri, Rr, Rincli, CR, dispmin):
     rows = []
-    with open("assets/data/"+savefile+".csv", "r") as csvfile:
+    with open("assets/data/optimizationresistance.csv", "r") as csvfile:
         csvreader = csv.reader(csvfile) 
         for row in csvreader: 
             rows.append(row)
@@ -269,7 +230,7 @@ def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, 
 
     exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, valid]
 
-    with open("assets/data/"+savefile+".csv", "a") as file:
+    with open("assets/data/optimizationresistance.csv", "a") as file:
         writer = csv.writer(file, delimiter=',')
         writer.writerow(exportdata)
     

@@ -140,9 +140,9 @@ def display_page(tab):
     elif tab == 'tab-5':
         return dimensionsappendages.appendages, space, footer
     elif tab == 'tab-6':
-        return space, footer # optimizationappendages.optimizationappendages
+        return optimizationappendages.optimizationappendages, space, footer
     elif tab == 'tab-7':
-        return space, footer # resultsappendages.resultsappendages
+        return resultsappendages.resultsappendages, space, footer
     else:
         return ''
 

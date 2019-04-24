@@ -85,7 +85,7 @@ def optionoptimization(typeoptimization):
                     {'label': 'Uniform', 'value': '4'},
                 ],
                 value='1',
-                style={'width': '80%', 'font-size': '10pt'}
+                style={'width': '70%', 'font-size': '10pt'}
             ),
             dbc.Label("Method of Mutation"),
             dcc.Dropdown(
@@ -95,7 +95,7 @@ def optionoptimization(typeoptimization):
                     {'label': 'Gaussian', 'value': '2'},
                 ],
                 value='1',
-                style={'width': '80%', 'font-size': '10pt'}
+                style={'width': '70%', 'font-size': '10pt'}
             ),
             dbc.Label("Method of Selection"),
             dcc.Dropdown(
@@ -105,7 +105,7 @@ def optionoptimization(typeoptimization):
                     {'label': 'SPEA-II', 'value': '2'},
                 ],
                 value='1',
-                style={'width': '80%', 'font-size': '10pt'}
+                style={'width': '70%', 'font-size': '10pt'}
             ),
             html.Br(),
             html.Div(id='estimative-offspring'),
@@ -140,7 +140,7 @@ def optionoptimization(typeoptimization):
                     {'label': 'MOEA -  Multi-Objective Evolutionary Algorithm', 'value': 'EpsMOEA'},
                 ],
                 value='NSGAII',
-                style={'width': '100%', 'font-size': '10pt'}
+                style={'width': '70%', 'font-size': '10pt'}
             ),
             dbc.Label("Number of offsprings"),
             dbc.Input(
@@ -148,7 +148,7 @@ def optionoptimization(typeoptimization):
                 id='offsprings-platypus', 
                 value='300', 
                 bs_size="sm", 
-                style={'width': '25%'}
+                style={'width': 80}
             ),
             html.Br(),
             dbc.Label("Behave of each algorithm"),
@@ -375,7 +375,7 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
             result = optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, cbmin, cbmax, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus, dispmin)
         elif typeoptimization == 'custom':
             json.dump({'cbmin': cbmin, 'cbmax': cbmax, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'capsize-factor': capsizefactor, 'gamethod': 'NSGA II', 'dispmin': dispmin}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
-            result = optimization_deap_resistance(np.float(dispmin))
+            result = optimization_deap_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, cbmin, cbmax, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, dispmin)
         done = time.time()
         elapsed = done-start
         file = open("assets/data/optimizationresistance.csv")
