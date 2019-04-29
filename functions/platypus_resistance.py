@@ -93,3 +93,5 @@ def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcma
         algorithm = EpsMOEA(problem, epsilons = 0.05)
 
     algorithm.run(np.int(offspringsplatypus))
+
+    return offspringsplatypus

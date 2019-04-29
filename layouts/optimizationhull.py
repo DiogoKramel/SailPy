@@ -11,7 +11,7 @@ optimizationhull = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H4('Genetic Algorithm Configuration'),
-            html.P("The algorithm applied is the NSGA II - Nondominated Sorting Genetic Algorithm developed by Professor Kalyanmoy Deb. It needs seven parameters to be configured. In case you are not familiar with them, more details are provided when hoving the parameters or reading the documentation in the link below. In any case, the standard configuration will provide satisfactory results."),
+            html.P("The optimizaton method can be choosen between a default method, in which all the parameters are automatically set based on the literature best recommendations, and a custom method. The latter applies the algorithm NSGA II - Nondominated Sorting Genetic Algorithm developed by Professor Kalyanmoy Deb. It needs seven parameters to be configured. In case you are not familiar with them, more details are provided when hoving the parameters or reading the documentation in the link below. In any case, the standard configuration will provide satisfactory results."),
             dcc.Dropdown(
                 id='type-optimization',
                 options=[
@@ -26,7 +26,7 @@ optimizationhull = dbc.Container([
             html.Div(id="option-optimization"),
             html.Br(), html.Br(), 
             html.H4("Constraints"),
-            html.P("Constraints help maintain the sailboats feasible. They evaluate safety the Capsize Screening Factor, that empirically evaluate the likelihood of capsizing."),
+            html.P("Constraints help maintain the sailboats feasible. The Capsize Screening Factor empirically evaluates the likelihood of capsizing based on the formula shown below. Another constraint is the displacement, which assits the optimization process on not allowing unrealistic hulls."),
 			html.Img(src='/assets/static/cs.png', height='28pt'),
 			html.Br(),html.Br(),
 			dbc.Label("Capsize Screening Factor"),
@@ -40,7 +40,7 @@ optimizationhull = dbc.Container([
         ], className = "justify mt-4", md=6),
         dbc.Col([
             html.H4("Weighted Objectives"),
-            html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
+            html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity that the user can set through the sliders below. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
             dbc.Row([
                 dbc.Col([
                     html.Div(id='resistance-weight', style={'display': 'block', 'text-align': 'center'}),

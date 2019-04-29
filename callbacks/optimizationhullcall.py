@@ -228,7 +228,7 @@ def optionoptimization(typeoptimization):
         ])
 
 @app.callback(Output('estimative-offspring', 'children'), [Input('pop-size', 'value'), Input('children-size', 'value'), Input('max-generation', 'value'), Input('mut-prob', 'value')])
-def resistance_weight(popsize, childrensize, maxgeneration, mutprob):
+def estimative_offspring(popsize, childrensize, maxgeneration, mutprob):
     offsprings = np.float(popsize)*np.float(childrensize)*np.float(maxgeneration)*np.float(mutprob)/100+2
     offsprings = offsprings*2
     return dbc.Label('Number of offsprings generated: {} offsprings'.format(np.int(offsprings)))
@@ -248,7 +248,7 @@ def comfort_weight(value):
 @app.callback(
     Output('dimensions-limits', 'children'),
     [Input('weight2', 'value')])
-def comfort_weight(value):
+def dimensions_limits(value):
     dimensionsobj = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
     dimensions = json.loads(dimensionsobj)
     for item in dimensions:

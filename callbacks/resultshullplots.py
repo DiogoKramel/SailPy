@@ -303,7 +303,7 @@ def update_y_timeseries(hoverData):
 @app.callback(
     dash.dependencies.Output('plot-limits-bwl-tc', 'figure'),
     [Input('output-optimization', 'hoverData')])
-def update_y_timeseries(hoverData):
+def plot_limits_bwltc(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
     xmin = min(df["BWL"])
     xmax = max(df["BWL"])
@@ -396,7 +396,7 @@ def update_y_timeseries(hoverData):
 @app.callback(
     dash.dependencies.Output('plot-limits-lwl-disp', 'figure'),
     [Input('output-optimization', 'hoverData')])
-def update_y_timeseries(hoverData):
+def plot_limits_lwldisp(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
     xmin = min(df["LWL"])
     xmax = max(df["LWL"])
@@ -489,7 +489,7 @@ def update_y_timeseries(hoverData):
 @app.callback(
     dash.dependencies.Output('plot-limits-awp-disp', 'figure'),
     [Input('output-optimization', 'hoverData')])
-def update_y_timeseries(hoverData):
+def plot_limits_awpdisp(hoverData):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
     xmin = min(df["AWP"])
     xmax = max(df["AWP"])
@@ -634,7 +634,7 @@ def update_graph(resultshullaxisy):
 @app.callback(
      Output('plot-parallel-dimensions', 'figure'),
     [Input('parallel-datatype', 'value')])
-def update_output(type):
+def plot_parallel_dimensions(type):
     if np.float(type) == 1:
         df = pd.read_csv("assets/data/optimizationresistance.csv")
     elif np.float(type) == 2:
@@ -681,7 +681,7 @@ def update_output(type):
     }
 
 @app.callback(Output("table-all-individuals", "children"), [Input("resultshullaxisx", "value")])
-def update_graph(resultshullaxisx):
+def table_all_individuals(resultshullaxisx):
     datatable = pd.read_csv("assets/data/optimizationresistance.csv")
     datatable = datatable.loc[datatable['valid']==True]
     datatable = datatable.loc[:,"id":"LCF"]
@@ -712,7 +712,7 @@ def update_graph(resultshullaxisx):
     )
 
 @app.callback(Output("plot-dimensions", "children"), [Input('datatable-interactivity', 'selected_rows')])
-def update_graph(selected_row_indices):
+def plot_dimensions(selected_row_indices):
     datatable_all = pd.read_csv("assets/data/optimizationresistance.csv")
     datatable_valid = datatable_all.loc[datatable_all['valid']==True]
     datatable_unvalid = datatable_all.loc[datatable_all['valid']==False]
@@ -775,7 +775,6 @@ def export_hull_dimensions(hoverData):
     lcb = np.float(row.iloc[0]['LCB'])
     lcf = np.float(row.iloc[0]['LCF'])
     disp = np.float(row.iloc[0]['Displacement'])
-    awp = np.float(row.iloc[0]['AWP'])
     cs = np.float(row.iloc[0]['CS'])
     json.dump({'lwl': lwl, 'bwl': bwl, 'tc': tc, 'disp': disp, 'lcb': lcb, 'lcf': lcf}, codecs.open('assets/data/dimensions-hull.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     return html.Div([
