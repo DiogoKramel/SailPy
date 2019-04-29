@@ -44,6 +44,10 @@ def update_output(resultshullaxisy, resultshullaxisx):
         paretoy=p_front[0]
         paretox=p_front[1]
         paretoname='Pareto'
+    else:
+        paretoy=[]
+        paretox=[]
+        paretoname='No Pareto'
     
     ymin = min(df[resultshullaxisy])*0.9
     ymax = max(df[resultshullaxisy])
