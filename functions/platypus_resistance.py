@@ -46,10 +46,10 @@ def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcma
             index = csvreader.line_num
         
         # calculate constraints of delft series, capsize screening factor, and displacement
-        constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, constraint7, valid  = False, False, False, False, False, False, False, False
+        constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, valid  = False, False, False, False, False, False, False
         if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
             constraint1 = True
-        if (bwl/tcan) > 19.39 or (bwl/tcan) < 2.46:
+        if (bwl/tcan) > 6.5 or (bwl/tcan) < 3.8: #(bwl/tcan) > 19.39 or (bwl/tcan) < 2.46 delft series seems to have unrealistic limits
             constraint2 = True
         if (lwl/divcan**(1/3)) > 8.5 or (lwl/divcan**(1/3)) < 4.34:
             constraint3 = True
@@ -69,10 +69,10 @@ def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcma
             writer.writerow(exportdata)
         
         # return 2 objectives and 2 restrictions
-        return [Rt, CR], [divcan-dispmin, cs-2]
+        return [Rt, CR], [divcan-dispmin, cs-2, lwl/bwl-5, 2.73-lwl/bwl, bwl/tcan-6.5, 3.8-bwl/tcan]
 
     # optimize for 9 parameters, 2 objectives and 2 restrictions
-    problem = Problem(9, 2, 2)
+    problem = Problem(9, 2, 6)
     problem.types[:] = [Real(lwlmin, lwlmax), Real(bwlmin, bwlmax), Real(tcmin, tcmax), Real(lcfmin, lcfmax), Real(lcbmin, lcbmax), Real(cbmin, cbmax), Real(cwpmin, cwpmax), Real(cpmin, cpmax), Real(cmmin, cmmax)]
     problem.directions[:] = [Problem.MINIMIZE, Problem.MAXIMIZE]
     problem.constraints[:] = "<0"

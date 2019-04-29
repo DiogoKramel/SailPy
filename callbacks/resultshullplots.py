@@ -584,8 +584,8 @@ def update_graph(resultshullaxisy):
     df = pd.read_csv("assets/data/optimizationresistance.csv")
     constraint1 = df.constraint1.value_counts().loc[True]
     constraint2 = df.constraint2.value_counts().loc[True]
-    constraint3 = df.constraint3.value_counts().loc[True]
-    constraint4 = df.constraint4.value_counts().loc[True]
+    #constraint3 = df.constraint3.value_counts().loc[True]
+    #constraint4 = df.constraint4.value_counts().loc[True]
     constraint5 = df.constraint5.value_counts().loc[True]
     constraint6 = df.constraint6.value_counts().loc[True]
     return html.Div([
@@ -593,8 +593,8 @@ def update_graph(resultshullaxisy):
                 figure={
                     'data': [
                         go.Bar(
-                            x=[1, 2, 3, 4, 5, 6],
-                            y=[constraint1,constraint2, constraint3, constraint4, constraint5, constraint6],
+                            x=[1, 2, 3, 4],
+                            y=[constraint1, constraint2, constraint5, constraint6],
                             name='Valid',
                         ),
                     ],
@@ -612,8 +612,8 @@ def update_graph(resultshullaxisy):
                             showgrid= True,
                             showline= True,
                             mirror= True,
-                            ticktext= ['lwl/bwl', 'bwl/tcan', 'lwl/disp', 'awp/divcan', 'disp', 'cs'],
-                            tickvals=[1, 2, 3, 4, 5, 6],
+                            ticktext= ['lwl/bwl', 'bwl/tcan', 'disp', 'cs'],
+                            tickvals=[1, 2, 3, 4],
                             tickmode='array',
                         ),
                         yaxis=go.layout.YAxis(

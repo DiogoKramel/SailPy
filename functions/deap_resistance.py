@@ -42,7 +42,7 @@ def optimization_deap_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, l
     crossovermethod = np.int(gaconfig["crossovermethod"])
     NDIM = 2                            # numero de dimensoes do problema (objetivos?)
     random.seed(a = 42)					# control randomnesss
-    savefile="optimizationresistance"
+    savefile = "optimizationresistance"
     
     ### BUILD MODEL
     def uniform(low1, up1, low2, up2, low3, up3, low4, up4, low5, up5, low6, up6, low7, up7, low8, up8, low9, up9, size=None):         # function to generate the attributes of the initial population
@@ -89,7 +89,7 @@ def optimization_deap_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, l
         csmax = 2
         
         if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
-           if (bwl/tc) > 19.39 or (bwl/tc) < 2.46:
+           if (bwl/tc) > 6.5 or (bwl/tc) < 3.8: #(bwl/tcan) > 19.39 or (bwl/tcan) < 2.46 delft series seems to have unrealistic limits
                 if (lwl/disp**(1/3)) > 8.5 or (lwl/disp**(1/3)) < 4.34:
                     if (awp/disp**(2/3)) > 12.67 or (awp/disp**(2/3)) < 3.78:
                         if cs > csmax:
@@ -215,7 +215,7 @@ def exportresults(savefile, boa, tcan, divcan, lwl, bwl, awp, lcb, lcf, Rt, Rv, 
 
     if (lwl/bwl) > 5 or (lwl/bwl) < 2.73:
         constraint1 = True
-    if (bwl/tcan) > 19.39 or (bwl/tcan) < 2.46:
+    if (bwl/tcan) > 6.5 or (bwl/tcan) < 3.8:
         constraint2 = True
     if (lwl/divcan**(1/3)) > 8.5 or (lwl/divcan**(1/3)) < 4.34:
         constraint3 = True

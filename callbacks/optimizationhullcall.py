@@ -265,15 +265,15 @@ def comfort_weight(value):
                 ]),
 
                 dbc.Row([dbc.Label("Waterline beam")]),
-                dbc.Row([dbc.Input(value="{}".format(round(lwl/5,2)), id='bwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                dbc.Row([dbc.Input(value="{}".format(round(bwl*0.85,2)), id='bwl-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 html.P("{}m".format(round(bwl,2)), style={'display': 'inline-block', 'padding': '5px'}),
-                dbc.Input(value="{}".format(round(lwl/2.73,2)), id='bwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                dbc.Input(value="{}".format(round(bwl*1.15,2)), id='bwl-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 ]),
 
                 dbc.Row([dbc.Label("Draft")]),
-                dbc.Row([dbc.Input(value="{}".format(round(lwl/21,2)), type='text', id='tc-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                dbc.Row([dbc.Input(value="{}".format(round(tc*0.85,2)), type='text', id='tc-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 html.P("{}m".format(round(tc,2)), style={'display': 'inline-block', 'padding': '5px'}),
-                dbc.Input(value="{}".format(round(bwl/2.46,2)), type='text', id='tc-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                dbc.Input(value="{}".format(round(tc*1.15,2)), type='text', id='tc-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 ]),
 
                 dbc.Row([dbc.Label("LCB")]),
@@ -293,7 +293,7 @@ def comfort_weight(value):
             dbc.Col([
                 dbc.Row(dbc.Label("Block Coefficient (Cb)")),
                 dbc.Row([
-                    dbc.Input(value="{}".format(round(0.3,2)), type='text', id='cb-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                    dbc.Input(value="{}".format(round(0.35,2)), type='text', id='cb-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                     html.P(" - ", style={'display': 'inline-block', 'padding': '5px'}),
                     dbc.Input(value="{}".format(round(0.4,2)), type='text', id='cb-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 ]),

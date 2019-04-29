@@ -64,11 +64,18 @@ Then change directory into the repo:
 cd SailPy-master/
 ```
 
-Now create and activate the virtual environment:
+Now create and activate the virtual environment. On Mac:
 
 ```
 virtualenv venv
 source venv/bin/activate
+```
+
+On Windows:
+
+```
+virtualenv venv
+venv/Scripts/activate.bat
 ```
 
 Now that virtualenv is setup and active we can install the dependencies:
