@@ -31,6 +31,7 @@ resultsappendages = dbc.Container([
                     id='resultshullaxisy',
                     options=[
                         {'label': 'Average Velocity [knots]', 'value': 'AverageVelocity'},
+                        {'label': 'Average Velocity Upwind [knots]', 'value': 'AverageVelocityUpwind'},
                         {'label': 'Comfort Ratio', 'value': 'Comfort'},
                     ],
                     value='AverageVelocity',
@@ -44,6 +45,7 @@ resultsappendages = dbc.Container([
                     id='resultshullaxisx',
                     options=[
                         {'label': 'Average Velocity [knots]', 'value': 'AverageVelocity'},
+                        {'label': 'Average Velocity Upwind [knots]', 'value': 'AverageVelocityUpwind'},
                         {'label': 'Comfort Ratio', 'value': 'Comfort'},
                     ],
                     value='Comfort',

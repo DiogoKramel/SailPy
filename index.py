@@ -126,23 +126,22 @@ app.layout = html.Div([
 def display_page(tab):
     space = html.Div([html.Br(), html.Br(), html.Br(), html.Br(), html.Br()])
     if tab == 'tab-1':
-        return introduction.introduction, space, footer
+        return html.Br(), introduction.introduction, space, footer
     elif tab == 'tab-2':
-        return dimensionshull.hull, space, footer
+        return html.Br(), dimensionshull.hull, space, footer
     elif tab == 'tab-3':
-        return optimizationhull.optimizationhull, space, footer
+        return html.Br(), optimizationhull.optimizationhull, space, footer
     elif tab == 'tab-4':
-        df = pd.read_csv("assets/data/optimizationresistance.csv")
         datatable = pd.read_csv("assets/data/optimizationresistance.csv")
         datatable = datatable.loc[datatable['valid']==True]
         datatable = datatable.loc[:,"id":"LCB"]
-        return resultshulll.resultshull, space, footer
+        return html.Br(), resultshulll.resultshull, space, footer
     elif tab == 'tab-5':
-        return dimensionsappendages.appendages, space, footer
+        return html.Br(), dimensionsappendages.appendages, space, footer
     elif tab == 'tab-6':
-        return optimizationappendages.optimizationappendages, space, footer
+        return html.Br(), optimizationappendages.optimizationappendages, space, footer
     elif tab == 'tab-7':
-        return resultsappendages.resultsappendages, space, footer
+        return html.Br(), resultsappendages.resultsappendages, space, footer
     else:
         return ''
 

@@ -249,7 +249,7 @@ def dimensionskeel(lwl, tc, disp):
 
 @app.callback(Output('dimensions-mizzen', 'children'),
     [Input('mzn-check', 'value')])
-def dimensionskeel(mzncheck):
+def mzncheck(mzncheck):
     if mzncheck == '0':
         return html.Div([
             dbc.Label("Mizzen Hoist"),
@@ -285,7 +285,7 @@ def dimensionskeel(mzncheck):
 
 @app.callback(Output('dimensions-bulbo', 'children'),
     [Input('bulbo-check', 'value')])
-def dimensionskeel(bulbocheck):
+def bulbocheck(bulbocheck):
     if bulbocheck == '0':
         return html.Div([
             dbc.Label("Keel bulbous length"),

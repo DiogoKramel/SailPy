@@ -2,6 +2,20 @@ import numpy as np
 from scipy import interpolate
 import csv
 
+
+# SUMMARY
+# -------------------------
+# 1 RESISTANCE
+# 1.1 Viscous Resistance
+# 1.2 Residual resistance
+# 1.3 Resistance due to heel
+# 1.4 Added resistance in waves
+# 1.5 Total resistance
+# 2 STABILITY
+# 3 MOTION COMFORT RATIO
+# 4 Vertical Acceleration
+
+
 def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel):
     # Delft coefficients
     coefficient_residual = [
@@ -95,7 +109,7 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel):
     Rr = disp*rho*grav*(vector_residual[0] + (vector_residual[1]*LCBfpp/lwl + vector_residual[2]*cp + vector_residual[3]*disp**(2/3)/awp + vector_residual[4]*bwl/lwl)*disp**(1/3)/lwl + (vector_residual[5]*disp**(2/3)/Scb + vector_residual[6]*LCBfpp/LCFfpp + vector_residual[7]*(LCBfpp/lwl)**2 + vector_residual[8]*cp**2)*disp**(1/3)/lwl)
     
     # 1.3 Resistance due to heel
-    # 1.3.1 Viscous additional resistance due to hee
+    # 1.3.1 Viscous additional resistance due to heel
     # vector with delft series coefficients
     vector_heel_viscous = np.zeros(4)
     heel_temp = np.degrees(heel)
@@ -159,8 +173,8 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, vboat, heel):
     else:
         Raw = vector_addwave[0]+vector_addwave[1]*(lwl/disp**(1/3)) + vector_addwave[2]*(lwl/disp**(1/3))**2 + vector_addwave[3]*(lwl/disp**(1/3))**3 + vector_addwave[4]*(lwl/bwl) + vector_addwave[5]*(lwl/bwl)**2 + vector_addwave[6]*(bwl/tc) + vector_addwave[7]*cp + vector_addwave[8]*cp**2 + vector_addwave[9]*cp**3 
 
-    # 1.5 TOTAL RESISTANCE
-    Rt = abs(Rv)+abs(Rr)+abs(Rheel)+abs(Raw)
+    # 1.5 Total resistance
+    Rt = abs(Rv) + abs(Rr) + abs(Rheel) + abs(Raw)
 
     # 2 STABILITY
     # OOSSANEN, P. van. A concept exploration model for sailing yachts. Transactions of RINA, p. 17–28, 2003.

@@ -108,7 +108,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
             ],
         'layout': go.Layout(
             title="NSGA II Optimization",
-            height=500,
+            height=380,
             hovermode="closest",
             margin={
                 "r": 20,
@@ -133,7 +133,7 @@ def update_output(resultshullaxisy, resultshullaxisx):
                 "title": resultshullaxisy,
                 "range": [min(df[resultshullaxisy]), max(df[resultshullaxisy])],
             },
-        legend=dict(x=0.8, y=1),
+        legend=dict(x=0.5, y=1),
         font=dict(size=12),
         )
     }
@@ -143,11 +143,11 @@ def update_output(resultshullaxisy, resultshullaxisx):
 def callback_vpp(hoverData):
     hover = np.int(hoverData["points"][0]['text'])
     index = np.str(hover)
-    filename="assets/data/vpp_results/veloc_hull"+index+".json"
+    filename="assets/data/vpp_results/veloc_hull_"+index+".json"
     
     veloc_obj = codecs.open(filename, 'r', encoding='utf-8').read()
     veloc_solution = json.loads(veloc_obj)
-    velocities= np.asarray(veloc_solution['velocity'])
+    velocities= np.asarray(veloc_solution['velocity_boat_matrix_list'])
     ymax=1.1*np.max(velocities)
 
     angles_obj = codecs.open("assets/data/vpp_results/angles.json", 'r', encoding='utf-8').read()
@@ -158,19 +158,31 @@ def callback_vpp(hoverData):
             theta=angles,
             r=velocities[0],
             mode='lines',
-            name='6 nós'
+            name='6 knots'
         ),
         go.Scatterpolar(
             theta=angles,
             r=velocities[1],
             mode='lines',
-            name='8 nós'
+            name='8 knots'
+        ), 
+        go.Scatterpolar(
+            theta=angles,
+            r=velocities[2],
+            mode='lines',
+            name='10 knots'
+        ),
+        go.Scatterpolar(
+            theta=angles,
+            r=velocities[3],
+            mode='lines',
+            name='12 knots'
         )],
         # https://plot.ly/python/polar-chart/
         'layout': go.Layout(
             title='Velocity Prediction',
             hovermode = "closest",
-            height = 400,
+            height = 500,
             margin = {
                 "r": 20,
                 "t": 30,
@@ -189,5 +201,6 @@ def callback_vpp(hoverData):
                 ),
             ),
             font=dict(size=10),
+            legend=dict(x=0.3, y=-0.5),
         ),
     }

@@ -16,6 +16,7 @@ import time
 from functions import resistance
 from functions import vpp
 from functions import optimization_deap_appendages
+from functions import optimization_platypus_vpp
 
 
 @app.callback(
@@ -37,12 +38,12 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         
         with open('assets/data/initialhull2.csv','w') as fd:
             fd.write("id,AverageVelocity,Comfort"+"\n")
-            writer = csv.writer(fd, delimiter=',')
+            #writer = csv.writer(fd, delimiter=',')
             #writer.writerow(fields)
         with open('assets/data/optimizationvpp.csv','w') as fd:
-            fd.write("id,AverageVelocity,Comfort,valid"+"\n")
+            fd.write("id,AverageVelocity,AverageVelocityUpwind,Comfort,valid"+"\n")
         start = time.time()
-        result = optimization_deap_appendages()
+        optimization_platypus_vpp()
         done = time.time()
         elapsed = done-start
         file = open("assets/data/optimizationvpp.csv")
