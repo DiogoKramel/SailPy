@@ -12,75 +12,126 @@ E) Derivated elementary dimensions
 VPP MAIN ROUTINE
 -------------------------
 1 PRE-CALCULATION
-2 LIFT FORCES
-A) Keel 
-B) Rudder 
-C) Canoe Body
+
+2 LIFT FORCES AND MOMENTS
+  A) Keel lift force
+  B) Bulb lift force
+  C) Rudder lift force
+  D) Canoe body side force
+  E) GZ estimation
+  F) Munk moment
+  G) Restoration moment
+  H) Centre of Effort (CE)
+
 3 RESISTANCE
 3.1 Viscous Resistance
-A) Parameters 
-B) Canoe Body 
-C) Keel 
-D) Rudder 
-E) Total viscous resistance
+  A) Parameters 
+  B) Canoe Body 
+  C) Keel 
+  D) Rudder 
+  E) Total viscous resistance
 3.2 Residual Resistance
-A) Canoe body 
-B) Keel
-C) Total residual resistance
+  A) Canoe body 
+  B) Keel
+  C) Total residual resistance
 3.3 Added resistance in waves
 3.4 Induced resistance
-A) Canoe body
-B) Keel
-C) Rudder
-D) Total induced resistance
+  A) Canoe body
+  B) Keel
+  C) Rudder
+  D) Total induced resistance
 3.5) Resistance increase due to heel
-A) Canoe body viscous resistance
-B) Canoe body residual resistance
-C) Keel residual resistance
-D) Total heel resistance
+  A) Canoe body viscous resistance
+  B) Canoe body residual resistance
+  C) Keel residual resistance
+  D) Total heel resistance
 3.6) Total resistance
+
 4) AERODYNAMIC MODELING
-4.1) Area
-A) Main sail
-B) Genoa and foretriangle
-C) Spinnaker
-D) Mizzen
-E) Total area
+4.1) Sail area
+  A) Main sail
+  B) Jib and foretriangle
+  C) Spinnaker
+  D) Mizzen
+  E) Total area
 4.2) Lift and drag coefficients
+  A) Main sail
+  B) Jib and foretriangle
+  C) Spinnaker
+  D) Mast drag coefficient
+  E) Lift and drag for all sails combined
 4.3) Lift forces
 
--------------------------
-NOMENCLATURE
--------------------------
-- Variables' name are composed of "attribute" + "_" + "object", e.g. velocity_boat, angle_rudder
-- Dimensions are given in radians and m/s, otherwise a suffix will be added, e.g. angle_tw_deg
+5 FORCES AND MOMENTS IN GLOBAL COORDINATES [X, Y, Z]
+5.1 Coordinates matrix
+  A) Leeway
+  B) Heel angle
+  C) Keel angle attack due to heel
+  D) Rudder angle due to heel
+  E) Rudder angle attack due to rudder angle
+  F) Rudder angle attack due to rudder with no lift
+  G) Sail angle attack due to heel
+5.2 Forces
+  A) Total resistance
+  B) Lift force keel
+  C) Lift force rudder
+  D) Lift force rudder for delta = 0
+  E) Bulb side force
+  F) Canoe body side force
+  G) Sail lift force
+  H) Sail drag force 
+5.3 Centre of effort
+  A) Aerodynamic CE
+  B) Hydrodynamic CE
+  C) Rudder hydrodynamic CE
+5.4 Moments
+  A) Munk Moment
+  B) Righting Moment
+  C) Aerodrynamic moment
+  D) Hydrodynamic moment
+  E) Rudder moment
+5.5 Resulting forces and moments
+5.6 Equilibrium system
 
 -------------------------
-ACRONYMS
+NOMENCLATURE & ACRONYMS
 -------------------------
+- Variables' name are composed of "attribute" + "_" + "object", e.g. velocity_boat, angle_rudder
+- Dimensions are given in radians and meters per second, otherwise a suffix will be added, e.g. angle_tw_deg
+
 tw: true wind
 aw: apparent wind
 cb: canoe body
 deg: degrees
 temp: temporary
 avg: average
+
+-------------------------
+REFERENCES
+-------------------------
+Gerritsma, J. Sailing yacht performance in calm water and in waves. The 11th Chesapeake Sailing Yacht Symposium SNAME, Jan. 1993.
+Keuning, J. A., and U. B. Sonnenberg. Approximation of the hydrodynamic forces on a sailing yacht based on the 'Delft Systematic Yacht Hull Series'. Delft University of Technology, Faculty of Mechanical Engineering and Marine Technology, Ship Hydromechanics Laboratory, 1998.
+Oossanen, P. van. Predicting the speed of sailing yachts, 1993.
+Oossanen, P. van. A concept exploration model for sailing yachts. Transactions of RINA, p. 17–28, 2003.
+Wilson, Philip A. Basic Naval Architecture: Ship Stability. Springer, 2018.
+
 '''
 
 
 ### IMPORT PACKAGES
 import numpy as np                          # High-level mathematical functions
 from scipy import optimize                  # Optimization functions to solve the VPP's system of equations
-from scipy import interpolate               # Interpolatation methods applied to the Delft coefficients
+from scipy import interpolate               # Interpolatation methods applied to obtain the Delft coefficients
 import csv                                  # Export the results as CSV
 import codecs, json                         # Export the results as JSON
 import re, os, os.path                      # Auxiliary package to build the JSON files                       
 from _ctypes import PyObj_FromPtr           # See https://stackoverflow.com/a/15012814/355230
 
 
-def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, scb, KG, free_board, lead_rudder, lead_sail, \
-    mass_crew, P, E, I, J, BAD, SLp, LPG, span_rudder, tip_chord_rudder, root_chord_rudder, tip_thickness_rudder, root_thickness_rudder, \
+def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_surface_cb, KG, free_board, lead_rudder, lead_sail, \
+    mass_crew, height_mainsail, base_mainsail, height_foretriangle, base_foretriangle, boom_heigth_deck, length_spinnaker, perpendicular_jib, span_rudder, tip_chord_rudder, root_chord_rudder, tip_thickness_rudder, root_thickness_rudder, \
     sweep_rudder_deg, span_keel, tip_chord_keel, root_chord_keel, tip_thickness_keel, root_thickness_keel, sweep_keel_deg, \
-    naca_keel, naca_rudder, EHM, EMDC, height_surface_rudder, Pmz, Emz, BADmz, chord_bulb_keel, diameter_bulb, surface_area_bulb, 
+    naca_keel, naca_rudder, height_mast, diameter_mast, height_surface_rudder, height_mizzen, base_mizzen, boom_height_mizzen, chord_bulb_keel, diameter_bulb, surface_area_bulb, 
     minimum_tw_knots, maximum_tw_knots): 
     
 
@@ -93,28 +144,29 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
     pi = np.pi                  # pi number
 
     # B) True wind angle and velocity range 
-    step_angle = 5                                # true wind angle step [degrees] 
-    step_tw = 1.02889                             # true wind velocity step equivalent to 2 knots [m/s]
-    minimum_tw = minimum_tw_knots*0.514444        # true wind speed [m/s]
+    step_angle = 5                                   # true wind angle step [degrees] 
+    step_velocity = 1.02889                          # true wind velocity step equivalent to 2 knots [m/s]
+    minimum_tw = minimum_tw_knots*0.514444           # true wind speed [m/s]
     maximum_tw = maximum_tw_knots*0.514444
-    if (maximum_tw - minimum_tw) < step_tw:       # in case the range of wind speed is too low
-        step_tw = (maximum_tw - minimum_tw)*0.99
+    if (maximum_tw - minimum_tw) < step_velocity:    # in case the range of wind speed is lower than its step
+        step_velocity = (maximum_tw - minimum_tw)*0.99
 
     # Arrays for true wind angle and velocity 
-    angle_tw_deg = np.arange(30, 181, step_angle) # polar diagram ranging from 30 to 180 degrees
+    angle_tw_deg = np.arange(30, 181, step_angle)    # polar diagram ranging from 30 to 180 degrees
     angle_tw = np.radians(angle_tw_deg)
-    velocity_tw = np.arange(minimum_tw, maximum_tw, step_tw)
+    velocity_tw = np.arange(minimum_tw, maximum_tw, step_velocity)
     
     # Matrix to store the boat velocity for each true wind angle
     angle_tw_matrix = np.zeros((np.size(velocity_tw), np.size(angle_tw_deg)))
     velocity_boat_matrix = np.zeros((np.size(velocity_tw), np.size(angle_tw_deg)))
+    vmg_matrix = np.zeros((np.size(velocity_tw), np.size(angle_tw_deg)))
 
     # C) Initial guess for solving the VPP 
     # Velocity [m/s], leeway [rad], heel [rad], rudder angle [rad])
     initial_guess = np.array([4, np.radians(5), np.radians(15) ,np.radians(-4)])
     # initial_guess = np.array([4, np.radians(0), np.radians(20), np.radians(-10)])
  
-    # D) Delft coefficients for resistance estimation
+    # D) Delft coefficients for resistance estimation (Keuning et al (1998))
     # Residual resistance - bare hull
     coefficient_residual_hull = [
         ['FroudeNo' 'a0' 'a1' 'a2' 'a3' 'a4' 'a5' 'a6' 'a7' 'a8'], 
@@ -193,7 +245,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
     avg_chord_rudder = (root_chord_rudder + tip_chord_rudder)/2
 
     # Surface area for canoe body, keel, and rudder [m2]
-    surface_area_cb = (1.97 + 0.171*(bwl/tc))*((0.65/cm)**(1/3))*(disp*lwl)**0.5
+    surface_area_cb = (1.97 + 0.171*bwl/tc)*(0.65/cm)**(1/3)*(disp*lwl)**0.5    # Gerritsma et al (1992)
     lat_surface_keel = avg_chord_keel*span_keel
     surface_area_keel = 2*lat_surface_keel
     lat_surface_rudder = avg_chord_rudder*span_rudder
@@ -203,9 +255,9 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
     avg_thickness_rudder = (tip_thickness_rudder + root_thickness_rudder)/2
     avg_thickness_keel = (tip_thickness_keel + root_thickness_keel)/2
 
-    # Tip and root chord ratio [-]
-    ratio_chord_keel = tip_chord_keel/root_chord_keel
-    ratio_chord_rudder = tip_chord_rudder/root_chord_rudder
+    # Taper ratio: ratio of the chord length at the tip to that at the root [-]
+    taper_ratio_keel = tip_chord_keel/root_chord_keel
+    taper_ratio_rudder = tip_chord_rudder/root_chord_rudder
 
     # Canoe body ratio [-]
     ratio_cb = 2*tc/(0.75*lwl)
@@ -217,11 +269,11 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
     kb_keel = span_keel*(2*tip_chord_keel + root_chord_keel)/(3*(tip_chord_keel + root_chord_keel))
     disp_keel = 0.6*span_keel*avg_thickness_keel*avg_chord_keel**2
 
-    # LCB and LCF [m]
+    # LCB and LCF measured from the stern's perpendicular [m]
     LCBfpp = lwl/2 + lcb 
     LCFfpp = lwl/2 + lcf
 
-    # Form coefficient
+    # Form coefficient [-]
     form_coeff_cb = 0.09
     if naca_keel == '6digit':
         form_coeff_keel = 2*(avg_thickness_keel) + 60*(avg_thickness_keel)**4
@@ -236,13 +288,13 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         form_coeff_rudder = 1.2*(avg_thickness_rudder) + 70*(avg_thickness_rudder)**4
         visc_rudder = 0.9
 
-    # Cross-flow drag coefficient
-    crossflow_coeff_rudder = 0.1 + 0.7*ratio_chord_rudder
+    # Cross-flow drag coefficient [-]
+    crossflow_coeff_rudder = 0.1 + 0.7*taper_ratio_rudder
     if chord_bulb_keel > 0:
         crossflow_coeff_keel = 0
     else:
-        crossflow_coeff_keel = 0.1 + 0.7*ratio_chord_keel      # faired tip
-        #crossflow_coeff_keel = 0.1 + 1.6*ratio_chord_keel    # squared tip
+        crossflow_coeff_keel = 0.1 + 0.7*taper_ratio_keel      # faired tip
+        # crossflow_coeff_keel = 0.1 + 1.6*taper_ratio_keel    # squared tip
 
 
     ### VELOCITY PREDICTION PROGRAMME
@@ -262,7 +314,6 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         # Froude number
         Fn = (velocity_boat)/(gravity * lwl)**0.5                   # Froude number hull [-]
         Fn_rudder = velocity_boat/(gravity*avg_chord_rudder)**0.5   # Froude number rudder [-]
-
         
         # Apparent wind calculation
         velocity_aw = (velocity_boat**2 + velocity_tw[t]**2 - 2*velocity_boat*velocity_tw[t]*np.cos(pi - leeway - angle_tw[u]))**0.5
@@ -275,27 +326,29 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
             heel = -heel
 
 
-        ### 2 LIFT FORCES
+        ### 2 LIFT FORCES AND MOMENTS
+        # Lift forces calculated according to Oossanen, 1993, page 27
         # A) Keel lift force
         angle_keel = np.arctan2(np.cos(heel)*np.sin(leeway), np.cos(leeway))
+        # Keel lift force influencing factors
         keel_linear_factor = 2*pi*visc_keel*aspect_ratio_keel/(2*visc_keel + np.cos(sweep_keel)*(4 + aspect_ratio_keel**2/(np.cos(sweep_keel))**4)**0.5)
         keel_quad_factor = crossflow_coeff_keel/aspect_ratio_keel
         keel_tip_factor = 1 - 0.135/aspect_ratio_keel**(2/3)        # faired tip
         #keel_tip_factor = 1                                        # squared tip
         keel_cb_factor = 1
-        diameter_bulb = 0
         keel_bulb_factor = (1 + 0.4*diameter_bulb/span_keel)**2
         keel_factor_total = keel_linear_factor*keel_tip_factor*keel_cb_factor*keel_bulb_factor + keel_quad_factor*abs(angle_keel)
+        # Keel lift force
         lift_keel = - 0.5*density_water*(velocity_boat**2)*angle_keel*lat_surface_keel*keel_factor_total
 
-        # B) Bulb lift
+        # B) Bulb lift force
         if chord_bulb_keel > 0 and surface_area_bulb > 0: 
             side_force_bulb = - 0.5*density_water*(velocity_boat**2)*(pi*diameter_bulb**2/2 + 1.8*surface_area_bulb*abs(angle_keel))*angle_keel
         else:
             side_force_bulb = 0
 
-        # B) Rudder lift force
-        # calculo do efeito de superficie livre sobre a ARe
+        # C) Rudder lift force
+        # Free-surface influence factor of the rudder
         fsr = 1 - 4*height_surface_rudder/(avg_chord_rudder)
         if fsr > 0:
             if Fn_rudder <= 0.5:
@@ -307,41 +360,40 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
             aspect_ratio_rudder = fsr*factor_aspect_ratio_rudder*(span_rudder**2/lat_surface_rudder)
         else:
             aspect_ratio_rudder = 2*(span_rudder**2/lat_surface_rudder)
-        
-        # reducao da velocidade do leme na esteira do veleiro (ref. Oossanen 4.3.10)
+        # Taylor wake fraction [-]
         w = 0.10 + 4.5*(tc/(height_surface_rudder + span_rudder))*cb*cp*bwl/(lwl*(7*cwp - 6*cb)*(2.8 - 1.8*cp))
-            
-        # angulo de ataque induzido e efetivo
+        # Induced flow angle at the keel [rad]
         angle_induced_keel = 1.5*(lead_rudder/(3*avg_chord_keel))**0.25*keel_factor_total*angle_keel/(pi*aspect_ratio_keel)
+        # Induced flow angle at the rudder due to the downwash of the keel [rad]
         angle_rudder_attack = - angle_induced_keel + np.arctan2(-np.cos(leeway)*np.sin(angle_rudder) + np.cos(heel)*np.sin(leeway)*np.cos(angle_rudder), np.cos(leeway)*np.cos(angle_rudder) + np.cos(heel)*np.sin(leeway)*np.sin(angle_rudder))
         angle_rudder_delta0 = angle_keel - angle_induced_keel
-
+        # Rudder lift force influencing factors
         rudder_linear_factor = 2*pi*visc_rudder*aspect_ratio_rudder/(2*visc_rudder + np.cos(sweep_rudder)*(4 + aspect_ratio_rudder**2/(np.cos(sweep_rudder))**4)**0.5)
         rudder_quad_factor = crossflow_coeff_rudder/aspect_ratio_rudder
         rudder_tip_factor = 1 - 0.135/aspect_ratio_rudder**(2/3)
         rudder_factor_total = rudder_linear_factor*rudder_tip_factor + rudder_quad_factor*abs(angle_rudder_attack)
         rudder_factor_delta0_total = rudder_linear_factor*rudder_tip_factor + rudder_quad_factor*abs(angle_rudder_delta0)
+        # Rudder lift force
         lift_rudder = - 0.5*density_water*((1 - w)*velocity_boat)**2*lat_surface_rudder*rudder_factor_total*angle_rudder_attack
         lift_rudder_delta0 = - 0.5 * density_water * ((1 - w) * velocity_boat)**2 * lat_surface_rudder * rudder_factor_delta0_total * angle_rudder_delta0
         
-        # C) Canoe body side force
-        side_force_cb = - 0.5*density_water*(velocity_boat**2)*(0.5*pi*tc**2 + 1.8*alcb*abs(angle_keel))*angle_keel
+        # D) Canoe body side force
+        side_force_cb = - 0.5*density_water*(velocity_boat**2)*(0.5*pi*tc**2 + 1.8*lat_surface_cb*abs(angle_keel))*angle_keel
 
-        # D) GZ estimation
-        # OOSSANEN, P. van. A concept exploration model for sailing yachts. Transactions of RINA, p. 17–28, 2003.
+        # D) GZ estimation (Oossanen, 2003)
         # coefficients b0 and b1 built as fitting polynomials from the plot provided in the paper above
         b0 = 8*10**(-10)*np.degrees(heel)**4 - 3*10**(-7)*np.degrees(heel)**3 + 4*10**(-5)*np.degrees(heel)**2 - 0.002*np.degrees(heel) + 0.0754
         b1 = 5*10**(-12)*np.degrees(heel)**5 - 4*10**(-9)*np.degrees(heel)**4 + 9*10**(-7)*np.degrees(heel)**3 + 9*10**(-5)*np.degrees(heel)**2 + 0.0038*np.degrees(heel) + 0.0153
         c1 = b0 + b1*(boa/bwl)**2*(tc/bwl)/cb
         BM = c1*bwl**2/tc
-        KB = tc*(5/6-cb/(3*cwp))    # WILSON, P. A. Basic Naval Architecture. Springer, 2017
+        KB = tc*(5/6-cb/(3*cwp))    # Wilson, 2018
         GZ = (KB + BM - KG)*np.sin(heel)
 
-        # Momento de endireitamento tranversal [kN*m]
+        # E) Righting moment [N*m]
+        # Momento de endireitamento tranversal [N*m]
         M_hull_trans = GZ*disp*density_water*gravity
 
-        # Momento de escora da tripulacao [kN*m]
-        # crew arm
+        # Righting moment of crew sitting on weather rail [N*m]
         factor_esc = 1
         if abs(angle_tw[u]) <= (pi/3):
             arm_crew = factor_esc*(0.475*boa - 0.305)
@@ -349,23 +401,23 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
             arm_crew = factor_esc*(0.475*boa - 0.305)*np.cos(abs(angle_tw[u])*3/2 - pi/2)
         else:
             arm_crew = 0
-        M_esc = np.sign(M_hull_trans)*abs(mass_crew*gravity*arm_crew*np.cos(heel))
+        M_crew = np.sign(M_hull_trans)*abs(mass_crew*gravity*arm_crew*np.cos(heel))
 
-        # Momento restaurador total [kN*m]
-        M_rest = M_hull_trans + M_esc
+        # Total righting moment
+        M_righting = M_hull_trans + M_crew
 
-        # D) Momento de Munk do casco
+        # F) Munk moment
+        # Slender bodies in near-axial flow experience a destabilising moment
         M_munk = - 0.9*disp*density_water*leeway*velocity_boat**2
 
-        # E) Centre of Effort (CE)
+        # G) Centre of Effort (CE)
         # Rudder hydrodynamic CE
-        CE_rudder_x = -lwl/2 - root_chord_rudder/4 - np.tan(sweep_rudder)*span_rudder/3*(1 + 2*ratio_chord_rudder)/(1 + ratio_chord_rudder)
-        CE_rudder_z = height_surface_rudder + span_rudder/3*(1 + 2*ratio_chord_rudder)/(1 + ratio_chord_rudder)
+        CE_rudder_x = -lwl/2 - root_chord_rudder/4 - np.tan(sweep_rudder)*span_rudder/3*(1 + 2*taper_ratio_rudder)/(1 + taper_ratio_rudder)
+        CE_rudder_z = height_surface_rudder + span_rudder/3*(1 + 2*taper_ratio_rudder)/(1 + taper_ratio_rudder)
         
         # Global hydrodynamic CE
         CE_hydro_x = CE_rudder_x + lead_rudder
         CE_hydro_z = 0.45*(span_keel + tc)
-
         
 
         ### 3 RESISTANCE CALCULATION
@@ -474,12 +526,12 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         # 3.4 Induced resistance
         # Fator de correcao para folios de carregamento nao-eliptico
         tr_cb = 0.3         # razao de afilamento do casco
-        sig_keel = aspect_ratio_keel*(0.012 - 0.057*ratio_chord_keel + 0.095*ratio_chord_keel**2 - 0.04*ratio_chord_keel**3)
-        sig_rudder = aspect_ratio_rudder*(0.012 - 0.057*ratio_chord_rudder + 0.095*ratio_chord_rudder**2 - 0.04*ratio_chord_rudder**3)
+        sig_keel = aspect_ratio_keel*(0.012 - 0.057*taper_ratio_keel + 0.095*taper_ratio_keel**2 - 0.04*taper_ratio_keel**3)
+        sig_rudder = aspect_ratio_rudder*(0.012 - 0.057*taper_ratio_rudder + 0.095*taper_ratio_rudder**2 - 0.04*taper_ratio_rudder**3)
         sig_cb = ratio_cb*(0.012 - 0.057*tr_cb + 0.095*tr_cb**2 - 0.04*tr_cb**3)
 
         # A) Canoe body
-        Ri_cb = (side_force_cb/np.cos(heel))**2*(1 + sig_cb)/(0.5*density_water*velocity_boat**2*alcb*pi*ratio_cb)
+        Ri_cb = (side_force_cb/np.cos(heel))**2*(1 + sig_cb)/(0.5*density_water*velocity_boat**2*lat_surface_cb*pi*ratio_cb)
         
         # B) Keel
         Ri_keel = ((lift_keel**2)*(1 + sig_keel))/(0.5*density_water*(velocity_boat**2)*lat_surface_keel*pi*aspect_ratio_keel)
@@ -551,43 +603,42 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
 
 
         ### 4 AERODYNAMIC MODELING
-        ### 4.1 Area and centre of effort
-        # A) Main sail
-        Am = 0.5*P*E
-        CEm = (0.39*P) + BAD
+        ### 4.1 Sail area and centre of effort
+        # A) Main sail (m)
+        Am = 0.5*height_mainsail*base_mainsail
+        CEm = (0.39*height_mainsail) + boom_heigth_deck
         
-        # B) Genoa (j) and Foretriangle (f)
+        # B) Jib (j) and Foretriangle (f)
         if sailset == 'main+genoa' or sailset == 'main+genoa+spinnaker':
-            Aj = LPG*(I**2 + J**2)**0.5/2
-            CEj = 0.39*I
-            Af = 0.5*I*J
+            Aj = perpendicular_jib*(height_foretriangle**2 + base_foretriangle**2)**0.5/2
+            CEj = 0.39*height_foretriangle
+            Af = 0.5*height_foretriangle*base_foretriangle
         else:
             Aj = 0
             CEj = 0
             Af = 0
         
-        # C) Spinnaker
+        # C) Spinnaker (s)
         if (sailset == 'main+spinnaker' and angle_tw[u] > (2*pi/3)) or (sailset == 'main+genoa+spinnaker' and angle_tw[u] > (2*pi/3)):
-            As = 1.15*SLp*J
-            CEs = 0.59*I
+            As = 1.15*length_spinnaker*base_foretriangle
+            CEs = 0.59*height_foretriangle
         else:
             As = 0
             CEs = 0
             
-        # D) Mizzen
-        Amz = 0.5*Pmz*Emz
-        CEmz = 0.39*Pmz + BADmz
+        # D) Mizzen (mz)
+        Amz = 0.5*height_mizzen*base_mizzen
+        Cbase_mizzen = 0.39*height_mizzen + boom_height_mizzen
 
-        # E) Area Nominal
+        # E) Nominal area
         An = Af + Am/1.16
 
-        # F) Centro de esforco em relacao ao deck
-        CE_sail = (CEm*Am +  CEj*Aj + CEs*As + CEmz*Amz)/An
+        # F) Centre of effort abode deck line
+        CE_sail = (CEm*Am +  CEj*Aj + CEs*As + Cbase_mizzen*Amz)/An
 
-        ### 4.2 Coeficientes de Lift e Drag de cada vela (procura e interpola os coeficientes)
+        ### 4.2 Interpolation of lift and drag coefficients for each sail
         angle_sail = np.arctan2(np.cos(heel)*np.sin(angle_aw), np.cos(angle_aw))
 
-        # 4.2.1 Coeficientes      
         # A) Main Full
         # coeficients of clm (y) and cdm (z)
         x = [0.0, 0.12211111, 0.157, 0.20933333, 1.04666667, 1.57, 2.09333333, 2.61666667, 3.14]
@@ -617,15 +668,15 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         KPj = 0.016
         KPs = 0.019
 
-        # Mast drag coefficient
-        coeff_drag_mast = 1.13*((boa*free_board) + (EHM*EMDC))/An 
+        # D) Mast drag coefficient
+        coeff_drag_mast = 1.13*((boa*free_board) + (height_mast*diameter_mast))/An 
 
-        # Lift and drag for all sails combined
+        # E) Lift and drag for all sails combined
         # sail aspect ratio
         if (angle_tw[u]) < (pi/3):
-            aspect_ratio_sail = (1.1*(EHM + free_board))**2/An
+            aspect_ratio_sail = (1.1*(height_mast + free_board))**2/An
         else:
-            aspect_ratio_sail = (1.1*EHM)**2/An
+            aspect_ratio_sail = (1.1*height_mast)**2/An
         if sailset == 'main' or sailset == 'main+genoa' or (sailset == 'main+spinnaker' and angle_tw[u] < (2*pi/3)) or (sailset == 'main+genoa+spinnaker' and angle_tw[u] < (2*pi/3)):
             coeff_lift = (Clm*Am + Clj*Aj)/An
             coeff_drag_par = (Cdm*Am + Cdj*Aj)/An
@@ -648,8 +699,8 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         CE_aero_z = - CE_sail - free_board
         heel = abs(heel)
 
-        ### 6 FORCES AND MOMENTS IN GLOBAL COORDINATES [X, Y, Z]
-        # 6.1 Coordinates matrix
+        ### 5 FORCES AND MOMENTS IN GLOBAL COORDINATES [X, Y, Z]
+        # 5.1 Coordinates matrix
         # A) Leeway
         Mrot_leeway = np.matrix([
             [np.cos(leeway), -np.sin(leeway), 0], 
@@ -693,7 +744,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
             [0, 0, 1]
         ])
 
-        # 6.2) Forces [N]
+        # 5.2) Forces [N]
         # A) Total resistance
         Rt_xyz = Mrot_leeway*np.array([Rt, 0, 0]).reshape(-1, 1)
         # B) Lift force keel
@@ -711,7 +762,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         # H) Sail drag force 
         drag_force_sail_xyz = Mrot_heel*Mrot_sail_heel*np.array([drag_force_sail, 0, 0]).reshape(-1, 1)
 
-        # 6.3) Centre of effort
+        # 5.3) Centre of effort
         # A) Aerodynamic CE
         CE_aero_xyz = Mrot_heel*np.array([CE_aero_x, 0, CE_aero_z]).reshape(-1, 1)
         # B) Hydrodynamic CE
@@ -719,48 +770,51 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         # C) Rudder hydrodynamic CE
         CE_rudder_xyz = Mrot_heel*np.array([CE_rudder_x, 0, CE_rudder_z]).reshape(-1, 1)
 
-        # 6.4) Moments
-        # A) Momento de munk 
+        # 5.4) Moments
+        # A) Munk Moment
         M_munk_xyz = np.array([0, 0, M_munk])
-        # B) Momento restaurador
-        M_rest_xyz = np.array([M_rest, 0, 0])
+
+        # B) Righting Moment
+        M_righting_xyz = np.array([M_righting, 0, 0])
+
         # C) Aerodrynamic moment
         x = [np.float(CE_aero_xyz[0]), np.float(CE_aero_xyz[1]), np.float(CE_aero_xyz[2])]
         y = [np.float(lift_force_sail_xyz[0]) + np.float(drag_force_sail_xyz[0]), np.float(lift_force_sail_xyz[1]) + np.float(drag_force_sail_xyz[0]), np.float(lift_force_sail_xyz[2]) + np.float(drag_force_sail_xyz[0])] 
         M_aero_xyz = np.cross(x,y)
+        
         # D) Hydrodynamic moment
         x = [np.float(CE_hydro_xyz[0]), np.float(CE_hydro_xyz[1]), np.float(CE_hydro_xyz[2])]
         y = [np.float(- Rt_xyz[0]) + np.float(lift_keel_xyz[0]) + np.float(lift_rudder_xyz[0]) + np.float(side_force_cb_xyz[0]) + np.float(side_force_bulb_xyz[0]), \
             np.float(- Rt_xyz[1]) + np.float(lift_keel_xyz[1]) + np.float(lift_rudder_xyz[1]) + np.float(side_force_cb_xyz[1]) + np.float(side_force_bulb_xyz[1]), \
             np.float(- Rt_xyz[2]) + np.float(lift_keel_xyz[2]) + np.float(lift_rudder_xyz[2]) + np.float(side_force_cb_xyz[2]) + np.float(side_force_bulb_xyz[2])]
         M_hydro_xyz = np.cross(x,y)
-        # D) Rudder moment
+        
+        # E) Rudder moment
         x = [np.float(CE_rudder_xyz[0]) - np.float(CE_hydro_xyz[0]), np.float(CE_rudder_xyz[1]) - np.float(CE_hydro_xyz[1]), np.float(CE_rudder_xyz[2]) - np.float(CE_hydro_xyz[2])]
         y = [np.float(lift_rudder_xyz[0]) - np.float(lift_rudder_delta0_xyz[0]), np.float(lift_rudder_xyz[1]) - np.float(lift_rudder_delta0_xyz[1]), np.float(lift_rudder_xyz[2]) - np.float(lift_rudder_delta0_xyz[2])]
         M_rudder_xyz = np.cross(x,y)
 
-        # 6.5 Resulting forces and moments
+        # 5.5 Resulting forces and moments
         forces_resulting = lift_force_sail_xyz + drag_force_sail_xyz + lift_keel_xyz + lift_rudder_xyz + side_force_cb_xyz + side_force_bulb_xyz - Rt_xyz
-        moments_resulting = M_munk_xyz + M_rest_xyz + M_aero_xyz + M_hydro_xyz + M_rudder_xyz
+        moments_resulting = M_munk_xyz + M_righting_xyz + M_aero_xyz + M_hydro_xyz + M_rudder_xyz
 
-        # 6.6 Equilibrium system to be solved for roll, ...
+        # 5.6 Equilibrium system to be solved for Surge, Sway, Roll, and Yaw, in this order
         equilibrium_system = np.array([np.float(forces_resulting[0]), np.float(forces_resulting[1]), np.float(moments_resulting[0]), np.float(moments_resulting[2])])
 
 
         return equilibrium_system
 
 
-    ### RUNNING THE VPP FOR EVERY WIND ANGLE AND SPEED
+    ### RUNNING THE VPP FOR EVERY COMBINATION OF WIND ANGLE AND WIND SPPED
     for t in range (0, np.size(velocity_tw), 1):
         for u in range (0, np.size(angle_tw), 1):
-            # solve for Powell hybrid method (hybr) ou Levenber-Marquart (lb)
-            #sol = optimize.least_squares(vpp_solve_main, initial_guess)
-            #sol = optimize.minimize(vpp_solve_main, initial_guess)
+            # solve for Powell hybrid method (hybr) or Levenber-Marquart (lb)
             sol = optimize.root(vpp_solve_main, initial_guess)
-            print(sol)
             velocity_boat_matrix[t, u] = abs(sol.x[0])
             angle_tw_matrix[t, u] = np.degrees(angle_tw[u])
-            #initial_guess[1] = abs(sol.x[1])
+            vmg_matrix[t, u] = abs(sol.x[0])*np.cos(abs(sol.x[1]) + angle_tw[u])
+            print(sol)
+            #initial_guess[0] = abs(sol.x[0])
 
     # Average velocity [kn]
     average_velocity = np.float(np.mean(velocity_boat_matrix))
@@ -785,10 +839,12 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
     # Export VPP data to json file
     velocity_boat_matrix_list = velocity_boat_matrix.tolist()
     angle_tw_matrix_list = angle_tw_matrix.tolist()
+    vmg_matrix_list = vmg_matrix.tolist()
 
     data_struct = {
         'velocity_boat_matrix_list': [NoIndent(elem) for elem in velocity_boat_matrix_list],
         'angle_tw_matrix_list': [NoIndent(elem) for elem in angle_tw_matrix_list],
+        'vmg_matrix_list': [NoIndent(elem) for elem in vmg_matrix_list],
     }
 
     with open('assets/data/vpp_results/veloc_hull_' + str(index) + '.json', 'w') as fp:
