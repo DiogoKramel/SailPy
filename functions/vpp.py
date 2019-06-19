@@ -3,9 +3,10 @@
 SETUP THE MODEL
 -------------------------
 A) Environmental parameters
-B) Delft coefficients
-C) True wind angle and velocity range 
-D) Derivated elementary dimensions
+B) True wind angle and velocity range 
+C) Initial guess
+D) Delft coefficients
+E) Derivated elementary dimensions
 
 -------------------------
 VPP MAIN ROUTINE
@@ -65,6 +66,7 @@ temp: temporary
 avg: average
 '''
 
+
 ### IMPORT PACKAGES
 import numpy as np                          # High-level mathematical functions
 from scipy import optimize                  # Optimization functions to solve the VPP's system of equations
@@ -78,18 +80,41 @@ from _ctypes import PyObj_FromPtr           # See https://stackoverflow.com/a/15
 def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, scb, KG, free_board, lead_rudder, lead_sail, \
     mass_crew, P, E, I, J, BAD, SLp, LPG, span_rudder, tip_chord_rudder, root_chord_rudder, tip_thickness_rudder, root_thickness_rudder, \
     sweep_rudder_deg, span_keel, tip_chord_keel, root_chord_keel, tip_thickness_keel, root_thickness_keel, sweep_keel_deg, \
-    naca_keel, naca_rudder, EHM, EMDC, height_surface_rudder, Pmz, Emz, BADmz, chord_bulb_keel, diameter_bulb, surface_area_bulb): 
+    naca_keel, naca_rudder, EHM, EMDC, height_surface_rudder, Pmz, Emz, BADmz, chord_bulb_keel, diameter_bulb, surface_area_bulb, 
+    minimum_tw_knots, maximum_tw_knots): 
     
 
     ### SETUP THE MODEL
     # A) Environmental parameters
-    density_water = 1025        # salt water density [kg/m3]
     density_air = 1.3           # air density [kg/m3]
-    ni = 1e-6                   # kynematic viscosity of water [m2/s]
+    density_water = 1025        # water density [kg/m3]
+    viscosity_water = 1e-6      # kynematic viscosity of water [m2/s]
     gravity = 9.80665           # gravity acceleration [m/s2]
     pi = np.pi                  # pi number
+
+    # B) True wind angle and velocity range 
+    step_angle = 5                                # true wind angle step [degrees] 
+    step_tw = 1.02889                             # true wind velocity step equivalent to 2 knots [m/s]
+    minimum_tw = minimum_tw_knots*0.514444        # true wind speed [m/s]
+    maximum_tw = maximum_tw_knots*0.514444
+    if (maximum_tw - minimum_tw) < step_tw:       # in case the range of wind speed is too low
+        step_tw = (maximum_tw - minimum_tw)*0.99
+
+    # Arrays for true wind angle and velocity 
+    angle_tw_deg = np.arange(30, 181, step_angle) # polar diagram ranging from 30 to 180 degrees
+    angle_tw = np.radians(angle_tw_deg)
+    velocity_tw = np.arange(minimum_tw, maximum_tw, step_tw)
+    
+    # Matrix to store the boat velocity for each true wind angle
+    angle_tw_matrix = np.zeros((np.size(velocity_tw), np.size(angle_tw_deg)))
+    velocity_boat_matrix = np.zeros((np.size(velocity_tw), np.size(angle_tw_deg)))
+
+    # C) Initial guess for solving the VPP 
+    # Velocity [m/s], leeway [rad], heel [rad], rudder angle [rad])
+    initial_guess = np.array([4, np.radians(5), np.radians(15) ,np.radians(-4)])
+    # initial_guess = np.array([4, np.radians(0), np.radians(20), np.radians(-10)])
  
-    # B) Delft coefficients for resistance estimation
+    # D) Delft coefficients for resistance estimation
     # Residual resistance - bare hull
     coefficient_residual_hull = [
         ['FroudeNo' 'a0' 'a1' 'a2' 'a3' 'a4' 'a5' 'a6' 'a7' 'a8'], 
@@ -151,28 +176,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         [0.45, 0.139240049, -0.142907914, 0.019939832, -0.000934437, 0.006308615, -0.000543945, 0.000457244, 0.578174665, -0.22452672, -0.390073693]
         ]
 
-    # C) True wind angle and velocity range 
-    step_angle = 5              # interval of wind angle evaluated [degrees] 
-    step_tw = 1.02889           # interval of wind velocity evaluated [m/s]
-    minimum_tw = 3.08667        # true wind speed [m/s] evaluated from 6 to 22 knots
-    maximum_tw = 11.31779
-
-    # Upwind: true wind angle from 30 to 180 degrees
-    if sailset == 'main' or sailset == 'main+genoa':
-        angle_tw_deg = np.arange(30, 181, step_angle)
-        initial_guess = np.array([4, np.radians(5), np.radians(15) ,np.radians(-4)])
-    
-    # Downwind (add spinnaker): true wind angle from 120 to 180 degrees
-    if sailset == 'main+spinnaker' or sailset == 'main+genoa+spinnaker':
-        angle_tw_deg = np.arange(120, 181, step_angle)
-        initial_guess = np.array([4, np.radians(0), np.radians(20), np.radians(-10)])
-    
-    velocity_tw = np.arange(minimum_tw, maximum_tw, step_tw)
-    angle_tw = np.radians(angle_tw_deg)
-    angle_tw_matrix = np.zeros((np.size(velocity_tw), np.size(angle_tw_deg)))
-    velocity_boat_matrix = np.zeros((np.size(velocity_tw), np.size(angle_tw_deg)))
-    
-    # D) Derivated elementary dimensions
+    # E) Derivated elementary dimensions
     # Displacement [m3]
     disp = cb*lwl*bwl*tc
 
@@ -180,7 +184,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
     awp = cwp*lwl*bwl
     # awp = lwl*bwl*(1.313*cp - 0.0857*cp*lwl/disp**(1/3) + 0.0371*lwl/disp**(1/3))
 
-    # Rudder and keel sweep angle [radians]
+    # Rudder and keel sweep angle [rad]
     sweep_rudder = np.radians(sweep_rudder_deg)
     sweep_keel = np.radians(sweep_keel_deg)
 
@@ -195,7 +199,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
     lat_surface_rudder = avg_chord_rudder*span_rudder
     surface_area_rudder = 2*lat_surface_rudder
 
-    # Rudder and keel average thickness [meters]
+    # Rudder and keel average thickness [m]
     avg_thickness_rudder = (tip_thickness_rudder + root_thickness_rudder)/2
     avg_thickness_keel = (tip_thickness_keel + root_thickness_keel)/2
 
@@ -203,17 +207,17 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
     ratio_chord_keel = tip_chord_keel/root_chord_keel
     ratio_chord_rudder = tip_chord_rudder/root_chord_rudder
 
-    # Canoe body ratio
+    # Canoe body ratio [-]
     ratio_cb = 2*tc/(0.75*lwl)
 
-    # Effective aspect ratio
+    # Effective aspect ratio [-]
     aspect_ratio_keel = 2*(span_keel+diameter_bulb/5)**2/lat_surface_keel
 
-    # Keel displacement and volumetric centre, if not provide
+    # Keel displacement and volumetric centre, if not provide [m3]
     kb_keel = span_keel*(2*tip_chord_keel + root_chord_keel)/(3*(tip_chord_keel + root_chord_keel))
     disp_keel = 0.6*span_keel*avg_thickness_keel*avg_chord_keel**2
 
-    # LCB and LCF
+    # LCB and LCF [m]
     LCBfpp = lwl/2 + lcb 
     LCFfpp = lwl/2 + lcf
 
@@ -368,10 +372,10 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         # 3.1 Viscous Resistance
         # A) Parameters
         # Reynolds number
-        reynolds_cb = (velocity_boat*0.7*lwl)/ni
-        reynolds_keel = (velocity_boat*avg_chord_keel)/ni
-        reynolds_rudder = (velocity_boat*avg_chord_rudder)/ni
-        reynolds_bulb = (velocity_boat*chord_bulb_keel)/ni
+        reynolds_cb = (velocity_boat*0.7*lwl)/viscosity_water
+        reynolds_keel = (velocity_boat*avg_chord_keel)/viscosity_water
+        reynolds_rudder = (velocity_boat*avg_chord_rudder)/viscosity_water
+        reynolds_bulb = (velocity_boat*chord_bulb_keel)/viscosity_water
 
         # Friction coefficient
         friction_coeff_cb = (0.075/((np.log(reynolds_cb)/np.log(10)) - 2)**2) - (1800/reynolds_cb)
@@ -553,7 +557,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         CEm = (0.39*P) + BAD
         
         # B) Genoa (j) and Foretriangle (f)
-        if sailset == 'main+genoa':
+        if sailset == 'main+genoa' or sailset == 'main+genoa+spinnaker':
             Aj = LPG*(I**2 + J**2)**0.5/2
             CEj = 0.39*I
             Af = 0.5*I*J
@@ -563,7 +567,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
             Af = 0
         
         # C) Spinnaker
-        if sailset == 'main+spinnaker' or sailset == 'main+genoa+spinnaker':
+        if (sailset == 'main+spinnaker' and angle_tw[u] > (2*pi/3)) or (sailset == 'main+genoa+spinnaker' and angle_tw[u] > (2*pi/3)):
             As = 1.15*SLp*J
             CEs = 0.59*I
         else:
@@ -578,10 +582,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
         An = Af + Am/1.16
 
         # F) Centro de esforco em relacao ao deck
-        if sailset == 'main+genoa' or sailset == 'main+genoa+spinnaker' or sailset == 'main':
-            CE_sail = (CEm*Am + CEj*Aj + CEmz*Amz)/An
-        elif sailset == 'main+spinnaker':
-            CE_sail = (CEm*Am + CEs*As + CEmz*Amz)/An
+        CE_sail = (CEm*Am +  CEj*Aj + CEs*As + CEmz*Amz)/An
 
         ### 4.2 Coeficientes de Lift e Drag de cada vela (procura e interpola os coeficientes)
         angle_sail = np.arctan2(np.cos(heel)*np.sin(angle_aw), np.cos(angle_aw))
@@ -625,13 +626,13 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
             aspect_ratio_sail = (1.1*(EHM + free_board))**2/An
         else:
             aspect_ratio_sail = (1.1*EHM)**2/An
-        if sailset == 'main+genoa' or sailset == 'main':
+        if sailset == 'main' or sailset == 'main+genoa' or (sailset == 'main+spinnaker' and angle_tw[u] < (2*pi/3)) or (sailset == 'main+genoa+spinnaker' and angle_tw[u] < (2*pi/3)):
             coeff_lift = (Clm*Am + Clj*Aj)/An
             coeff_drag_par = (Cdm*Am + Cdj*Aj)/An
             coeff_drag_ind = (Clm**2*Am + Clj**2*Aj)/(An*pi*aspect_ratio_sail)
             coeff_drag_sep = (Clm**2*Am*KPm + Clj**2*Aj*KPj)/An
             coeff_drag_global = coeff_drag_par + coeff_drag_ind + coeff_drag_sep + coeff_drag_mast
-        elif sailset == 'main+spinnaker':
+        elif (sailset == 'main+spinnaker' or sailset == 'main+genoa+spinnaker') and angle_tw > (2*pi/3):
             coeff_lift = (Clm*Am + Cls*As)/An
             coeff_drag_par = (Cdm*Am + Cds*As)/An 
             coeff_drag_ind = (Clm**2*Am + Cls**2*As)/(An*pi*aspect_ratio_sail)
@@ -756,7 +757,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, alcb, 
             #sol = optimize.least_squares(vpp_solve_main, initial_guess)
             #sol = optimize.minimize(vpp_solve_main, initial_guess)
             sol = optimize.root(vpp_solve_main, initial_guess)
-            #print(sol)
+            print(sol)
             velocity_boat_matrix[t, u] = abs(sol.x[0])
             angle_tw_matrix[t, u] = np.degrees(angle_tw[u])
             #initial_guess[1] = abs(sol.x[1])
@@ -817,9 +818,9 @@ class MyEncoder(json.JSONEncoder):
         self._kwargs = {k: v for k, v in kwargs.items() if k not in ignore}
         super(MyEncoder, self).__init__(**kwargs)
 
-    #def default(self, obj):
-    #    return (self.FORMAT_SPEC.format(id(obj)) if isinstance(obj, NoIndent)
-    #                else super(MyEncoder, self).default(obj))
+    def default(self, obj):
+        return (self.FORMAT_SPEC.format(id(obj)) if isinstance(obj, NoIndent)
+                    else super(MyEncoder, self).default(obj))
 
     def iterencode(self, obj, **kwargs):
         format_spec = self.FORMAT_SPEC  # Local var to expedite accesss
