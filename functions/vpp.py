@@ -813,7 +813,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_su
             velocity_boat_matrix[t, u] = abs(sol.x[0])
             angle_tw_matrix[t, u] = np.degrees(angle_tw[u])
             vmg_matrix[t, u] = abs(sol.x[0])*np.cos(abs(sol.x[1]) + angle_tw[u])
-            print(sol)
+            #print(sol)
 
 
     # Average velocity [kn]

@@ -43,6 +43,7 @@ def update_output(n_clicks, offspringsplatypus, gamethod, weight1, weight2, wind
         optimization_platypus_vpp(offspringsplatypus, gamethod, windspeedrange, windanglerange)
         done = time.time()
         elapsed = done - start
+        
         file = open("assets/data/optimizationvpp.csv")
         numoffsprings = len(file.readlines()) - 1
         

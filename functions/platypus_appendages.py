@@ -45,7 +45,6 @@ def optimization_platypus_vpp(offspringsplatypus, gamethod, windspeedrange, wind
     cwpmin = np.float(dim["cwpmin"])
     cwpmax = np.float(dim["cwpmax"])
 
-
     dim_obj = codecs.open('assets/data/dimensions-appendages-limits.json', 'r', encoding='utf-8').read()
     dim = json.loads(dim_obj)
     fbmin = np.float(dim["fbmin"])
@@ -140,7 +139,7 @@ def optimization_platypus_vpp(offspringsplatypus, gamethod, windspeedrange, wind
         with open("assets/data/optimizationvpp.csv", "a") as file:
             writer = csv.writer(file, delimiter=',')
             writer.writerow(exportdata)
-        print(index)
+        #print(index)
 
         return resultados[0], resultados[2]
 
@@ -157,7 +156,6 @@ def optimization_platypus_vpp(offspringsplatypus, gamethod, windspeedrange, wind
         Real(badmin, badmax), Real(splmin, splmax), Real(lpgmin, lpgmax), \
         Real(ehmmin, ehmmax), Real(emdcmin, emdcmax), Real(hsrmin, hsrmax), Real(pmzmin, pmzmax), Real(emzmin, emzmax), \
         Real(badmzmin, badmzmax), Real(xceamin, xceamax)]
-
     problem.directions[:] = [Problem.MAXIMIZE, Problem.MAXIMIZE]
     problem.function = function_platypus_vpp
 
