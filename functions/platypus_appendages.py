@@ -10,10 +10,10 @@ from functions import vpp_solve
 def optimization_platypus_vpp(offspringsplatypus, gamethod, windspeedrange, windanglerange):
     
     # Clean the folder with previous results
-    folder = "assets/data/vpp_results/*"
-    files = glob.glob(folder)
-    for f in files:
-        os.remove(f)
+    #folder = "assets/data/vpp_results/*"
+    #files = glob.glob(folder)
+    #for f in files:
+    #    os.remove(f)
 
     # Adjust input data
     minimum_tw_knots = np.float(windspeedrange[0])
