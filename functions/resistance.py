@@ -179,20 +179,21 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, velocity_boat, h
     R_heel = R_viscous_heel + R_resid_heel
 
     # 2.4 Added resistance in waves
+    '''
     vector_addwave = np.zeros(10)
     if Fn > 0.45:
-        Fn_temp = 0.45
+        Fn_temp = 0.44
     if Fn < 0.20:
-        Fn_temp = 0.20
+        Fn_temp = 0.21
     else:
         Fn_temp = Fn
     for k in range(1, 6, 1):
-        if float(coefficient_addwave[k][0]) <= Fn_temp and Fn_temp <= float(coefficient_addwave[k + 1][0]):
-            GG = [float(coefficient_addwave[k][0]), float(coefficient_addwave[k + 1][0])]
-            for j in range(1, 11, 1):
-                HH = [float(coefficient_addwave[k][j]), float(coefficient_addwave[k + 1][j])]
-                vector_addwave[j - 1] = interpolate.interp1d(GG, HH)(Fn_temp)
-    vector_addwave[:] = [x / 1000 for x in vector_addwave]
+            if float(coefficient_addwave[k][0]) <= Fn_temp and Fn_temp <= float(coefficient_addwave[k + 1][0]):
+                GG = [float(coefficient_addwave[k][0]), float(coefficient_addwave[k + 1][0])]
+                for j in range(1, 11, 1):
+                    HH = [float(coefficient_addwave[k][j]), float(coefficient_addwave[k + 1][j])]
+                    vector_addwave[j - 1] = interpolate.interp1d(GG, HH)(Fn_temp)
+    
     if Fn_temp < 0.25:
         R_addwaves = 0
     else:
@@ -202,6 +203,8 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, velocity_boat, h
     
     wave_amplitude = 0.3
     R_addwaves = R_addwaves*gravity*density_water*lwl*wave_amplitude**2
+    '''
+    R_addwaves = 0
 
     # 2.5 Total resistance
     R_total = abs(R_viscous) + abs(R_resid) + abs(R_heel) + abs(R_addwaves)
@@ -217,12 +220,13 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, velocity_boat, h
         c1 = b0 + b1*(boa/bwl)**2*(tc/bwl)/cb
         BM = c1*bwl**2/tc
         KB = tc*(5/6 - cb/(3*cwp))  # Wilson, 2017
-        GZ[i] = (KB + BM - KG)*np.sin(heel_calc)
+        GZ[i] = (KB + BM - KG)*np.sin(np.radians(heel_calc[i]))
     GZ[1] = GZ[2]/2                 # GZ at 10 deg is half of GZ at 20 deg
     GZ[17] = GZ[16]/2               # GZ at 170 deg is half of GZ at 160 deg
     GZmax = max(GZ)
 
-    # Angle of Vanishing Stability 
+    # Angle of Vanishing Stability
+    AVS = 0
     for i in range (2, 17):
         if GZ[i] < 0 and GZ[i - 1] > 0:
             AVS = (heel_calc[i]*GZ[i - 1] + heel_calc[i - 1]*GZ[i])/(GZ[i] + GZ[i - 1])

@@ -135,7 +135,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_su
     perpendicular_jib, span_rudder, tip_chord_rudder, root_chord_rudder, tip_thickness_rudder, root_thickness_rudder, \
     sweep_rudder_deg, span_keel, tip_chord_keel, root_chord_keel, tip_thickness_keel, root_thickness_keel, sweep_keel_deg, \
     naca_keel, naca_rudder, height_mast, diameter_mast, height_surface_rudder, height_mizzen, base_mizzen, boom_height_mizzen, \
-    chord_bulb_keel, diameter_bulb, surface_area_bulb, minimum_tw_knots, maximum_tw_knots): 
+    chord_bulb_keel, diameter_bulb, surface_area_bulb, minimum_tw_knots, maximum_tw_knots, minimum_tw_angle, maximum_tw_angle): 
     
 
     ### SETUP THE MODEL
@@ -144,7 +144,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_su
     density_water = 1025        # water density [kg/m3]
     viscosity_water = 1e-6      # water kynematic viscosity [m2/s]
     gravity = 9.80665           # gravity acceleration [m/s2]
-
+    print(minimum_tw_knots, maximum_tw_knots, minimum_tw_angle, maximum_tw_angle)
     # B) True wind angle and velocity range 
     pi = np.pi                                       # pi number
     step_angle = 5                                   # true wind angle step [degrees] 
@@ -155,7 +155,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_su
         step_velocity = (maximum_tw - minimum_tw)*0.99
 
     # Arrays for true wind angle and velocity 
-    angle_tw_deg = np.arange(30, 181, step_angle)    # polar diagram ranging from 30 to 180 degrees
+    angle_tw_deg = np.arange(minimum_tw_angle, maximum_tw_angle, step_angle)    # polar diagram range
     angle_tw = np.radians(angle_tw_deg)
     velocity_tw = np.arange(minimum_tw, maximum_tw, step_velocity)
     

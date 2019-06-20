@@ -371,6 +371,7 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         # optimization process
         start = time.time()
         if typeoptimization == 'default':
+            json.dump({'cbmin': cbmin, 'cbmax': cbmax, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, }, codecs.open('assets/data/dimensions_hull_limits.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
             json.dump({'velocityrange': velocityrange, 'heelrange': heelrange, 'weight1': weight1, 'weight2': weight2, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
             result = optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, cbmin, cbmax, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus, dispmin)
         elif typeoptimization == 'custom':
