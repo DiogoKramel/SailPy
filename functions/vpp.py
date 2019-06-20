@@ -144,7 +144,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_su
     density_water = 1025        # water density [kg/m3]
     viscosity_water = 1e-6      # water kynematic viscosity [m2/s]
     gravity = 9.80665           # gravity acceleration [m/s2]
-    print(minimum_tw_knots, maximum_tw_knots, minimum_tw_angle, maximum_tw_angle)
+    
     # B) True wind angle and velocity range 
     pi = np.pi                                       # pi number
     step_angle = 5                                   # true wind angle step [degrees] 
