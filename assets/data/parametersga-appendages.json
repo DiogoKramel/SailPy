@@ -1,1 +1,1 @@
-{"gamethod": "NSGAII", "offspringsplatypus": 2, "weight1": 9, "weight2": 6.5, "windanglerange": [3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18], "windspeedrange": [6, 16]}
+{"gamethod": "NSGAII", "offspringsplatypus": "300", "weight1": 9, "weight2": 6.5, "windanglerange": [3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18], "windspeedrange": [6, 16]}

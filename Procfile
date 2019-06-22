@@ -1,2 +1,2 @@
 web: gunicorn index:server
-worker: python -u run-worker.py
+worker: celery -A tasks worker --loglevel=info

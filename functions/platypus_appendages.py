@@ -10,17 +10,16 @@ from functions import vpp_solve
 def optimization_platypus_vpp(offspringsplatypus, gamethod, windspeedrange, windanglerange):
     
     # Clean the folder with previous results
-    #folder = "assets/data/vpp_results/*"
-    #files = glob.glob(folder)
-    #for f in files:
-    #    os.remove(f)
+    folder = "assets/data/vpp_results/*"
+    files = glob.glob(folder)
+    for f in files:
+        os.remove(f)
 
     # Adjust input data
     minimum_tw_knots = np.float(windspeedrange[0])
     maximum_tw_knots = np.float(windspeedrange[1])+1
     minimum_tw_angle = np.float(windanglerange[0])*10
     maximum_tw_angle = np.float(windanglerange[1])*10+1
-    print(minimum_tw_knots, maximum_tw_knots, minimum_tw_angle, maximum_tw_angle)
 
     # Import dimensions
     dim_obj = codecs.open('assets/data/dimensions_hull_limits.json', 'r', encoding='utf-8').read()
