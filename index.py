@@ -7,18 +7,18 @@ import json, codecs
 import numpy as np
 import pandas as pd
 import os
-import redis
+#import redis
 
 from app import app
 from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages, optimizationappendages, resultsappendages, saildata
 
 server = app.server
 
-if "DYNO" in os.environ:
-    if bool(os.getenv("DASH_PATH_ROUTING", 0)):
-        app.config.requests_pathname_prefix = "/{}/".format(os.environ["DASH_APP_NAME"])
+#if "DYNO" in os.environ:
+#    if bool(os.getenv("DASH_PATH_ROUTING", 0)):
+#        app.config.requests_pathname_prefix = "/{}/".format(os.environ["DASH_APP_NAME"])
 
-redis_instance = redis.StrictRedis.from_url(os.environ["REDIS_URL"])
+#redis_instance = redis.StrictRedis.from_url(os.environ["REDIS_URL"])
 
 # logos and hyperlinks
 logoapp = html.Img(src='assets/static/logoappwhite.png', height='50px')
