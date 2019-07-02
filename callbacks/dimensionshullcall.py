@@ -50,16 +50,11 @@ def main_dimensions(loa):
     ])
 
 # Source: Illuminati
-@app.callback(Output('limits-lwl', 'children'), [Input('loa', 'value'), Input('boat-category', 'value')])
-def limits_lwl(loa, boat_category): 
-    if (boat_category == 'cruiser'):
-        lwlmin = (np.float(loa)*0.7-2)/3.2804
-        lwlest = (np.float(loa)*0.8)/3.2804
-        lwlmax = (np.float(loa)*0.9+1.079)/3.2804
-    elif (boat_category == 'racer'):
-        lwlmin = (np.float(loa)*0.8+1.079)/3.2804
-        lwlest = (np.float(loa)*0.92)/3.2804
-        lwlmax = (np.float(loa))/3.2804
+@app.callback(Output('limits-lwl', 'children'), [Input('loa', 'value')])
+def limits_lwl(loa): 
+    lwlmin = (np.float(loa)*0.7-2)/3.2804
+    lwlest = (np.float(loa)*0.8)/3.2804
+    lwlmax = (np.float(loa)*0.9+1.079)/3.2804
     return 'Minimum: {}'.format(round(lwlmin,2)), ' -- Recommended: {}'.format(round(lwlest,2)), ' -- Maximum: {}'.format(round(lwlmax,2))
 
 # Source: DELFT series
@@ -77,14 +72,10 @@ def limits_lcb(lwl):
     return 'Minimum: {} -'.format(round(lcbmin,2)), '- Maximum: {}'.format(round(lcbmax,2)),
 
 # Source: DELFT series
-@app.callback(Output('limits-tc', 'children'), [Input('loa', 'value'), Input('boat-category', 'value')])
-def limits_tc(loa, boat_category):
-    if (boat_category == 'cruiser'):
-        tcmin = ((np.float(loa)*0.8+1.079)/3.2804)/22
-        tcmax = ((np.float(loa)*0.7-2)/3.2804)/13
-    if (boat_category == 'racer'):
-        tcmin = ((np.float(loa)*0.8+1.079)/3.2804)/22
-        tcmax = ((np.float(loa)*0.7-2)/3.2804)/15
+@app.callback(Output('limits-tc', 'children'), [Input('loa', 'value')])
+def limits_tc(loa):
+    tcmin = ((np.float(loa)*0.8+1.079)/3.2804)/22
+    tcmax = ((np.float(loa)*0.7-2)/3.2804)/13
     return 'Minimum: {} -'.format(round(tcmin,2)),'- Maximum: {}'.format(round(tcmax,2))
 
 
