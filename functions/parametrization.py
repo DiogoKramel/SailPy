@@ -189,7 +189,7 @@ def keel_solve(lwl, tc, angle_keel_bow, angle_keel_stern):
         return f1, f2, f3
 
     x0 = np.array([lwl*0.2, lwl*0.8, -tc])
-    bds = ([0, lwl*0.4], [lwl*0.6, 0], [0, -3*tc])
+    bds = ([0, lwl*0.6, -3*tc], [lwl*0.5, lwl, 0])
     res = least_squares(keel, x0, bounds = bds, xtol = 0.1)
     xp1, xp2, yp1 = res.x[0], res.x[1], res.x[2]
     yp2 = yp1
