@@ -17,24 +17,15 @@ from functions import keel_solve, sac_solve, section_solve, wl_solve
 def loa_ft(loa):
     return ': {} ft'.format(loa)
 
-@app.callback(Output('main-dimensions', 'children'), [Input('boat-category', 'value'), Input('loa', 'value')])
-def main_dimensions(boatcategory, loa):
-    if boatcategory == 'cruiser':
-        lwl = loa*0.3048*0.85
-        #bwl = lwl/3.219
-        bwl = 0.115*lwl+2.1667
-        if lwl < 10:
-            bwl = 0.155*lwl+2.1667
-        #tc = bwl/4.324
-        tc = lwl/18
-        lcb = (50-3.29)/100*lwl
-        lcf = (50-6.25)/100*lwl
-    if boatcategory == 'racer':
-        lwl = loa*0.3048
-        bwl = lwl/3.155
-        tc = bwl/3.992
-        lcb = (50-2.29)/100*lwl
-        lcf = (50-3.33)/100*lwl
+@app.callback(Output('main-dimensions', 'children'), [Input('loa', 'value')])
+def main_dimensions(loa):
+    lwl = loa*0.3048*0.85
+    bwl = 0.115*lwl+2.1667
+    if lwl < 10:
+        bwl = 0.155*lwl+2.1667
+    tc = lwl/18
+    lcb = (50-3.29)/100*lwl
+    lcf = (50-6.25)/100*lwl
     return html.Details([
         html.Summary('Main Dimensions'),
         html.Div([
@@ -56,77 +47,6 @@ def main_dimensions(boatcategory, loa):
             dbc.Input(type='text', id='beamtransom', bs_size='sm', value='0'),
             html.Br(),
         ], className='regularfont'),
-    ])
-
-@app.callback(Output('form-coefficients', 'children'), [Input('boat-category', 'value')])
-def form_coefficients(boatcategory):
-    # estimations from DELFT series based on Sysser parent models #44 and #1
-    if boatcategory == 'cruiser':
-        cm = 0.72
-        cb = 0.39
-        cwp = 0.7
-    if boatcategory == 'racer':
-        cm = 0.65
-        cb = 0.31
-        cwp = 0.7
-    return html.Details([
-        html.Summary('Form Coefficients'),
-        html.Div([
-            dbc.Label('Midsection Coefficient'),
-            dcc.Slider(
-                id='cm',
-                min=0.65,
-                max=0.78,
-                value=cm,
-                step=0.01,
-                marks={0.65: '0.65', 0.68: '0.68', 0.71: '0.71', 0.74: '0.74', 0.78: '0.78'}
-            ),
-            html.Br(),
-            dbc.Label('Block Coefficient'),
-            dcc.Slider(
-                id='cb',
-                min=0.3,
-                max=0.4,
-                value=cb,
-                step=0.01,
-                marks={0.3: '0.3', 0.32: '0.32', 0.34: '0.34', 0.36: '0.36', 0.38: '0.38', 0.4: '0.4'}
-            ),
-            html.Br(),
-            dbc.Label('Waterplane Area Coefficient'),
-            dcc.Slider(
-                id='cwp',
-                min=0.68,
-                max=0.71,
-                value=cwp,
-                step=0.01,
-                marks={0.68: '0.65', 0.69: '0.69', 0.70: '0.71', 0.71: '0.71'}
-            ),
-            html.Br(), html.Br()
-        ], className='regularfont')
-    ])
-
-@app.callback(Output('hull-adjustmetns', 'children'), [Input('boat-category', 'value')])
-def hull_adjustmetns(boatcategory):
-    # estimations from DELFT series based on Sysser parent models #44 and #1
-    # suggestion: adjust the values for very high and low overall lenghts
-    if boatcategory == 'cruiser':
-        angforesac = 5
-        angrearsac = 25
-        betan = 0
-    if boatcategory == 'racer':
-        angforesac = 5
-        angrearsac = 25
-        betan = 10
-    return html.Details([
-        html.Summary('Hull Adjustments'),
-        html.Div([
-            dbc.Label('SAC angle at the bow [degrees]'),
-            dbc.Input(type='text', id='alpha_f_sac', bs_size='sm', value='{}'.format(round(angforesac,2))),
-            dbc.Label('SAC angle at the stern [degrees]'),
-            dbc.Input(type='text', id='alpha_i_sac', bs_size='sm', value='{}'.format(round(angrearsac,2))),
-            dbc.Label('Hull bottom angle [degrees]'),
-            dbc.Input(type='text', id='beta_n', bs_size='sm', value='{}'.format(round(betan,2)))
-        ], className='regularfont')
     ])
 
 # Source: Illuminati

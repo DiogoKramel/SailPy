@@ -164,9 +164,9 @@ def create_wl(lcf, cwp, lwl, beamtransom, bwl):
         )
     }
 
-@app.callback(Output('insert-keel', 'figure'), [Input('lwl', 'value'), Input('tc', 'value')])
-def create_keel(lwl, tc):
-    keel_solution = keel_solve(np.float(lwl), np.float(tc)),
+@app.callback(Output('insert-keel', 'figure'), [Input('lwl', 'value'), Input('tc', 'value'), Input('angle_keel_bow', 'value'), Input('angle_keel_stern', 'value')])
+def create_keel(lwl, tc, angle_keel_bow, angle_keel_stern):
+    keel_solution = keel_solve(np.float(lwl), np.float(tc), np.float(angle_keel_bow), np.float(angle_keel_stern)),
     return {
         'data': [
             go.Scatter(
@@ -229,13 +229,13 @@ def create_keel(lwl, tc):
         )
     }
 
-@app.callback(Output('insert-section', 'figure'), [Input('lwl', 'value'), Input('beta_n', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('lcf', 'value'), Input('cwp', 'value')])
-def create_section(lwl, beta_n, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, bwl, tc, cm, lcf, cwp):
+@app.callback(Output('insert-section', 'figure'), [Input('lwl', 'value'), Input('beta_n', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('lcf', 'value'), Input('cwp', 'value'), Input('angle_keel_bow', 'value'), Input('angle_keel_stern', 'value')])
+def create_section(lwl, beta_n, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, bwl, tc, cm, lcf, cwp, angle_keel_bow, angle_keel_stern):
     sn_sections_sol = sac_solve(np.float(lwl), np.float(cb), np.float(lcb), np.float(alpha_f_sac), np.float(alpha_i_sac), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
     sn_sections = sn_sections_sol[0][6]
     bn_sections_sol = wl_solve(np.float(lcf), np.float(cwp), np.float(lwl), np.float(beamtransom), np.float(bwl))
     bn_sections = bn_sections_sol[6]
-    tn_sections_sol = keel_solve(np.float(lwl), np.float(tc))
+    tn_sections_sol = keel_solve(np.float(lwl), np.float(tc), np.float(angle_keel_bow), np.float(angle_keel_stern))
     tn_sections = tn_sections_sol[5]
     section_solution = section_solve(tn_sections, bn_sections, sn_sections, np.float(lwl), np.float(beta_n)),
     return {
