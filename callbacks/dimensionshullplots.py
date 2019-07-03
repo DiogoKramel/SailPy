@@ -170,23 +170,23 @@ def create_keel(lwl, tc, angle_keel_bow, angle_keel_stern):
     return {
         'data': [
             go.Scatter(
-                x = keel_solution[0][0],
-                y = keel_solution[0][1],
+                x = keel_solution[0],
+                y = keel_solution[1],
                 name = "Control points",
                 line = dict(dash = 'dash', color = "rgb(46, 117, 211)"),
                 marker = dict(color = "rgb(46, 117, 211)"),
-                cliponaxis = False,
+                #cliponaxis = False,
             ),
             go.Scatter(
-                x = keel_solution[0][2],
-                y = keel_solution[0][3],
+                x = keel_solution[2],
+                y = keel_solution[3],
                 mode = "lines",
                 name = "Spline",
                 line = dict(color= "rgba(236, 45, 45, 0.5)"),
                 fill = 'tozeroy'
             ),
             go.Scatter(
-                x = [keel_solution[0][4]],
+                x = [keel_solution[4]],
                 y = [-np.float(tc)],
                 text = ["Tc max"],
                 textposition = ["top center"],
@@ -222,22 +222,22 @@ def create_keel(lwl, tc, angle_keel_bow, angle_keel_stern):
                 "mirror": True,
                 "title": "Draft [m]",
                 "zeroline": False,
-                "range": [keel_solution[0][1][1]*1.2, 0],
+                "range": [keel_solution[1][1]*1.2, 0],
             },
             legend=dict(x=0, y=-0.6, orientation="h"),
             font=dict(size=10),
         )
     }
 
-@app.callback(Output('insert-section', 'figure'), [Input('lwl', 'value'), Input('beta_n', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('lcf', 'value'), Input('cwp', 'value'), Input('angle_keel_bow', 'value'), Input('angle_keel_stern', 'value')])
-def create_section(lwl, beta_n, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, bwl, tc, cm, lcf, cwp, angle_keel_bow, angle_keel_stern):
-    sn_sections_sol = sac_solve(np.float(lwl), np.float(cb), np.float(lcb), np.float(alpha_f_sac), np.float(alpha_i_sac), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm)),
-    sn_sections = sn_sections_sol[0][6]
+@app.callback(Output('insert-section', 'figure'), [Input('lwl', 'value'), Input('beta_n', 'value'), Input('beta_n2', 'value'), Input('cb', 'value'), Input('lcb', 'value'), Input('alpha_f_sac', 'value'), Input('alpha_i_sac', 'value'), Input('beamtransom', 'value'), Input('bwl', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('lcf', 'value'), Input('cwp', 'value'), Input('angle_keel_bow', 'value'), Input('angle_keel_stern', 'value')])
+def create_section(lwl, beta_n, beta_n2, cb, lcb, alpha_f_sac, alpha_i_sac, beamtransom, bwl, tc, cm, lcf, cwp, angle_keel_bow, angle_keel_stern):
+    sn_sections_sol = sac_solve(np.float(lwl), np.float(cb), np.float(lcb), np.float(alpha_f_sac), np.float(alpha_i_sac), np.float(beamtransom), np.float(bwl), np.float(tc), np.float(cm))
+    sn_sections = sn_sections_sol[6]
     bn_sections_sol = wl_solve(np.float(lcf), np.float(cwp), np.float(lwl), np.float(beamtransom), np.float(bwl))
     bn_sections = bn_sections_sol[6]
     tn_sections_sol = keel_solve(np.float(lwl), np.float(tc), np.radians(np.float(angle_keel_bow)), np.radians(np.float(angle_keel_stern)))
     tn_sections = tn_sections_sol[5]
-    section_solution = section_solve(tn_sections, bn_sections, sn_sections, np.float(lwl), np.float(beta_n)),
+    section_solution = section_solve(tn_sections, bn_sections, sn_sections, np.float(lwl), np.float(beta_n), np.float(beta_n2))
     return {
         'data': [
             go.Scatter(

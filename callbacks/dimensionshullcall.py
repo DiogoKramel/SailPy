@@ -186,8 +186,8 @@ def test_feasibility(cwp, bwl, lwl, cb, tc, cm):
     return dbc.Alert('{}'.format(alert), color='{}'.format(successfail), style={'padding': '5pt'})
 
 style={}
-@app.callback(Output('other-dimensions', 'children'), [Input('lwl','value'), Input('bwl','value'), Input('cb', 'value'), Input('cwp', 'value'), Input('lcf', 'value'), Input('lcb', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('beta_n', 'value')])
-def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
+@app.callback(Output('other-dimensions', 'children'), [Input('lwl','value'), Input('bwl','value'), Input('cb', 'value'), Input('cwp', 'value'), Input('lcf', 'value'), Input('lcb', 'value'), Input('tc', 'value'), Input('cm', 'value'), Input('beta_n', 'value'), Input('beta_n2', 'value')])
+def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n, beta_n2):
     cwp = np.float(cwp)
     cm = np.float(cm)
     cb = np.float(cb)
@@ -252,7 +252,7 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n):
     #coefficient to estimate alcb during resistance calculation
     alcb_coefficient = alcb/(lwl*tc)
     
-    json.dump({'alcb': alcb, 'lwl': lwl, 'disp': disp, 'awp': awp, 'lcf': lcf, 'lcb': lcb, 'tc': tc, 'beta_n': beta_n, 'cwp': cwp, 'cb': cb, 'cm': cm, 'cp': cp, 'bwl': bwl, 'scb': scb, 'am': am, 'itwp': itwp, 'bmt': bmt, 'kb': kb, 'kg': kg, 'gmt': gmt, 'gmlong': gmlong, 'alcb_coefficient': alcb_coefficient}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    json.dump({'alcb': alcb, 'lwl': lwl, 'disp': disp, 'awp': awp, 'lcf': lcf, 'lcb': lcb, 'tc': tc, 'beta_n': beta_n, 'beta_n2': beta_n2, 'cwp': cwp, 'cb': cb, 'cm': cm, 'cp': cp, 'bwl': bwl, 'scb': scb, 'am': am, 'itwp': itwp, 'bmt': bmt, 'kb': kb, 'kg': kg, 'gmt': gmt, 'gmlong': gmlong, 'alcb_coefficient': alcb_coefficient}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     
     data = {'Parameters' : ['Displacement', 'Waterplane Area', 'Canoe Body Lateral Area', 'Wetted Surface Area', 'Transverse Moment of Inertia', 'Metacentric Radius', 'Vertical Centre of Buoyancy (KB)', 'Metacentric Height (GM)'], 'Values' : [round(disp,2), round(awp,2), round(alcb,2), round(scb,2), round(itwp,2), round(bmt,2), round(kg,2), round(gmt,2)], 'Unit' : ['m3', 'm2', 'm2', 'm2', 'm4', 'm', 'm', 'm']}
     df = pd.DataFrame(data)
