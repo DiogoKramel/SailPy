@@ -7,7 +7,6 @@ import json, codecs
 import numpy as np
 import pandas as pd
 import os
-import redis
 
 from app import app
 from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages, optimizationappendages, resultsappendages, saildata
@@ -172,5 +171,4 @@ for css in external_css:
     app.css.append_css({'external_url': css})
 
 if __name__ == '__main__':
-    #app.run_server(debug=True)
-    app.run(host='0.0.0.0', port=os.environ.get('PORT', '5000'))
+    app.run_server(debug=True)
