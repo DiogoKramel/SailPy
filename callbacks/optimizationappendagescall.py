@@ -18,8 +18,6 @@ from functions import vpp
 from functions import optimization_deap_appendages
 from functions import optimization_platypus_vpp
 
-from tasks import optimize_appendages
-
 
 @app.callback(
     Output('resistance-weight-2', 'children'),
@@ -44,10 +42,8 @@ def update_output(n_clicks, offspringsplatypus, gamethod, weight1, weight2, wind
         
         start = time.time()
 
-        optimize_appendages(offspringsplatypus, gamethod, windspeedrange, windanglerange)
-        '''
         optimization_platypus_vpp(offspringsplatypus, gamethod, windspeedrange, windanglerange)
-        '''
+        
         done = time.time()
         elapsed = done - start
         

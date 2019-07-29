@@ -7,17 +7,21 @@ import json, codecs
 import numpy as np
 import pandas as pd
 import os
+<<<<<<< HEAD
+=======
+#import redis
+>>>>>>> a2f51e7de44ee4dd5ee09c151eab3b3b173f2f24
 
 from app import app
 from layouts import introduction, dimensionshull, optimizationhull, resultshulll, dimensionsappendages, optimizationappendages, resultsappendages, saildata
 
 server = app.server
 
-if "DYNO" in os.environ:
-    if bool(os.getenv("DASH_PATH_ROUTING", 0)):
-        app.config.requests_pathname_prefix = "/{}/".format(os.environ["DASH_APP_NAME"])
+#if "DYNO" in os.environ:
+#    if bool(os.getenv("DASH_PATH_ROUTING", 0)):
+#        app.config.requests_pathname_prefix = "/{}/".format(os.environ["DASH_APP_NAME"])
 
-redis_instance = redis.StrictRedis.from_url(os.environ["REDIS_URL"])
+#redis_instance = redis.StrictRedis.from_url(os.environ["REDIS_URL"])
 
 # logos and hyperlinks
 logoapp = html.Img(src='assets/static/logoappwhite.png', height='50px')
@@ -171,4 +175,9 @@ for css in external_css:
     app.css.append_css({'external_url': css})
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     app.run_server(debug=True)
+=======
+    app.run_server(debug=True)
+    #app.run(host='0.0.0.0', port=os.environ.get('PORT', '5000'))
+>>>>>>> a2f51e7de44ee4dd5ee09c151eab3b3b173f2f24

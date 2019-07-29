@@ -6,14 +6,12 @@ from scipy.optimize import least_squares        # solve the equations system
 import json, codecs                             # export as json
 
 
-################################################################################################################
-# 1. SAC CURVE
-################################################################################################################
+### 1 SECTIONAL AREA CURVE (SAC)
 def sac_solve(lwl, cb, lcb, alpha_f, alpha_i, b0, bwl, tc, cm):
-    disp =cb*lwl*bwl*tc
+    disp = cb*lwl*bwl*tc
     alpha_i_sac = np.radians(np.float(alpha_i))       # controls volume distribution inside the ship at the stern
     alpha_f_sac = np.radians(np.float(alpha_f))      # controls volume distribution inside the ship at the bow
-    xp0, xp4, yp0, yp4, = 0, lwl, b0, 0
+    xp0, xp4, yp0, yp4 = 0, lwl, 0, 0
     
     def sac(p):
         xp1_sac, xp2_sac, xp3_sac, yp1_sac, yp2_sac, yp3_sac = p
@@ -85,7 +83,7 @@ def sac_solve(lwl, cb, lcb, alpha_f, alpha_i, b0, bwl, tc, cm):
     x_sections = np.linspace(0, lwl, 12)       # first and last points are not representative
     interpolation_sac = si.interp1d(x_i, y_i, kind='quadratic')
     sn_sections = interpolation_sac(x_sections)
-    sn = max(y_i)
+    #sn = max(y_i)
     
     json.dump({'x_sac': x.tolist(), 'y_sac': y.tolist(), 'x_i_sac': x_i.tolist(), 'y_i_sac': y_i.tolist(), 'maxsac': maxsac.tolist(), 'maxsac_x': maxsac_x.tolist(), 'sn_sections': sn_sections.tolist()}, codecs.open('assets/data/sacsolution.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
     
@@ -97,7 +95,7 @@ def sac_solve(lwl, cb, lcb, alpha_f, alpha_i, b0, bwl, tc, cm):
 ################################################################################################################
 def wl_solve(lcf, cwp, lwl, b0, bwl):
     awp=cwp*bwl*lwl
-    xp0, yp0, xp1, xp3, yp3 = 0, b0, 0, lwl, 0
+    xp0, yp0, xp1, xp3, yp3 = 0, b0/2, 0, lwl, 0
     def wl(p):
         yp1_wl, yp2_wl, xp2_wl = p
         # create the spline
@@ -165,12 +163,13 @@ def wl_solve(lcf, cwp, lwl, b0, bwl):
 ################################################################################################################
 # 3. KEEL CURVE
 ################################################################################################################
-def keel_solve(lwl, tc):
-    xp0, yp0, xp3, yp3, xp2 = 0, 0, lwl, 0, 0.85*lwl
+def keel_solve(lwl, tc, angle_keel_bow, angle_keel_stern):
+    xp0, yp0, xp3, yp3 = 0, 0, lwl, 0
+    print(angle_keel_bow)
     def keel(p):
-        xp1_keel, yp1_keel = p
+        xp1_keel, xp2_keel, yp1_keel = p
         # create the spline
-        points_keel = np.array([[xp0, yp0], [xp1_keel, yp1_keel], [xp2, yp1_keel], [xp3, yp3]])
+        points_keel = np.array([[xp0, yp0], [xp1_keel, yp1_keel], [xp2_keel, yp1_keel], [xp3, yp3]])
         x_keel, y_keel = points_keel[:, 0], points_keel[:, 1]
         t_keel = range(len(points_keel))
         ipl_t_keel = np.linspace(0, len(points_keel)-1, 100)
@@ -181,16 +180,19 @@ def keel_solve(lwl, tc):
         y_list_keel = list(y_tup_keel)
         yl_keel = y_keel.tolist()
         y_list_keel[1] = yl_keel+[0, 0, 0, 0]
-        x_i_keel, y_i_keel = si.splev(ipl_t_keel, x_list_keel), si.splev(ipl_t_keel, y_list_keel)
+        #x_i_keel  = si.splev(ipl_t_keel, x_list_keel)
+        y_i_keel = si.splev(ipl_t_keel, y_list_keel)
         # evaluate the function
-        f1 = tc-max(-y_i_keel)
-        f2 = (xp1_keel*0.8+xp2)-lwl
-        return f1, f2
+        y_i_keel = y_i_keel*(-1)
+        f1 = tc - max(y_i_keel)
+        f2 = np.tan(angle_keel_stern) - np.tan(xp1_keel/tc)
+        f3 = np.tan(angle_keel_bow) - np.tan((lwl - xp2_keel)/tc)
+        return f1, f2, f3
 
-    x0 = np.array([lwl*0.2, -tc])
-    bds = ([0, -3*tc], [lwl/2, 0])
-    res = least_squares(keel, x0, bounds=bds, xtol=0.1)
-    xp1, yp1 = res.x[0], res.x[1]
+    x0 = np.array([lwl*0.2, lwl*0.8, -tc])
+    bds = ([0, lwl*0.6, -3*tc], [lwl*0.5, lwl, 0])
+    res = least_squares(keel, x0, bounds = bds, xtol = 0.1)
+    xp1, xp2, yp1 = res.x[0], res.x[1], res.x[2]
     yp2 = yp1
 
     # create the spline
@@ -201,10 +203,10 @@ def keel_solve(lwl, tc):
     x_tup, y_tup = si.splrep(t, x, k=3), si.splrep(t, y, k=3)
     x_list = list(x_tup)
     xl = x.tolist()
-    x_list[1] = xl+[0, 0, 0, 0]
+    x_list[1] = xl + [0, 0, 0, 0]
     y_list = list(y_tup)
     yl = y.tolist()
-    y_list[1] = yl+[0, 0, 0, 0]
+    y_list[1] = yl + [0, 0, 0, 0]
     x_i, y_i = si.splev(ipl_t, x_list), si.splev(ipl_t, y_list)
 
     # coordinates of the maximul draft
@@ -223,7 +225,7 @@ def keel_solve(lwl, tc):
     tn_sections[0] = 0
     tn_sections[len(tn_sections)-1] = 0
 
-    json.dump({'x_keel': x.tolist(), 'y_keel': y.tolist(), 'x_i_keel': x_i.tolist(), 'y_i_keel': y_i.tolist(), 'tnx': tnx.tolist(), 'tn_sections': tn_sections.tolist()}, codecs.open('assets/data/keelsolution.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    json.dump({'x_keel': x.tolist(), 'y_keel': y.tolist(), 'x_i_keel': x_i.tolist(), 'y_i_keel': y_i.tolist(), 'tnx': tnx.tolist(), 'tn_sections': tn_sections.tolist()}, codecs.open('assets/data/keelsolution.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys = True)
 
     return x, y, x_i, y_i, tnx, tn_sections
 
@@ -232,18 +234,18 @@ def keel_solve(lwl, tc):
 # 4. SECTIONS
 ################################################################################################################
 # create the coordinates for the sections in x, y and z axis
-def section_solve(tn_sections, bn_sections, sn_sections, lwl, beta_n):
+def section_solve(tn_sections, bn_sections, sn_sections, lwl, beta_n, beta_n2):
     x_sections = np.linspace(0, lwl, 12)
     pcon_yaxis = 10
-    kn = np.tan(np.radians(beta_n))
+    kn = np.arange(np.tan(np.radians(beta_n)), np.tan(np.radians(beta_n2))+0.01, (np.tan(np.radians(beta_n2)) - np.tan(np.radians(beta_n2)))/(pcon_yaxis))
     qn_sections, pn_sections = np.zeros(pcon_yaxis+1), np.zeros(pcon_yaxis+1)
     section_x_sections, section_y_sections, section_z_sections = [], [], []
     for n in range(1, pcon_yaxis+1):
-        qn_sections[n] = (tn_sections[n]-kn*bn_sections[n]/2)*(bn_sections[n]/2)*(tn_sections[n]*bn_sections[n]/2-sn_sections[n]/2-kn/2*(bn_sections[n]/2)**2)**(-1)-1
-        pn_sections[n] = (tn_sections[n]-kn*bn_sections[n]/2)/(bn_sections[n]/2)**qn_sections[n]
+        qn_sections[n] = (tn_sections[n]-kn[n]*bn_sections[n]/2)*(bn_sections[n]/2)*(tn_sections[n]*bn_sections[n]/2-sn_sections[n]/2-kn[n]/2*(bn_sections[n]/2)**2)**(-1)-1
+        pn_sections[n] = (tn_sections[n]-kn[n]*bn_sections[n]/2)/(bn_sections[n]/2)**qn_sections[n]
         section_x_sections.append([x_sections[n]] * 10)
         section_y_sections.append(np.linspace(0, bn_sections[n]/2, 25))
         if qn_sections[n]<0:      # INVESTIGAR POR QUE O QN[10] DÁ NEGATIVO?
             qn_sections[n]=qn_sections[n-1]
-        section_z_sections.append((kn*section_y_sections[n-1]+pn_sections[n]*section_y_sections[n-1]**qn_sections[n])-tn_sections[n])
+        section_z_sections.append((kn[n]*section_y_sections[n-1]+pn_sections[n]*section_y_sections[n-1]**qn_sections[n])-tn_sections[n])
     return section_x_sections, section_y_sections, section_z_sections
