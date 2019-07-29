@@ -14,6 +14,7 @@ from functions import keel_solve, sac_solve, section_solve, wl_solve
 
 @app.callback(Output('output-optimization', 'figure'), [Input('resultshullaxisy', 'value'), Input('resultshullaxisx', 'value')])
 def update_output(resultshullaxisy, resultshullaxisx):
+    
     # calculate pareto frontier
     def pareto_frontier(Xs, Ys, maxX = True, maxY = True):
         myList = sorted([[Xs[i], Ys[i]] for i in range(len(Xs))], reverse=maxX)
@@ -589,16 +590,15 @@ def update_graph(resultshullaxisy):
     constraint1 = df.constraint1.value_counts().loc[True]
     constraint2 = df.constraint2.value_counts().loc[True]
     #constraint3 = df.constraint3.value_counts().loc[True]
-    #constraint4 = df.constraint4.value_counts().loc[True]
+    constraint4 = df.constraint4.value_counts().loc[True]
     constraint5 = df.constraint5.value_counts().loc[True]
-    constraint6 = df.constraint6.value_counts().loc[True]
     return html.Div([
             dcc.Graph(
                 figure={
                     'data': [
                         go.Bar(
                             x=[1, 2, 3, 4],
-                            y=[constraint1, constraint2, constraint5, constraint6],
+                            y=[constraint1, constraint2, constraint4, constraint5],
                             name='Valid',
                         ),
                     ],
@@ -812,9 +812,9 @@ def insert_section_choosen(hoverData, alpha_f_sac2, alpha_i_sac2, beta_n2):
     sn_sections = sn_sections_sol[0][6]
     bn_sections_sol = wl_solve(np.float(lcf), np.float(cwp), np.float(lwl), np.float(beamtransom), np.float(bwl))
     bn_sections = bn_sections_sol[6]
-    tn_sections_sol = keel_solve(np.float(lwl), np.float(tc))
+    tn_sections_sol = keel_solve(np.float(lwl), np.float(tc), np.float(20), np.float(35))
     tn_sections = tn_sections_sol[5]
-    section_solution = section_solve(tn_sections, bn_sections, sn_sections, np.float(lwl), np.float(beta_n)),
+    section_solution = section_solve(tn_sections, bn_sections, sn_sections, np.float(lwl), np.float(beta_n), np.float(2)),
     return {
         'data': [
             go.Scatter(

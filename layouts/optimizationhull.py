@@ -36,7 +36,6 @@ optimizationhull = dbc.Container([
                 value='2', 
                 bs_size="sm", 
                 style={'width': 80}),
-			html.Div(id="disp-tc-min")
         ], className = "justify mt-4", md=6),
         dbc.Col([
             html.H4("Weighted Objectives"),

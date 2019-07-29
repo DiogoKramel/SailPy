@@ -255,6 +255,7 @@ def dimensions_limits(value):
         item = str(item)
         if item != "category":
             globals()[item] = np.float(dimensions[item])
+    displacement = lwl*bwl*tc*0.38
     return html.Div([
         dbc.Row([
             dbc.Col([
@@ -276,54 +277,60 @@ def dimensions_limits(value):
                 dbc.Input(value="{}".format(round(tc*1.15,2)), type='text', id='tc-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 ]),
 
+                dbc.Row(dbc.Label("Displacement [m3]")),
+                dbc.Row([
+                    dbc.Input(value="{}".format(round(displacement,2)), type='text', id='displac', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                ]),
+
+                dbc.Row(dbc.Label("Ballast Ratio [%]")),
+                dbc.Row([
+                    dbc.Input(value="{}".format(round(40,2)), type='text', id='ballast-ratio', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                ]),
+
+            ]),
+            dbc.Col([
                 dbc.Row([dbc.Label("LCB")]),
                 dbc.Row([dbc.Input(value="{}".format(round(lwl*0.418,2)), type='text', id='lcb-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 html.P("{}m".format(round(lcb,2)), style={'display': 'inline-block', 'padding': '5px'}),
                 dbc.Input(value="{}".format(round(lwl*0.5,2)), type='text', id='lcb-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 ]),
-                
+
                 dbc.Row(dbc.Label("LCF")),
                 dbc.Row([
                     dbc.Input(value="{}".format(round(lwl*0.405,2)), type='text', id='lcf-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                     html.P("{}m".format(round(lcf,2)), style={'display': 'inline-block', 'padding': '5px'}),
                     dbc.Input(value="{}".format(round(lwl*0.482,2)), type='text', id='lcf-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                ])
-
-            ]),
-            dbc.Col([
-                dbc.Row(dbc.Label("Block Coefficient (Cb)")),
-                dbc.Row([
-                    dbc.Input(value="{}".format(round(0.35,2)), type='text', id='cb-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                    html.P(" - ", style={'display': 'inline-block', 'padding': '5px'}),
-                    dbc.Input(value="{}".format(round(0.4,2)), type='text', id='cb-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 ]),
+
                 dbc.Row(dbc.Label("Waterplane Coefficient (Cwp)")),
                 dbc.Row([
                     dbc.Input(value="{}".format(round(0.68,2)), type='text', id='cwp-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                     html.P(" - ", style={'display': 'inline-block', 'padding': '5px'}),
                     dbc.Input(value="{}".format(round(0.71,2)), type='text', id='cwp-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 ]),
+
                 dbc.Row(dbc.Label("Prismatic Coefficient (Cp)")),
                 dbc.Row([
                     dbc.Input(value="{}".format(round(0.52,2)), type='text', id='cp-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                     html.P(" - ", style={'display': 'inline-block', 'padding': '5px'}),
                     dbc.Input(value="{}".format(round(0.6,2)), type='text', id='cp-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 ]),
+
                 dbc.Row(dbc.Label("Midship Area Coefficient (Cm)")),
                 dbc.Row([
                     dbc.Input(value="{}".format(round(0.65,2)), type='text', id='cm-min', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                     html.P(" - ", style={'display': 'inline-block', 'padding': '5px'}),
                     dbc.Input(value="{}".format(round(0.78,2)), type='text', id='cm-max', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
-                ])
+                ]),
             ])
         ])
     ])
 
-@app.callback(Output('output-button', 'children'), [Input('export-ga', 'n_clicks')], [State('pop-size', 'value'), State('children-size', 'value'), State('max-generation', 'value'), State('mut-prob', 'value'), State('halloffame-number', 'value'), State('indpb-value', 'value'), State('eta_value', 'value'), State('weight1', 'value'), State('weight2', 'value'), State('velocity-range', 'value'), State('heel-range', 'value'), State('lwl-min', 'value'), State('lwl-max', 'value'), State('bwl-min', 'value'), State('bwl-max', 'value'), State('tc-min', 'value'), State('tc-max', 'value'), State('lcb-min', 'value'), State('lcb-max', 'value'), State('disp-min', 'value'), State('lcf-min', 'value'), State('lcf-max', 'value'), State('crossover-method', 'value'), State('mutation-method', 'value'), State('selection-method', 'value'), State('capsize-factor', 'value'), State('offsprings-platypus', 'value'), State('ga-method', 'value'), State('type-optimization', 'value'), State('cb-min', 'value'), State('cb-max', 'value'), State('cwp-min', 'value'), State('cwp-max', 'value'), State('cp-min', 'value'), State('cp-max', 'value'), State('cm-min', 'value'), State('cm-max', 'value')])
-def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, halloffamenumber, indpb, eta, weight1, weight2, velocityrange, heelrange, lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcbmin, lcbmax, dispmin, lcfmin, lcfmax, crossovermethod, mutationmethod, selectionmethod, capsizefactor, offspringsplatypus, gamethod, typeoptimization, cbmin, cbmax, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax):
+@app.callback(Output('output-button', 'children'), [Input('export-ga', 'n_clicks')], [State('pop-size', 'value'), State('children-size', 'value'), State('max-generation', 'value'), State('mut-prob', 'value'), State('halloffame-number', 'value'), State('indpb-value', 'value'), State('eta_value', 'value'), State('weight1', 'value'), State('weight2', 'value'), State('velocity-range', 'value'), State('heel-range', 'value'), State('lwl-min', 'value'), State('lwl-max', 'value'), State('bwl-min', 'value'), State('bwl-max', 'value'), State('tc-min', 'value'), State('tc-max', 'value'), State('lcb-min', 'value'), State('lcb-max', 'value'), State('lcf-min', 'value'), State('lcf-max', 'value'), State('crossover-method', 'value'), State('mutation-method', 'value'), State('selection-method', 'value'), State('capsize-factor', 'value'), State('offsprings-platypus', 'value'), State('ga-method', 'value'), State('type-optimization', 'value'), State('displac', 'value'), State('cwp-min', 'value'), State('cwp-max', 'value'), State('cp-min', 'value'), State('cp-max', 'value'), State('cm-min', 'value'), State('cm-max', 'value')])
+def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, halloffamenumber, indpb, eta, weight1, weight2, velocityrange, heelrange, lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcbmin, lcbmax, lcfmin, lcfmax, crossovermethod, mutationmethod, selectionmethod, capsizefactor, offspringsplatypus, gamethod, typeoptimization, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax):
     if n_clicks >= 1:
         with open('assets/data/optimizationresistance.csv','w') as fd:
-            fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,CS,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,constraint1,constraint2,constraint3,constraint4,constraint5,constraint6,valid"+"\n")
+            fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,CS,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,constraint1,constraint2,constraint3,constraint4,constraint5,valid"+"\n")
         
         # initial hull
         dim_obj = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
@@ -363,38 +370,22 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         boa = bwl*1.1
         dispmass = disp*1025
         cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
-        exportdata = [1, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), False, False, False, False, False, False, False]
-        with open("assets/data/optimizationresistance.csv", "a") as file:
+        exportdata = [1, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), False, False, False, False, False, False]
+        with open("assets/data/optimizationresistance.csv", "a", newline='') as file:
             writer = csv.writer(file, delimiter=',')
             writer.writerow(exportdata)
-        
+            
         # optimization process
         start = time.time()
         if typeoptimization == 'default':
-            json.dump({'cbmin': cbmin, 'cbmax': cbmax, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, }, codecs.open('assets/data/dimensions_hull_limits.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
+            json.dump({'displac': displac, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, }, codecs.open('assets/data/dimensions_hull_limits.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
             json.dump({'velocityrange': velocityrange, 'heelrange': heelrange, 'weight1': weight1, 'weight2': weight2, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
-            result = optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, cbmin, cbmax, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus, dispmin)
+            result = optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus)
         elif typeoptimization == 'custom':
-            json.dump({'cbmin': cbmin, 'cbmax': cbmax, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'capsize-factor': capsizefactor, 'gamethod': 'NSGA II', 'dispmin': dispmin}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
-            result = optimization_deap_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, cbmin, cbmax, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, dispmin)
+            json.dump({'displac': displac, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'capsize-factor': capsizefactor, 'gamethod': 'NSGA II'}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
+            result = optimization_deap_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax)
         done = time.time()
         elapsed = done-start
         file = open("assets/data/optimizationresistance.csv")
         numoffsprings = len(file.readlines())-1
         return html.Div(dbc.Alert("Optimization finished in {} seconds after generating {} offsprings".format(round(elapsed, 2), numoffsprings), color="success", style={'padding': '5px', 'display': 'inline-block'}))
-
-@app.callback(Output('disp-tc-min', 'children'), [Input('velocity-range', 'value')])
-def limits_lcb(lwl):
-    dimensionsobj = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
-    dimensions = json.loads(dimensionsobj)
-    lwl = np.float(dimensions["lwl"])
-    dispmin = (np.float(lwl)/5.5)**3
-    return html.Div([
-        dbc.Label("Minimum Displacement"),
-        dbc.Input(
-            type='text', 
-            id='disp-min', 
-            value=round(dispmin, 2), 
-            bs_size="sm", 
-            style={'width': 80}),
-    ])

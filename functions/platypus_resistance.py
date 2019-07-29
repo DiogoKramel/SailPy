@@ -6,11 +6,11 @@ from functions import resistance
 
 # more information here: https://platypus.readthedocs.io/en/latest/_modules/platypus/algorithms.html
 
-def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, cbmin, cbmax, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus, dispmin):
+def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus):
     
     def function_platypus(vars):
         # each vars[i] give one random number between the minimum and maximum limit for each parameter
-        lwl, bwl, tcan, lcf, lcb, cb, cwp, cp, cm = vars[0], vars[1], vars[2], vars[3], vars[4], vars[5], vars[6], vars[7], vars[8]
+        lwl, bwl, tcan, lcf, lcb, cwp, cp, cm = vars[0], vars[1], vars[2], vars[3], vars[4], vars[5], vars[6], vars[7]
 
         # import extra parameters
         dimensions = codecs.open('assets/data/dimensions.json', 'r', encoding='utf-8').read()
@@ -23,11 +23,13 @@ def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcma
 
         # calculate remaining parameters   
         alcb = lwl*alcb_coefficient*tcan
-        divcan = lwl*bwl*tcan*cb
+        divcan = np.float(displac)
         awp = bwl*lwl*cwp
         boa = bwl*1.1
         dispmass = divcan*1025
         cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
+        cb = divcan/(lwl*bwl*tcan)
+        
         
         # calculate the resistance for a combinantion of velocities and heel angle
         Rt, CR, Rv, Ri, Rr, Rincli, count = 0, 0, 0, 0, 0, 0, 0
@@ -55,25 +57,25 @@ def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcma
             constraint3 = True
         if (awp/divcan**(2/3)) > 12.67 or (awp/divcan**(2/3)) < 3.78:
             constraint4 = True
-        if divcan < dispmin:
-            constraint5 = True
         if cs > 2:
+            constraint5 = True
+        if cb < 0.35:
             constraint6 = True
         if constraint1==False and constraint2 == False and constraint3 == False and constraint4 == False and constraint5 == False and constraint6 == False:
             valid = True
 
         # export data to csv
-        exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, constraint6, valid]
-        with open("assets/data/optimizationresistance.csv", "a") as file:
+        exportdata = [index, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tcan, '.4f'), format(divcan, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), constraint1, constraint2, constraint3, constraint4, constraint5, valid]
+        with open("assets/data/optimizationresistance.csv", "a", newline='') as file:
             writer = csv.writer(file, delimiter=',')
             writer.writerow(exportdata)
         
-        # return 2 objectives and 2 restrictions
-        return [Rt, CR], [divcan-dispmin, cs-2, lwl/bwl-5, 2.73-lwl/bwl, bwl/tcan-6.5, 3.8-bwl/tcan]
+        # return 2 objectives and 5 restrictions
+        return [Rt, CR], [cs-2, lwl/bwl-5, 2.73-lwl/bwl, bwl/tcan-6.5, 3.8-bwl/tcan]
 
-    # optimize for 9 parameters, 2 objectives and 2 restrictions
-    problem = Problem(9, 2, 6)
-    problem.types[:] = [Real(lwlmin, lwlmax), Real(bwlmin, bwlmax), Real(tcmin, tcmax), Real(lcfmin, lcfmax), Real(lcbmin, lcbmax), Real(cbmin, cbmax), Real(cwpmin, cwpmax), Real(cpmin, cpmax), Real(cmmin, cmmax)]
+    # optimize for 9 parameters, 2 objectives and 5 restrictions
+    problem = Problem(8, 2, 5)
+    problem.types[:] = [Real(lwlmin, lwlmax), Real(bwlmin, bwlmax), Real(tcmin, tcmax), Real(lcfmin, lcfmax), Real(lcbmin, lcbmax), Real(cwpmin, cwpmax), Real(cpmin, cpmax), Real(cmmin, cmmax)]
     problem.directions[:] = [Problem.MINIMIZE, Problem.MAXIMIZE]
     problem.constraints[:] = "<0"
     problem.function = function_platypus

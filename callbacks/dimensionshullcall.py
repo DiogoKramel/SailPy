@@ -79,7 +79,6 @@ def limits_tc(loa):
     return 'Minimum: {} -'.format(round(tcmin,2)),'- Maximum: {}'.format(round(tcmax,2))
 
 
-
 @app.callback(Output('test-lwlbwl', 'children'), [Input('lwl', 'value'), Input('bwl', 'value')])
 def test_lwlbwl(lwl, bwl):
     lwlbwl = np.float(lwl)/np.float(bwl)

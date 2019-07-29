@@ -74,7 +74,7 @@ hull = dbc.Container([
 					dbc.Label('Keel curve angle at the stern [degrees]'),
 					dbc.Input(type='text', id='angle_keel_stern', bs_size='sm', value='{}'.format(round(35, 2))),
 					dbc.Label('Deadrise angle at the bow [degrees]'),
-					dbc.Input(type='text', id='beta_n', bs_size='sm', value='{}'.format(round(0, 2))),
+					dbc.Input(type='text', id='beta_n', bs_size='sm', value='{}'.format(round(15, 2))),
 					dbc.Label('Deadrise angle at the stern [degrees]'),
 					dbc.Input(type='text', id='beta_n2', bs_size='sm', value='{}'.format(round(0, 2))),
 				], className='regularfont')

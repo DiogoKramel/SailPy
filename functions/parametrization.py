@@ -185,8 +185,8 @@ def keel_solve(lwl, tc, angle_keel_bow, angle_keel_stern):
         # evaluate the function
         y_i_keel = y_i_keel*(-1)
         f1 = tc - max(y_i_keel)
-        f2 = np.tan(angle_keel_stern) - np.tan(xp1_keel/tc)
-        f3 = np.tan(angle_keel_bow) - np.tan((lwl - xp2_keel)/tc)
+        f2 = np.tan(np.radians(angle_keel_stern)) - np.tan(xp1_keel/tc)
+        f3 = np.tan(np.radians(angle_keel_bow)) - np.tan((lwl - xp2_keel)/tc)
         return f1, f2, f3
 
     x0 = np.array([lwl*0.2, lwl*0.8, -tc])
@@ -237,7 +237,9 @@ def keel_solve(lwl, tc, angle_keel_bow, angle_keel_stern):
 def section_solve(tn_sections, bn_sections, sn_sections, lwl, beta_n, beta_n2):
     x_sections = np.linspace(0, lwl, 12)
     pcon_yaxis = 10
-    kn = np.arange(np.tan(np.radians(beta_n)), np.tan(np.radians(beta_n2))+0.01, (np.tan(np.radians(beta_n2)) - np.tan(np.radians(beta_n2)))/(pcon_yaxis))
+    initial_tan = np.tan(np.radians(beta_n2))
+    final_tan = np.tan(np.radians(beta_n))
+    kn = np.linspace(initial_tan, final_tan, pcon_yaxis+1)
     qn_sections, pn_sections = np.zeros(pcon_yaxis+1), np.zeros(pcon_yaxis+1)
     section_x_sections, section_y_sections, section_z_sections = [], [], []
     for n in range(1, pcon_yaxis+1):
