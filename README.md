@@ -1,3 +1,5 @@
+[![DOI](https://sandbox.zenodo.org/badge/181073617.svg)](https://sandbox.zenodo.org/badge/latestdoi/181073617)
+
 # About SailPy
 
 **SailPy** is a Python application for conceptual sailboat design with an object-oriented paradigm. **SailPy**  implements several routines in order to optimize the dimensions of the hull and all appendages of a sailboat. 
