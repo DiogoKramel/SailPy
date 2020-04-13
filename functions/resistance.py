@@ -176,7 +176,7 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, velocity_boat, h
         R_resid_heel = R_resid_heel_20*6*abs(heel)**1.7
     
     # 2.3.3 Total resistance due to heel
-    R_heel = R_viscous_heel + R_resid_heel
+    R_heel = abs(R_viscous_heel) + abs(R_resid_heel)
 
     # 2.4 Added resistance in waves
     '''
