@@ -1,1 +1,1 @@
-{"gamethod": "NSGAII", "heelrange": [2, 3], "velocityrange": [3, 5], "weight1": 9, "weight2": 6.5}
+{"gamethod": "NSGAII", "heelrange": [2, 3], "velocityrange": [3, 5], "weight1": 5, "weight2": 5}

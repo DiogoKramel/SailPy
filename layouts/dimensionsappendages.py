@@ -49,26 +49,15 @@ appendages = dbc.Container([
         dbc.Col([
             html.H5("Hull"),
             dbc.Label("Free Board [m]"), html.Br(),
-            dbc.Input(type='text', id='freeboard-min', bs_size="sm", value=format(round(1,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='freeboard', bs_size="sm", value=format(round(1.3,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='freeboard-max', bs_size="sm", value=format(round(1.6,2)), className='boxmaximum'),
-
+            dbc.Input(type='text', id='freeboard', bs_size="sm", value=format(round(1.3,2)), className='boxinput'), html.Br(),
+            
             html.Div(id="dimension-boa"),
+            
             dbc.Label("Overhang [m]"), html.Br(),
-            dbc.Input(type='text', id='overhang-min', bs_size="sm", value=format(round(0.5,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='overhang', bs_size="sm", value=format(round(1,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='overhang-max', bs_size="sm", value=format(round(1.5,2)), className='boxmaximum'),
+            dbc.Input(type='text', id='overhang', bs_size="sm", value=format(round(1,2)), className='boxinput'), html.Br(),
 
             dbc.Label("Bow angle [deg]"), html.Br(),
-            dbc.Input(type='text', id='bowangle-min', bs_size="sm", value=format(round(0,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
             dbc.Input(type='text', id='bowangle', bs_size="sm", value=format(round(15,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='bowangle-max', bs_size="sm", value=format(round(30,2)), className='boxmaximum'),
             html.Br(),html.Br(),
             
             html.H5("Sail"),
@@ -110,11 +99,7 @@ appendages = dbc.Container([
             dbc.Input(type='text', id='crewmass', bs_size="sm", value=format(round(280,2)), className='boxinput'),
             html.Br(),
             dbc.Label("Ballast Ratio [%]"), html.Br(),
-            dbc.Input(type='text', id='ballast-ratio-min', bs_size="sm", value=format(round(26,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='ballast-ratio', bs_size="sm", value=format(round(28,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='ballast-ratio-max', bs_size="sm", value=format(round(58,2)), className='boxmaximum'),
+            dbc.Input(type='text', id='ballast-ratio', bs_size="sm", value=format(round(28,2)), className='boxinput'), html.Br(),
             
             dbc.Label("Keel Naca Profile"),
             dcc.Dropdown(
@@ -152,6 +137,7 @@ appendages = dbc.Container([
             html.H5("Side plan view"),
             html.Div(dcc.Graph(id='plot-appendages', style={'width': 'inherit'})),
             html.Br(), html.Br(),
+            #html.Div(dcc.Graph(id='polar-diagram2')),
             html.Div(id="dimension-loa"),
 			html.Br(), html.Br(),
             html.Div(id="dimension-area", style = {'width': '50%'} ),

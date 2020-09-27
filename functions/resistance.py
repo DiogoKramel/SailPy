@@ -32,7 +32,7 @@ import numpy as np                  # high-level mathematical functions
 from scipy import interpolate       # interpolatation methods applied to obtain the Delft coefficients
 
 
-def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, velocity_boat, heel_deg):
+def resistance(lwl, bwl, tc, cp, cm, cwp, disp, lcb, lcf, velocity_boat, heel_deg):
 
 
     # 1 SETUP THE MODEL
@@ -47,7 +47,7 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, velocity_boat, h
     coeff_form = 0.09                        # coefficient form [-]
     KG = 0.5                                 # estimative of centre of gravity [m]
     cb = disp/(lwl*bwl*tc)                   # block coefficient [-]
-    cwp = awp/(lwl*bwl)                      # waterplane coefficient [-]
+    awp = cwp*lwl*bwl                      # waterplane coefficient [-]
     loa = lwl*1.05                           # estimation adopted for overall lenght [m]
     boa = bwl*1.15                           # estimation adopted for maximmum beam [m]
     
@@ -150,7 +150,9 @@ def resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, velocity_boat, h
     else:
         Scbincl = wetted_surface_hull*(1 + 1/100*(vector_heel_viscous[0] + vector_heel_viscous[1]*bwl/tc + \
             vector_heel_viscous[2]*(bwl/tc)**2 + vector_heel_viscous[3]*cm))
-        R_viscous_heel = 0.5*density_water*velocity_boat**2*coeff_form*(1 + coeff_form)*Scbincl - R_viscous
+        reynolds_cb = (velocity_boat*0.7*lwl)/viscosity_water
+        friction_coeff_cb = (0.075/((np.log(reynolds_cb)/np.log(10)) - 2)**2) - (1800/reynolds_cb)
+        R_viscous_heel = 0.5*density_water*velocity_boat**2*friction_coeff_cb*Scbincl - R_viscous
 
     # 2.3.2 Residual additional resistance due to heel
     vector_heel_residual = np.zeros(6)

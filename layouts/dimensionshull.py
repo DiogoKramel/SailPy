@@ -4,7 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 from callbacks import dimensionshullcall
-from callbacks import dimensionshullplots
+# from callbacks import dimensionshullplots
 
 
 hull = dbc.Container([
@@ -13,93 +13,152 @@ hull = dbc.Container([
             html.H4('Main parameters'),
             html.P("Set the category and overall length that will serve to build the regressions for each of the dimensions below. First, the main linear dimensions can be set, later the form coefficients can be adjusted, and lastly refinements on the curvature are performed. Following how the plots behave, you can understand how your choices affect the hull."),
             html.P("Have in mind that the plots are mere representations and tend not to be accurate for extreme cases. Even if the sections are incongruent, you can advance once the limits are respected."),
-            dbc.FormGroup([
-                dbc.Label('Overall length'),
-                html.Div(id='loa-ft', style={'display': 'inline-block'}),
-                dcc.Slider(
-                    id='loa',
-                    min=20,
-                    max=55,
-                    value=40,
-                    step=1,
-                    marks={20: '20ft', 25: '25ft', 30: '30ft', 35: '35ft', 40: '40ft', 45: '45ft', 50: '50ft', 55: '55ft'},
-                ),
-                html.Br(),
-            ]),
-            html.Div(id='main-dimensions', style={'width': '75%'}),
-			html.Details([
-				html.Summary('Form Coefficients'),
-				html.Div([
-					dbc.Label('Midsection Coefficient'),
-					dcc.Slider(
-						id='cm',
-						min=0.65,
-						max=0.78,
-						value=0.7,
-						step=0.01,
-						marks={0.65: '0.65', 0.68: '0.68', 0.71: '0.71', 0.74: '0.74', 0.78: '0.78'}
-					),
-					html.Br(),
-					dbc.Label('Block Coefficient'),
-					dcc.Slider(
-						id='cb',
-						min=0.3,
-						max=0.4,
-						value=0.38,
-						step=0.01,
-						marks={0.3: '0.3', 0.32: '0.32', 0.34: '0.34', 0.36: '0.36', 0.38: '0.38', 0.4: '0.4'}
-					),
-					html.Br(),
-					dbc.Label('Waterplane Area Coefficient'),
-					dcc.Slider(
-						id='cwp',
-						min=0.68,
-						max=0.71,
-						value=0.7,
-						step=0.01,
-						marks={0.68: '0.65', 0.69: '0.69', 0.70: '0.71', 0.71: '0.71'}
-					),
-					html.Br(), html.Br()
-				], className='regularfont')
-			]),
-            html.Details([
-				html.Summary('Hull Adjustments'),
-				html.Div([
-					dbc.Label('SAC angle at the bow [degrees]'),
-					dbc.Input(type='text', id='alpha_f_sac', bs_size='sm', value='{}'.format(round(5, 2))),
-					dbc.Label('SAC angle at the stern [degrees]'),
-					dbc.Input(type='text', id='alpha_i_sac', bs_size='sm', value='{}'.format(round(25, 2))),
-					dbc.Label('Keel curve angle at the bow [degrees]'),
-					dbc.Input(type='text', id='angle_keel_bow', bs_size='sm', value='{}'.format(round(20, 2))),
-					dbc.Label('Keel curve angle at the stern [degrees]'),
-					dbc.Input(type='text', id='angle_keel_stern', bs_size='sm', value='{}'.format(round(35, 2))),
-					dbc.Label('Deadrise angle at the bow [degrees]'),
-					dbc.Input(type='text', id='beta_n', bs_size='sm', value='{}'.format(round(15, 2))),
-					dbc.Label('Deadrise angle at the stern [degrees]'),
-					dbc.Input(type='text', id='beta_n2', bs_size='sm', value='{}'.format(round(0, 2))),
-				], className='regularfont')
-			]),
+            #dbc.FormGroup([
+            #    dbc.Label('Overall length'),
+            #    html.Div(id='loa-ft', style={'display': 'inline-block'}),
+            #    dcc.Slider(
+            #        id='loa',
+            #        min=20,
+            #        max=55,
+            #        value=40,
+            #        step=1,
+            #        marks={20: '20ft', 25: '25ft', 30: '30ft', 35: '35ft', 40: '40ft', 45: '45ft', 50: '50ft', 55: '55ft'},
+            #    ),
+            #    html.Br(),
+            #]),
         ], className = 'justify', md=4),
         dbc.Col([
-            html.H4('Lines Drawing'),
-            html.Div(dcc.Graph(id='insert-sac', style={'width': 'inherit'})),
-            html.Br(),
-            html.Div(dcc.Graph(id='insert-wl', style={'width': 'inherit'})),
-            html.Br(),
-            html.Div(dcc.Graph(id='insert-keel', style={'width': 'inherit'})),
-            html.Br(),
-            html.Div(dcc.Graph(id='insert-section', style={'width': 'inherit'})),
-            html.Br(),
-            html.H4('Other calculations'),
-            html.Div(id='other-dimensions', className='regularfont', style={'width': '100%'}),
-            html.Br(),
-            html.H4('Testing fitness according to DELFT Series'),
-            html.Div(id='test-lwlbwl', className='regularfont'),
-            html.Div(id='test-bwltc', className='regularfont'),
-            html.Div(id='test-lwldisp', className='regularfont'),
-            html.Div(id='test-loadingfactor', className='regularfont'),
-        	html.Div(id='test-prismatic', className='regularfont'),
-            html.Div(id='test-feasibility', style={'display': 'block', 'text-align': 'center'}),
+			html.H4('Main Dimensions'),
+			html.Div([
+				dbc.Row([
+					dbc.Col([
+						html.H5('Boat #1'),
+						dbc.Label('Waterline Length [m]'),
+						dbc.Input(type='text', id='lwl', bs_size='sm', value='{}'.format(round(10,2))),
+						#html.Div(id='limits-lwl', className='limits'),
+						dbc.Label('Waterline Beam [m]'),
+						dbc.Input(type='text', id='bwl', bs_size='sm', value='{}'.format(round(3.17,2))),
+						dbc.Label('Draft Canoe Body [m]'),
+						dbc.Input(type='text', id='tc', bs_size='sm', value='{}'.format(round(0.57,2))),
+						dbc.Label('Displacement [m3]'),
+						dbc.Input(type='text', id='disp', bs_size='sm', value='{}'.format(round(8.17,2))),
+						#html.Div(id='limits-tc', className='limits'),
+						dbc.Label('Longitudinal Centre of Buoyancy (LCB) [m]'),
+						dbc.Input(type='text', id='lcb', bs_size='sm', value='{}'.format(round(5,2))),
+						#html.Div(id='limits-lcb', className='limits'),
+						dbc.Label('Longitudinal Centre of Flotation (LCF) [m]'),
+						dbc.Input(type='text', id='lcf', bs_size='sm', value='{}'.format(round(4,2))),
+						#html.Div(id='limits-lcf', className='limits'),
+						dbc.Label('Beam at the Transom [m]'),
+						dbc.Input(type='text', id='beamtransom', bs_size='sm', value='0'),
+						html.Br(),
+					], className = 'justify', md=5),
+					dbc.Col([], className = 'justify', md=2),
+					dbc.Col([
+						html.H5('Boat #2'),
+						dbc.Label('Waterline Length [m]'),
+						dbc.Input(type='text', id='lwl2', bs_size='sm', value='{}'.format(round(10,2))),
+						#html.Div(id='limits-lwl', className='limits'),
+						dbc.Label('Waterline Beam [m]'),
+						dbc.Input(type='text', id='bwl2', bs_size='sm', value='{}'.format(round(3.17,2))),
+						dbc.Label('Draft Canoe Body [m]'),
+						dbc.Input(type='text', id='tc2', bs_size='sm', value='{}'.format(round(0.57,2))),
+						dbc.Label('Displacement [m3]'),
+						dbc.Input(type='text', id='disp2', bs_size='sm', value='{}'.format(round(8.17,2))),
+						#html.Div(id='limits-tc', className='limits'),
+						dbc.Label('Longitudinal Centre of Buoyancy (LCB) [m]'),
+						dbc.Input(type='text', id='lcb2', bs_size='sm', value='{}'.format(round(5,2))),
+						#html.Div(id='limits-lcb', className='limits'),
+						dbc.Label('Longitudinal Centre of Flotation (LCF) [m]'),
+						dbc.Input(type='text', id='lcf2', bs_size='sm', value='{}'.format(round(4,2))),
+						#html.Div(id='limits-lcf', className='limits'),
+						dbc.Label('Beam at the Transom [m]'),
+						dbc.Input(type='text', id='beamtransom2', bs_size='sm', value='0'),
+						html.Br(),
+					], className = 'justify', md=5),
+				]),
+			], className='regularfont'),
+			html.H4('Form Coefficients'),
+			html.Div([
+				dbc.Row([
+					dbc.Col([
+						dbc.Label('Midsection Coefficient'),
+						dcc.Slider(
+							id='cm',
+							min=0.65,
+							max=0.78,
+							value=0.7,
+							step=0.01,
+							marks={0.65: '0.65', 0.68: '0.68', 0.71: '0.71', 0.74: '0.74', 0.78: '0.78'}
+						),
+						html.Br(),
+						dbc.Label('Prismatic Coefficient'),
+						dcc.Slider(
+							id='cp',
+							min=0.52,
+							max=0.6,
+							value=0.58,
+							step=0.01,
+							marks={0.52: '0.52', 0.54: '0.54',0.56: '0.56', 0.58: '0.58', 0.60: '0.60'}
+						),
+						html.Br(),
+						dbc.Label('Waterplane Area Coefficient'),
+						dcc.Slider(
+							id='cwp',
+							min=0.65,
+							max=0.9,
+							value=0.75,
+							step=0.01,
+							marks={0.65: '0.65', 0.70: '0.70', 0.80: '0.80', 0.90: '0.90'}
+						),
+					], className = 'justify', md=5),
+					dbc.Col([], className = 'justify', md=2),
+					dbc.Col([
+						dbc.Label('Midsection Coefficient'),
+						dcc.Slider(
+							id='cm2',
+							min=0.65,
+							max=0.78,
+							value=0.7,
+							step=0.01,
+							marks={0.65: '0.65', 0.68: '0.68', 0.71: '0.71', 0.74: '0.74', 0.78: '0.78'}
+						),
+						html.Br(),
+						dbc.Label('Prismatic Coefficient'),
+						dcc.Slider(
+							id='cp2',
+							min=0.52,
+							max=0.6,
+							value=0.58,
+							step=0.01,
+							marks={0.52: '0.52', 0.54: '0.54',0.56: '0.56', 0.58: '0.58', 0.60: '0.60'}
+						),
+						html.Br(),
+						dbc.Label('Waterplane Area Coefficient'),
+						dcc.Slider(
+							id='cwp2',
+							min=0.65,
+							max=0.90,
+							value=0.75,
+							step=0.01,
+							marks={0.65: '0.65', 0.70: '0.70', 0.80: '0.80', 0.90: '0.90'}
+						),
+					], className = 'justify', md=5),
+				]),
+			], className='regularfont'),
+			html.Br(),html.Br(),
+			html.H4('Resistance comparison'),
+			html.Div(dcc.Graph(id='resistance-comparison')),
+            #html.H4('Other calculations'),
+            #html.Div(id='other-dimensions', className='regularfont', style={'width': '100%'}),
+            #html.Br(),
+            #html.H4('Testing fitness according to DELFT Series'),
+            #html.Div(id='test-lwlbwl', className='regularfont'),
+            #html.Div(id='test-bwltc', className='regularfont'),
+            #html.Div(id='test-lwldisp', className='regularfont'),
+            #html.Div(id='test-loadingfactor', className='regularfont'),
+        	#html.Div(id='test-prismatic', className='regularfont'),
+            #html.Div(id='test-feasibility', style={'display': 'block', 'text-align': 'center'}),
         ], className = 'justify', md=8)
     ]),
 ], className='mt-4',)

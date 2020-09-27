@@ -59,9 +59,6 @@ resultsappendages = dbc.Container([
                 html.Div(dcc.Graph(id='output-optimization2')),
                 html.A('Export all individuals generated', download='optimizationvpp.csv', href='assets/data/optimizationvpp.csv'),
             ], width=8),
-            dbc.Col([
-                html.Div(dcc.Graph(id='polar-diagram')),
-            ], width=4),
         ]),
     ], className="mt-4")
 ])

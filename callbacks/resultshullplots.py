@@ -639,12 +639,12 @@ def update_graph(resultshullaxisy):
      Output('plot-parallel-dimensions', 'figure'),
     [Input('parallel-datatype', 'value')])
 def plot_parallel_dimensions(type):
-    if np.float(type) == 1:
+    if np.int(type) == 1:
         df = pd.read_csv("assets/data/optimizationresistance.csv")
-    elif np.float(type) == 2:
+    elif np.int(type) == 2:
         df = pd.read_csv("assets/data/optimizationresistance.csv")
         df = df.loc[df['valid']==True]
-    elif np.float(type) == 3:
+    elif np.int(type) == 3:
         df = pd.read_csv("assets/data/optimizationresistance.csv")
         df = df.loc[df['valid']==False]
     return {
@@ -665,7 +665,6 @@ def plot_parallel_dimensions(type):
                     dict(label = 'Waterline Beam [m]', values = df['BWL']),
                     dict(label = 'Draft [m]', values = df['Draft']),
                     dict(label = 'Displacement [m3]', values = df['Displacement']),
-                    dict(label = 'Waterplane area [m2]', values = df['AWP']),
                     dict(label = 'LCB [m]', values = df['LCB']),
                     dict(label = 'LCF [m]', values = df['LCF']),
                 ]),
@@ -696,12 +695,12 @@ def table_all_individuals(resultshullaxisx):
             data=datatable.to_dict("rows"),
             editable=True,
             #filtering=True,
-            sorting=True,
-            sorting_type="multi",
+            #sorting=True,
+            #sorting_type="multi",
             row_selectable="multi",
             row_deletable=True,
             selected_rows=[],
-            n_fixed_rows=1,
+            #n_fixed_rows=1,
             style_cell={'font-size': '8pt', 'font_family': 'Source Sans Pro'},
             style_as_list_view=True,
             style_header={'fontWeight': 'bold'},

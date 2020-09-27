@@ -11,17 +11,15 @@ import json, codecs
 from scipy.integrate import simps
 import pandas as pd
 
+from functions import vpp_solve
+
 
 @app.callback(Output('dimension-boa', 'children'), [Input('bwl-new', 'value')])
 def dimensionshull(bwlnew):
     boa = np.float(bwlnew)*1.3
     return html.Div([
-        dbc.Label("Maximum beam [m]"), html.Br(),
-        dbc.Input(type='text', id='boa-min', bs_size="sm", value=format(round(boa*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
+        dbc.Label("Beam [m]"), html.Br(),
         dbc.Input(type='text', id='boa', bs_size="sm", value=format(round(boa,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='boa-max', bs_size="sm", value=format(round(boa*1.1,2)), className='boxmaximum'),
     ])
 
 @app.callback(Output('dimensions-sail', 'children'),
@@ -45,74 +43,34 @@ def dimensionssail(sailset, disp, lwl):
     mastpos = lwl*0.6
     return html.Div([
         dbc.Label("Mainsail hoist - P [m]"), html.Br(),
-        dbc.Input(type='text', id='psail-min', bs_size="sm", value=format(round(p*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='psail', bs_size="sm", value=format(round(p,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='psail-max', bs_size="sm", value=format(round(p*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='psail', bs_size="sm", value=format(round(p,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Mainsail foot - E [m]"), html.Br(),
-        dbc.Input(type='text', id='esail-min', bs_size="sm", value=format(round(e*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='esail', bs_size="sm", value=format(round(e,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='esail-max', bs_size="sm", value=format(round(e*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='esail', bs_size="sm", value=format(round(e,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Jib height - I [m]"), html.Br(),
-        dbc.Input(type='text', id='isail-min', bs_size="sm", value=format(round(i*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='isail', bs_size="sm", value=format(round(i,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='isail-max', bs_size="sm", value=format(round(i*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='isail', bs_size="sm", value=format(round(i,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Jib base - J [m]"), html.Br(),
-        dbc.Input(type='text', id='jsail-min', bs_size="sm", value=format(round(j*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='jsail', bs_size="sm", value=format(round(j,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='jsail-max', bs_size="sm", value=format(round(j*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='jsail', bs_size="sm", value=format(round(j,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Perpendicular of longest jib [m]"), html.Br(),
-        dbc.Input(type='text', id='lpg-min', bs_size="sm", value=format(round(lpg*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='lpg', bs_size="sm", value=format(round(lpg,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='lpg-max', bs_size="sm", value=format(round(lpg*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='lpg', bs_size="sm", value=format(round(lpg,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Spinnaker leech length [m]"), html.Br(),
-        dbc.Input(type='text', id='spl-min', bs_size="sm", value=format(round(spl*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='spl', bs_size="sm", value=format(round(spl,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='spl-max', bs_size="sm", value=format(round(spl*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='spl', bs_size="sm", value=format(round(spl,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Mast average diameter [m]"), html.Br(),
-        dbc.Input(type='text', id='mast-diameter-min', bs_size="sm", value=format(round(0.2*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='mast-diameter', bs_size="sm", value=format(round(0.2,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='mast-diameter-max', bs_size="sm", value=format(round(0.2*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='mast-diameter', bs_size="sm", value=format(round(0.2,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Height of main boom above sheer [m]"), html.Br(),
-        dbc.Input(type='text', id='boom-height-min', bs_size="sm", value=format(round(1.2*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='boom-height', bs_size="sm", value=format(round(1.2,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='boom-height-max', bs_size="sm", value=format(round(1.2*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='boom-height', bs_size="sm", value=format(round(1.2,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Mast height above sheerline [m]"), html.Br(),
-        dbc.Input(type='text', id='mast-height-min', bs_size="sm", value=format(round(mastheight*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='mast-height', bs_size="sm", value=format(round(mastheight,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='mast-height-max', bs_size="sm", value=format(round(mastheight*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='mast-height', bs_size="sm", value=format(round(mastheight,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Mast longitudinal position [m]"), html.Br(),
-        dbc.Input(type='text', id='mastpos-min', bs_size="sm", value=format(round(mastpos*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='mastpos', bs_size="sm", value=format(round(mastpos,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='mastpos-max', bs_size="sm", value=format(round(mastpos*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='mastpos', bs_size="sm", value=format(round(mastpos,2)), className='boxinput'), html.Br(),
     ])
 
 @app.callback(Output('dimensions-rudder', 'children'),
@@ -127,61 +85,28 @@ def dimensionsrudder(lwl, disp):
     rootrudder=1.1*surfacerudder/spanrudder
     return html.Div([
         dbc.Label("Root Chord"), html.Br(),
-        dbc.Input(type='text', id='rootchord-rudder-min', bs_size="sm", value=format(round(rootrudder*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord-rudder', bs_size="sm", value=format(round(rootrudder,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord-rudder-max', bs_size="sm", value=format(round(rootrudder*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='rootchord-rudder', bs_size="sm", value=format(round(rootrudder,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Tip chord"), html.Br(),
-        dbc.Input(type='text', id='tipchord-rudder-min', bs_size="sm", value=format(round(tiprudder*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='tipchord-rudder', bs_size="sm", value=format(round(tiprudder,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='tipchord-rudder-max', bs_size="sm", value=format(round(tiprudder*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='tipchord-rudder', bs_size="sm", value=format(round(tiprudder,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Span"), html.Br(),
-        dbc.Input(type='text', id='span-rudder-min', bs_size="sm", value=format(round(spanrudder*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='span-rudder', bs_size="sm", value=format(round(spanrudder,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='span-rudder-max', bs_size="sm", value=format(round(spanrudder*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='span-rudder', bs_size="sm", value=format(round(spanrudder,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Sweep angle [degrees]"), html.Br(),
-        dbc.Input(type='text', id='sweep-rudder-min', bs_size="sm", value=format(round(0*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='sweep-rudder', bs_size="sm", value=format(round(15,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='sweep-rudder-max', bs_size="sm", value=format(round(30,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='sweep-rudder', bs_size="sm", value=format(round(15,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Height above or below waterline"), html.Br(),
-        dbc.Input(type='text', id='heightsurface-rudder-min', bs_size="sm", value=format(round(-0.1,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='heightsurface-rudder', bs_size="sm", value=format(round(-0.05,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='heightsurface-rudder-max', bs_size="sm", value=format(round(0,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='heightsurface-rudder', bs_size="sm", value=format(round(-0.05,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Root Centerline"), html.Br(),
-        dbc.Input(type='text', id='pos-rudder-min', bs_size="sm", value=format(round(0*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='pos-rudder', bs_size="sm", value=format(round(1,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='pos-rudder-max', bs_size="sm", value=format(round(1.5*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='pos-rudder', bs_size="sm", value=format(round(1,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Root Chord Thickness"), html.Br(),
-        dbc.Input(type='text', id='rootchord-rudder-tcks-min', bs_size="sm", value=format(round(0.15*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord-rudder-tcks', bs_size="sm", value=format(round(0.175,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord-rudder-tcks-max', bs_size="sm", value=format(round(0.2*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='rootchord-rudder-tcks', bs_size="sm", value=format(round(0.175,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Tip Chord Thickness"), html.Br(),
-        dbc.Input(type='text', id='tipchord-rudder-tcks-min', bs_size="sm", value=format(round(0.075*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='tipchord-rudder-tcks', bs_size="sm", value=format(round(0.105,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='tipchord-rudder-tcks-max', bs_size="sm", value=format(round(0.135*1.1,2)), className='boxmaximum'),
-        dbc.Input(type='text', id='tipchord-rudder-tcks', bs_size="sm", value=0.105),
+        dbc.Input(type='text', id='tipchord-rudder-tcks', bs_size="sm", value=format(round(0.105,2)), className='boxinput'), html.Br(),
     ])
 
 @app.callback(Output('dimensions-keel', 'children'),
@@ -198,53 +123,25 @@ def dimensionskeel(lwl, tc, disp):
     rootkeel=1.2*surfacekeel/spankeel
     return html.Div([
         dbc.Label("Root Chord"), html.Br(),
-        dbc.Input(type='text', id='rootchord-keel-min', bs_size="sm", value=format(round(rootkeel*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord-keel', bs_size="sm", value=format(round(rootkeel,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord-keel-max', bs_size="sm", value=format(round(rootkeel*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='rootchord-keel', bs_size="sm", value=format(round(rootkeel,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Tip Chord"), html.Br(),
-        dbc.Input(type='text', id='tipchord-keel-min', bs_size="sm", value=format(round(tipkeel*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='tipchord-keel', bs_size="sm", value=format(round(tipkeel,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='tipchord-keel-max', bs_size="sm", value=format(round(tipkeel*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='tipchord-keel', bs_size="sm", value=format(round(tipkeel,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Span"), html.Br(),
-        dbc.Input(type='text', id='span-keel-min', bs_size="sm", value=format(round(spankeel*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='span-keel', bs_size="sm", value=format(round(spankeel,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='span-keel-max', bs_size="sm", value=format(round(spankeel*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='span-keel', bs_size="sm", value=format(round(spankeel,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Sweep angle [degrees]"), html.Br(),
-        dbc.Input(type='text', id='sweep-keel-min', bs_size="sm", value=format(round(20*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='sweep-keel', bs_size="sm", value=format(round(35,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='sweep-keel-max', bs_size="sm", value=format(round(50*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='sweep-keel', bs_size="sm", value=format(round(35,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Root Centerline"), html.Br(),
-        dbc.Input(type='text', id='pos-keel-min', bs_size="sm", value=format(round(cekeel*0.9,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='pos-keel', bs_size="sm", value=format(round(cekeel,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='pos-keel-max', bs_size="sm", value=format(round(cekeel*1.1,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='pos-keel', bs_size="sm", value=format(round(cekeel,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Root Chord Thickness"), html.Br(),
-        dbc.Input(type='text', id='rootchord-keel-tcks-min', bs_size="sm", value=format(round(0.15,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord-keel-tcks', bs_size="sm", value=format(round(0.175,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='rootchord-keel-tcks-max', bs_size="sm", value=format(round(0.2,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='rootchord-keel-tcks', bs_size="sm", value=format(round(0.175,2)), className='boxinput'), html.Br(),
         
         dbc.Label("Tip Chord Thickness"), html.Br(),
-        dbc.Input(type='text', id='tipchord-keel-tcks-min', bs_size="sm", value=format(round(0.07,2)), className='boxminimum'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='tipchord-keel-tcks', bs_size="sm", value=format(round(0.1,2)), className='boxinput'),
-        html.P(" ", className='spacebox'),
-        dbc.Input(type='text', id='tipchord-keel-tcks-max', bs_size="sm", value=format(round(0.13,2)), className='boxmaximum'),
+        dbc.Input(type='text', id='tipchord-keel-tcks', bs_size="sm", value=format(round(0.1,2)), className='boxinput'), html.Br(),
     ])
 
 @app.callback(Output('dimensions-mizzen', 'children'),
@@ -262,25 +159,13 @@ def mzncheck(mzncheck):
     if mzncheck == '1':
         return html.Div([
             dbc.Label("Mizzen Hoist"), html.Br(),
-            dbc.Input(type='text', id='pmz-min', bs_size="sm", value=format(round(3,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='pmz', bs_size="sm", value=format(round(4,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='pmz-max', bs_size="sm", value=format(round(5,2)), className='boxmaximum'),
+            dbc.Input(type='text', id='pmz', bs_size="sm", value=format(round(4,2)), className='boxinput'), html.Br(),
             
             dbc.Label("Mizzen Foot"), html.Br(),
-            dbc.Input(type='text', id='emz-min', bs_size="sm", value=format(round(1,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='emz', bs_size="sm", value=format(round(2,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='emz-max', bs_size="sm", value=format(round(3,2)), className='boxmaximum'),
+            dbc.Input(type='text', id='emz', bs_size="sm", value=format(round(2,2)), className='boxinput'), html.Br(),
             
             dbc.Label("Boom height"), html.Br(),
-            dbc.Input(type='text', id='badmz-min', bs_size="sm", value=format(round(0.7,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='badmz', bs_size="sm", value=format(round(1,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='badmz-max', bs_size="sm", value=format(round(1.3,2)), className='boxmaximum'),
+            dbc.Input(type='text', id='badmz', bs_size="sm", value=format(round(1,2)), className='boxinput'), html.Br(),
         ])
 
 @app.callback(Output('dimensions-bulbo', 'children'),
@@ -298,25 +183,13 @@ def bulbocheck(bulbocheck):
     if bulbocheck == '1':
         return html.Div([
             dbc.Label("Keel bulbous length"), html.Br(),
-            dbc.Input(type='text', id='lbk-min', bs_size="sm", value=format(round(0.7,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='lbk', bs_size="sm", value=format(round(1,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='lbk-max', bs_size="sm", value=format(round(1.3,2)), className='boxmaximum'),
+            dbc.Input(type='text', id='lbk', bs_size="sm", value=format(round(1,2)), className='boxinput'), html.Br(),
             
             dbc.Label("Keel bulbous lateral area"), html.Br(),
-            dbc.Input(type='text', id='abk-min', bs_size="sm", value=format(round(0.7,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='abk', bs_size="sm", value=format(round(1,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='abk-max', bs_size="sm", value=format(round(1.3,2)), className='boxmaximum'),
+            dbc.Input(type='text', id='abk', bs_size="sm", value=format(round(1,2)), className='boxinput'), html.Br(),
             
             dbc.Label("Keel bulbous wetted area"), html.Br(),
-            dbc.Input(type='text', id='sbk-min', bs_size="sm", value=format(round(0.7,2)), className='boxminimum'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='sbk', bs_size="sm", value=format(round(1,2)), className='boxinput'),
-            html.P(" ", className='spacebox'),
-            dbc.Input(type='text', id='sbk-max', bs_size="sm", value=format(round(1.3,2)), className='boxmaximum'),
+            dbc.Input(type='text', id='sbk', bs_size="sm", value=format(round(1,2)), className='boxinput'), html.Br(),
         ])
 
 @app.callback(Output('dimension-loa', 'children'), [Input('lwl-new', 'value'), Input('overhang', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value'), Input('disp-new', 'value'), Input('ballast-ratio', 'value'), Input('tc-new', 'value'), Input('bwl-new', 'value')])
@@ -374,3 +247,71 @@ def dimensionloa(rootrudder, tiprudder, spanrudder, rootkeel, tipkeel, spankeel,
             ]),
         ),
     ]),
+
+@app.callback(Output('polar-diagram2', 'figure'), [Input('lwl-new', 'value')])
+def callback_vpp(lwl):
+
+    velocity = [2, 4, 6, 8, 10]
+    true_wind = [30, 60, 90, 120, 150, 180]
+    # velocities = [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]
+    resultados = vpp_solve('main+genoa', loa, np.float(lwl), boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, 4.5, 0.8, free_board, 5.674, lead_sail, \
+            mass_crew, height_mainsail, base_mainsail, height_foretriangle, base_foretriangle, boom_heigth_deck, length_spinnaker, \
+            perpendicular_jib, span_rudder, tip_chord_rudder, root_chord_rudder, tip_thickness_rudder, root_thickness_rudder, \
+            sweep_rudder_deg, span_keel, tip_chord_keel, root_chord_keel, tip_thickness_keel, root_thickness_keel, sweep_keel_deg, \
+            '6digit', '6digit', height_mast, diameter_mast, height_surface_rudder, height_mizzen, base_mizzen, boom_height_mizzen, 0, 0, 0, \
+            velocity[0], velocity[4], true_wind[0], true_wind[5])
+    velocities = resultados[2]
+            
+
+
+    return {
+        'data': [go.Scatterpolar(
+            theta=angles,
+            r=velocities[0],
+            mode='lines',
+            name='6 knots'
+        ),
+        go.Scatterpolar(
+            theta=angles,
+            r=velocities[1],
+            mode='lines',
+            name='8 knots'
+        ), 
+        go.Scatterpolar(
+            theta=angles,
+            r=velocities[2],
+            mode='lines',
+            name='10 knots'
+        ),
+        go.Scatterpolar(
+            theta=angles,
+            r=velocities[3],
+            mode='lines',
+            name='12 knots'
+        )],
+        # https://plot.ly/python/polar-chart/
+        'layout': go.Layout(
+            title='Velocity Prediction',
+            hovermode = "closest",
+            height = 500,
+            margin = {
+                "r": 20,
+                "t": 30,
+                "b": 50,
+                "l": 50
+            },
+            polar = dict(
+                sector = [0, 360],
+                radialaxis = dict(
+                    angle = 90,
+                    range = [0, ymax],
+                ),
+                angularaxis = dict(
+                    direction = "clockwise",
+                    rotation = 90,
+                ),
+            ),
+            font=dict(size=10),
+            legend=dict(x=0.3, y=-0.5),
+        ),
+    }

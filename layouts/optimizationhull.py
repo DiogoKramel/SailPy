@@ -12,18 +12,45 @@ optimizationhull = dbc.Container([
         dbc.Col([
             html.H4('Genetic Algorithm Configuration'),
             html.P("The optimizaton method can be choosen between a default method, in which all the parameters are automatically set based on the literature best recommendations, and a custom method. The latter applies the algorithm NSGA II - Nondominated Sorting Genetic Algorithm developed by Professor Kalyanmoy Deb. It needs seven parameters to be configured. In case you are not familiar with them, more details are provided when hoving the parameters or reading the documentation in the link below. In any case, the standard configuration will provide satisfactory results."),
-            dcc.Dropdown(
-                id='type-optimization',
-                options=[
-                    {'label': 'Default methods', 'value': 'default'},
-                    {'label': 'Personalized configuration', 'value': 'custom'},
-                ],
-                value='default',
-                style={'width': '70%', 'font-size': '10pt'}
-            ),
-			html.Br(), html.Br(),
+            #dcc.Dropdown(
+            #    id='type-optimization',
+            #    options=[
+            #        {'label': 'Default methods', 'value': 'default'},
+            #        {'label': 'Personalized configuration', 'value': 'custom'},
+            #    ],
+            #    value='default',
+            #    style={'width': '70%', 'font-size': '10pt'}
+            #),
+			#html.Br(), html.Br(),
 			html.H4("Optimization Parameters"),
-            html.Div(id="option-optimization"),
+            #html.Div(id="option-optimization"),
+            html.Div([
+                dbc.Label("Method"),
+                dcc.Dropdown(
+                    id='ga-method',
+                    options=[
+                        {'label': 'NSGAII - Nondominated Sorting Genetic Algorithm', 'value': 'NSGAII'},
+                        {'label': 'GDE3 - Generalized Differential Evolution', 'value': 'GDE3'},
+                        {'label': 'OMOPSO - Multi-Objective Particle Swarm Optimization', 'value': 'OMOPSO'},
+                        {'label': 'SMPSO - Speed-Constrained Particle Swarm Optimization', 'value': 'SMPSO'},
+                        {'label': 'SPEA2 - Strength Pareto Evolutionary Algorithm', 'value': 'SPEA2'},
+                        {'label': 'MOEA -  Multi-Objective Evolutionary Algorithm', 'value': 'EpsMOEA'},
+                    ],
+                    value='NSGAII',
+                    style={'width': '70%', 'font-size': '10pt'}
+                ),
+                dbc.Label("Number of offsprings"),
+                dbc.Input(
+                    type='number', 
+                    id='offsprings-platypus', 
+                    value='300', 
+                    bs_size="sm", 
+                    style={'width': 80}
+                ),
+                html.Br(),
+                dbc.Label("Behave of each algorithm"),
+                html.Img(src='/assets/static/platypus3.png', width='100%'),
+            ]),
             html.Br(), html.Br(), 
             html.H4("Constraints"),
             html.P("Constraints help maintain the sailboats feasible. The Capsize Screening Factor empirically evaluates the likelihood of capsizing based on the formula shown below. Another constraint is the displacement, which assits the optimization process on not allowing unrealistic hulls."),
@@ -43,27 +70,27 @@ optimizationhull = dbc.Container([
             dbc.Row([
                 dbc.Col([
                     html.Div(id='resistance-weight', style={'display': 'block', 'text-align': 'center'}),
-                    daq.Knob(
+                    dcc.Slider(
                         id='weight1',
-                        value=9,
+                        value=5,
                         min=0,
                         max=10,
-                        scale={'start':0, 'interval': 1, 'labelInterval': 1},
-						style={'display': 'block', 'text-align': 'center'}
+                        marks={0: '0', 2: '2', 4: '4', 6: '6', 8: '8', 10: '10'},
                     ),
                 ]),
                 dbc.Col([
-                    html.Div(id='comfort-weight', style={'display': 'block', 'text-align': 'center'}),
-                    daq.Knob(
+                    html.Div(id='added-weight', style={'display': 'block', 'text-align': 'center'}),
+                    dcc.Slider(
                         id='weight2',
-                        value=6.5,
+                        value=5,
                         min=0,
                         max=10,
-                        scale={'start':0, 'interval': 1, 'labelInterval': 1},
-						style={'display': 'block', 'text-align': 'center'}
+                        marks={0: '0', 2: '2', 4: '4', 6: '6', 8: '8', 10: '10'},
                     ),
                 ]),
             ]),
+            html.H4("Study case"),
+            html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity that"""),
             dbc.Row([
                 dbc.Col([
                     dbc.Label("Velocities analyzed"),
@@ -86,6 +113,19 @@ optimizationhull = dbc.Container([
                         max=5,
                         value=[2, 3],
                         id='heel-range',
+                    ),
+                    html.Br(),html.Br(),
+                ])
+            ]),
+            dbc.Row([
+                dbc.Col([
+                    dbc.Label("Wave height"),
+                    dcc.RangeSlider(
+                        id='height-range',
+                        marks={i: '{} m'.format(i) for i in range(0, 6)},
+                        min=0,
+                        max=5,
+                        value=[1, 3],
                     ),
                     html.Br(),html.Br(),
                 ])

@@ -76,8 +76,8 @@ def motion(criticaldamping, heading, delta, vboatmed, position, waveamplitude):
         # tem um problem em algum lugar porque eu nao devia ter dividido tudo por 20000
 
     ####### ROLL
-    rollhydrodamping = 1;
-    excitationfrequency=10000000;
+    rollhydrodamping = 1
+    excitationfrequency=10000000
     B0 = bwl
 
     tn = 0.85*bwl*10/gm**0.5/10               # estimated tn value 

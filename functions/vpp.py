@@ -147,7 +147,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_su
     
     # B) True wind angle and velocity range 
     pi = np.pi                                       # pi number
-    step_angle = 5                                   # true wind angle step [degrees] 
+    step_angle = 15                                   # true wind angle step [degrees] 
     step_velocity = 1.02889                          # true wind speed step [m/s] equivalent to 2 knots 
     minimum_tw = minimum_tw_knots*0.514444           # true wind speed range [m/s]
     maximum_tw = maximum_tw_knots*0.514444
@@ -820,38 +820,39 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_su
     average_velocity = np.float(np.mean(velocity_boat_matrix))
 
     # Average velocity upwind [kn]
-    max_angle = np.int((120-30)/step_angle + 1)
-    angle_tw_matrix_upwind = np.zeros((np.size(velocity_tw), max_angle))
-    velocity_boat_matrix_upwind = np.zeros((np.size(velocity_tw), max_angle))
-    for t in range (0, np.size(velocity_tw), 1):
-        for u in range (0, max_angle, 1):
-            velocity_boat_matrix_upwind[t, u] = velocity_boat_matrix[t, u]
-            angle_tw_matrix_upwind[t, u] = angle_tw_matrix[t, u]
-    average_velocity_upwind = np.float(np.mean(velocity_boat_matrix_upwind))
+    #max_angle = np.int((120-30)/step_angle + 1)
+    #angle_tw_matrix_upwind = np.zeros((np.size(velocity_tw), max_angle))
+    #velocity_boat_matrix_upwind = np.zeros((np.size(velocity_tw), max_angle))
+    #for t in range (0, np.size(velocity_tw), 1):
+    #    for u in range (0, max_angle, 1):
+    #        print(t,u)
+    #        velocity_boat_matrix_upwind[t, u] = velocity_boat_matrix[t, u]
+    #        angle_tw_matrix_upwind[t, u] = angle_tw_matrix[t, u]
+    #average_velocity_upwind = np.float(np.mean(velocity_boat_matrix_upwind))
 
     # Comfort
     CR = disp*density_water*2.20462/((boa*3.28084)**(4/3)*0.65*(0.7*lwl*3.28084+0.3*loa*3.28084))
 
     # count the number of lines to set the index number
-    json.dump({'angle': angle_tw_matrix[0].tolist()}, codecs.open('assets/data/vpp_results/angles.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
-    index = sum([len(files) for r, d, files in os.walk("assets/data/vpp_results")])
+    #json.dump({'angle': angle_tw_matrix[0].tolist()}, codecs.open('assets/data/vpp_results/angles.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    #index = sum([len(files) for r, d, files in os.walk("assets/data/vpp_results")])
    
     # Export VPP data to json file
-    velocity_boat_matrix_list = velocity_boat_matrix.tolist()
-    angle_tw_matrix_list = angle_tw_matrix.tolist()
-    vmg_matrix_list = vmg_matrix.tolist()
+    #velocity_boat_matrix_list = velocity_boat_matrix.tolist()
+    #angle_tw_matrix_list = angle_tw_matrix.tolist()
+    #vmg_matrix_list = vmg_matrix.tolist()
 
-    data_struct = {
-        'velocity_boat_matrix_list': [NoIndent(elem) for elem in velocity_boat_matrix_list],
-        'angle_tw_matrix_list': [NoIndent(elem) for elem in angle_tw_matrix_list],
-        'vmg_matrix_list': [NoIndent(elem) for elem in vmg_matrix_list],
-    }
+    #data_struct = {
+    #    'velocity_boat_matrix_list': [NoIndent(elem) for elem in velocity_boat_matrix_list],
+    #    'angle_tw_matrix_list': [NoIndent(elem) for elem in angle_tw_matrix_list],
+    #    'vmg_matrix_list': [NoIndent(elem) for elem in vmg_matrix_list],
+    #}
 
-    with open('assets/data/vpp_results/veloc_hull_' + str(index) + '.json', 'w') as fp:
-        json.dump(data_struct, fp, cls = MyEncoder, sort_keys = True, indent = 4)
+    #with open('assets/data/vpp_results/veloc_hull_' + str(index) + '.json', 'w') as fp:
+    #    json.dump(data_struct, fp, cls = MyEncoder, sort_keys = True, indent = 4)
 
     
-    return average_velocity, average_velocity_upwind, CR # velocity_boat_matrix, velocity_boat_matrix_upwind, angle_tw_matrix_upwind
+    return average_velocity, CR, vmg_matrix#, average_velocity_upwind, CR # velocity_boat_matrix, velocity_boat_matrix_upwind, angle_tw_matrix_upwind
 
 
 # Functions to build the JSON file

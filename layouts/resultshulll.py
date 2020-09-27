@@ -70,33 +70,33 @@ resultshull = dbc.Container([
             ], width=10),
             dbc.Col(html.Div(dcc.Graph(id='plot-resistance-individual')), width=2),
         ]),
-		dbc.Row([
-			dbc.Col([
-				dbc.Label('SAC angle at the bow [degrees]'),
-				dbc.Input(type='text', id='alpha_f_sac2', bs_size='sm', value=5, style={'width': '75%'}),
-				dbc.Label('SAC angle at the stern [degrees]'),
-				dbc.Input(type='text', id='alpha_i_sac2', bs_size='sm', value=15, style={'width': '75%'}),
-				dbc.Label('Hull bottom angle [degrees]'),
-				dbc.Input(type='text', id='beta_n2', bs_size='sm', value=0, style={'width': '75%'})
-			], md=4),
-			dbc.Col([
-				html.Div(dcc.Graph(id='insert-section-choosen'))
-			], md=8)
-		]),
-        html.Br(),
-		html.Details([
-			html.Summary('Constraints Analysis'),
-			html.Br(),
-			dbc.Row([
-				dbc.Col([html.Div(dcc.Graph(id='plot-limits-lwl-bwl'))]),
-				dbc.Col([html.Div(dcc.Graph(id='plot-limits-bwl-tc'))]),
-			]),
-			dbc.Row([
-				dbc.Col([html.Div(dcc.Graph(id='plot-limits-lwl-disp'))]),
-				dbc.Col([html.Div(dcc.Graph(id='plot-limits-awp-disp')),]),
-			]),
-			dbc.Row(html.Div(id='plot-constraints-count')),
-		]),
+		#dbc.Row([
+		#	dbc.Col([
+		#		dbc.Label('SAC angle at the bow [degrees]'),
+		#		dbc.Input(type='text', id='alpha_f_sac2', bs_size='sm', value=5, style={'width': '75%'}),
+		#		dbc.Label('SAC angle at the stern [degrees]'),
+		#		dbc.Input(type='text', id='alpha_i_sac2', bs_size='sm', value=15, style={'width': '75%'}),
+		#		dbc.Label('Hull bottom angle [degrees]'),
+		#		dbc.Input(type='text', id='beta_n2', bs_size='sm', value=0, style={'width': '75%'})
+		#	], md=4),
+		#	dbc.Col([
+		#		html.Div(dcc.Graph(id='insert-section-choosen'))
+		#	], md=8)
+		#]),
+        #html.Br(),
+		#html.Details([
+		#	html.Summary('Constraints Analysis'),
+		#	html.Br(),
+		#	dbc.Row([
+		#		dbc.Col([html.Div(dcc.Graph(id='plot-limits-lwl-bwl'))]),
+		#		dbc.Col([html.Div(dcc.Graph(id='plot-limits-bwl-tc'))]),
+		#	]),
+		#	dbc.Row([
+		#		dbc.Col([html.Div(dcc.Graph(id='plot-limits-lwl-disp'))]),
+		#		dbc.Col([html.Div(dcc.Graph(id='plot-limits-awp-disp')),]),
+		#	]),
+		#	dbc.Row(html.Div(id='plot-constraints-count')),
+		#]),
 		html.Details([
 			html.Summary('Parallel Plot'),
 			html.Br(),
@@ -111,7 +111,7 @@ resultshull = dbc.Container([
 					style={'width': '300pt'},
 					className='regularfont',
 			),
-			html.Div(dcc.Graph(id='plot-parallel-dimensions')),
+			#html.Div(dcc.Graph(id='plot-parallel-dimensions')),
 		]),
 		html.Details([
 			html.Summary('Data of all individuals'),

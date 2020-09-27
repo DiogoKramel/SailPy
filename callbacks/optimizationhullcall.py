@@ -240,10 +240,10 @@ def resistance_weight(value):
     return dbc.Label('Resistance Weight: {}'.format(value))
 
 @app.callback(
-    Output('comfort-weight', 'children'),
+    Output('added-weight', 'children'),
     [Input('weight2', 'value')])
 def comfort_weight(value):
-    return dbc.Label('Comfort Ratio Weight: {}'.format(value))
+    return dbc.Label('Added resistance: {}'.format(value))
 
 @app.callback(
     Output('dimensions-limits', 'children'),
@@ -326,8 +326,14 @@ def dimensions_limits(value):
         ])
     ])
 
-@app.callback(Output('output-button', 'children'), [Input('export-ga', 'n_clicks')], [State('pop-size', 'value'), State('children-size', 'value'), State('max-generation', 'value'), State('mut-prob', 'value'), State('halloffame-number', 'value'), State('indpb-value', 'value'), State('eta_value', 'value'), State('weight1', 'value'), State('weight2', 'value'), State('velocity-range', 'value'), State('heel-range', 'value'), State('lwl-min', 'value'), State('lwl-max', 'value'), State('bwl-min', 'value'), State('bwl-max', 'value'), State('tc-min', 'value'), State('tc-max', 'value'), State('lcb-min', 'value'), State('lcb-max', 'value'), State('lcf-min', 'value'), State('lcf-max', 'value'), State('crossover-method', 'value'), State('mutation-method', 'value'), State('selection-method', 'value'), State('capsize-factor', 'value'), State('offsprings-platypus', 'value'), State('ga-method', 'value'), State('type-optimization', 'value'), State('displac', 'value'), State('cwp-min', 'value'), State('cwp-max', 'value'), State('cp-min', 'value'), State('cp-max', 'value'), State('cm-min', 'value'), State('cm-max', 'value')])
-def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, halloffamenumber, indpb, eta, weight1, weight2, velocityrange, heelrange, lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcbmin, lcbmax, lcfmin, lcfmax, crossovermethod, mutationmethod, selectionmethod, capsizefactor, offspringsplatypus, gamethod, typeoptimization, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax):
+@app.callback(Output('output-button', 'children'), [Input('export-ga', 'n_clicks')], [State('offsprings-platypus', 'value'), State('ga-method', 'value'), 
+    State('weight1', 'value'), State('weight2', 'value'), State('velocity-range', 'value'), State('heel-range', 'value'), State('lwl-min', 'value'), 
+    State('lwl-max', 'value'), State('bwl-min', 'value'), State('bwl-max', 'value'), State('tc-min', 'value'), State('tc-max', 'value'), State('lcb-min', 'value'), 
+    State('lcb-max', 'value'), State('lcf-min', 'value'), State('lcf-max', 'value'), State('capsize-factor', 'value'), State('displac', 'value'), State('cwp-min', 'value'), 
+    State('cwp-max', 'value'), State('cp-min', 'value'), State('cp-max', 'value'), State('cm-min', 'value'), State('cm-max', 'value')]) # State('type-optimization', 'value'), State('pop-size', 'value'), State('children-size', 'value'), State('max-generation', 'value'), State('mut-prob', 'value'), State('halloffame-number', 'value'), State('indpb-value', 'value'), State('eta_value', 'value')State('crossover-method', 'value'), State('mutation-method', 'value'), State('selection-method', 'value'), ])
+def update_output(n_clicks, offspringsplatypus, gamethod, weight1, weight2, velocityrange, heelrange, lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcbmin, lcbmax, lcfmin, lcfmax, capsizefactor, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax): #crossovermethod, mutationmethod, selectionmethod,  typeoptimization, popsize, childrensize, maxgeneration, mutprob, halloffamenumber, indpb, eta):
+    if n_clicks == None:
+        n_clicks = 0
     if n_clicks >= 1:
         with open('assets/data/optimizationresistance.csv','w') as fd:
             fd.write("id,Resistance,Rv,Ri,Rr,Rincli,Comfort,CS,LWL,BWL,Draft,Displacement,AWP,LCB,LCF,constraint1,constraint2,constraint3,constraint4,constraint5,valid"+"\n")
@@ -338,10 +344,9 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         lwl = np.float(dim["lwl"])
         bwl = np.float(dim["bwl"])
         tc = np.float(dim["tc"])
-        alcb = np.float(dim["alcb"])
         cp = np.float(dim["cp"])
         cm = np.float(dim["cm"])
-        awp = np.float(dim["awp"])
+        cwp = np.float(dim["cwp"])
         disp = np.float(dim["disp"])
         lcf = np.float(dim["lcf"])
         lcb = np.float(dim["lcb"])
@@ -354,7 +359,7 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         count = 0
         for velocity in range (velocityrange[0], velocityrange[1], 1):
             for heel in range (heelrange[0], heelrange[1], 5):
-                result = resistance(lwl, bwl, tc, alcb, cp, cm, awp, disp, lcb, lcf, velocity, heel)
+                result = resistance(lwl, bwl, tc, cp, cm, cwp, disp, lcb, lcf, velocity, heel)
                 Rt = Rt+result[0]
                 Rv = Rv+result[1]
                 Ri = Ri+result[2]
@@ -370,20 +375,20 @@ def update_output(n_clicks, popsize, childrensize, maxgeneration, mutprob, hallo
         boa = bwl*1.1
         dispmass = disp*1025
         cs = boa*3.28084/(dispmass*2.20462/64)**(1/3)
-        exportdata = [1, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(awp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), False, False, False, False, False, False]
+        exportdata = [1, format(Rt, '.4f'), format(Rv, '.4f'), format(Ri, '.4f'), format(Rr, '.4f'), format(Rincli, '.4f'), format(CR, '.4f'), format(cs, '.4f'), format(lwl, '.4f'), format(bwl, '.4f'), format(tc, '.4f'), format(disp, '.4f'), format(cwp, '.4f'), format(lcb, '.4f'), format(lcf, '.4f'), False, False, False, False, False, False]
         with open("assets/data/optimizationresistance.csv", "a", newline='') as file:
             writer = csv.writer(file, delimiter=',')
             writer.writerow(exportdata)
             
         # optimization process
         start = time.time()
-        if typeoptimization == 'default':
-            json.dump({'displac': displac, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, }, codecs.open('assets/data/dimensions_hull_limits.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
-            json.dump({'velocityrange': velocityrange, 'heelrange': heelrange, 'weight1': weight1, 'weight2': weight2, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
-            result = optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus)
-        elif typeoptimization == 'custom':
-            json.dump({'displac': displac, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'capsize-factor': capsizefactor, 'gamethod': 'NSGA II'}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
-            result = optimization_deap_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax)
+        #if typeoptimization == 'default':
+        json.dump({'displac': displac, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, }, codecs.open('assets/data/dimensions_hull_limits.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
+        json.dump({'velocityrange': velocityrange, 'heelrange': heelrange, 'weight1': weight1, 'weight2': weight2, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
+        result = optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus)
+        #elif typeoptimization == 'custom':
+        #    json.dump({'displac': displac, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'capsize-factor': capsizefactor, 'gamethod': 'NSGA II'}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
+        #    result = optimization_deap_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax)
         done = time.time()
         elapsed = done-start
         file = open("assets/data/optimizationresistance.csv")

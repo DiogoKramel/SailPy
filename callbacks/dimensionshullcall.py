@@ -9,45 +9,118 @@ import json, codecs
 import numpy as np
 from scipy.integrate import simps
 import pandas as pd
+import plotly.graph_objs as go
+import plotly.express as px
 
-from functions import keel_solve, sac_solve, section_solve, wl_solve
+from functions import resistance
+
+@app.callback(Output('resistance-comparison', 'figure'), 
+    [Input('lwl', 'value'), Input('lwl2', 'value'), Input('bwl', 'value'), Input('bwl2', 'value'), Input('tc', 'value'), Input('tc2', 'value'),
+    Input('cm', 'value'), Input('cm2', 'value'), Input('cp', 'value'), Input('cp2', 'value'), Input('cwp', 'value'), Input('cwp2', 'value'),
+    Input('lcb', 'value'), Input('lcb2', 'value'), Input('lcf', 'value'), Input('lcf2', 'value'), Input('disp', 'value'), Input('disp2', 'value')]
+)
+def update_output(lwl, lwl2, bwl, bwl2, tc, tc2, cm, cm2, cp, cp2, cwp, cwp2, lcb, lcb2, lcf, lcf2, disp, disp2):
+    froude_number = [0.2, 0.25, 0.3, 0.35, 0.4, 0.45]
+    resistance1_tot = [0, 0, 0, 0, 0, 0]
+    resistance1_visc = [0, 0, 0, 0, 0, 0]
+    resistance1_res = [0, 0, 0, 0, 0, 0]
+    resistance2_tot = [0, 0, 0, 0, 0, 0]
+    resistance2_visc = [0, 0, 0, 0, 0, 0]
+    resistance2_res = [0, 0, 0, 0, 0, 0]
+
+    for i in [0, 1, 2, 3, 4, 5]:
+        resistance1 = resistance(np.float(lwl), np.float(bwl), np.float(tc), np.float(cm), np.float(cp), np.float(cwp), np.float(disp), np.float(lcb), np.float(lcf), froude_number[i]*(np.float(lwl)*9.81)**0.5, 0)
+        resistance2 = resistance(np.float(lwl2), np.float(bwl2), np.float(tc2), np.float(cm2), np.float(cp2), np.float(cwp2), np.float(disp2), np.float(lcb2), np.float(lcf2), froude_number[i]*(np.float(lwl2)*9.81)**0.5, 0)
+        print(resistance1)
+        resistance1_tot[i] = resistance1[0]
+        resistance1_visc[i] = resistance1[1]
+        resistance1_res[i] = resistance1[2]
+        resistance2_tot[i] = resistance2[0]
+        resistance2_visc[i] = resistance2[1]
+        resistance2_res[i] = resistance2[2]
+
+    json.dump({'lwl': lwl, 'disp': disp, 'cwp': cwp, 'lcf': lcf, 'lcb': lcb, 'tc': tc, 'cm': cm, 'cp': cp, 'bwl': bwl}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+
+        
+    return {
+        'data': [
+            go.Scatter(
+                x=froude_number,
+                y=resistance1_tot,
+                name='Total - Boat #1',
+                marker=dict(color=px.colors.qualitative.Dark2[0])
+            ),
+            go.Scatter(
+                x=froude_number,
+                y=resistance2_tot,
+                name='Total - Boat #2',
+                marker=dict(color=px.colors.qualitative.Dark2[3])
+            ),
+            go.Scatter(
+                x=froude_number,
+                y=resistance1_res,
+                name='Residual - Boat #1',
+                marker=dict(color=px.colors.qualitative.Set2[0]),
+                line=dict(dash='dash')
+            ),
+            go.Scatter(
+                x=froude_number,
+                y=resistance2_res,
+                name='Residual - Boat #2',
+                marker=dict(color=px.colors.qualitative.Set2[3]),
+                line=dict(dash='dash')
+            ),
+            go.Scatter(
+                x=froude_number,
+                y=resistance1_visc,
+                name='Viscous - Boat #1',
+                marker=dict(color=px.colors.qualitative.Pastel2[0]),
+                line=dict(dash='dot')
+            ),
+            go.Scatter(
+                x=froude_number,
+                y=resistance2_visc,
+                name='Viscous - Boat #2',
+                marker=dict(color=px.colors.qualitative.Pastel2[3]),
+                line=dict(dash='dot')
+            ),
+        ],
+        'layout': go.Layout(
+            #title="Reistance comparison",
+            height=500,
+            hovermode="closest",
+            margin={
+                "r": 20,
+                "t": 30,
+                "b": 50,
+                "l": 80
+            },
+            xaxis={
+                "autorange": True,
+                "linewidth": 1,
+                "showgrid": True,
+                "showline": True,
+                "mirror": True,
+                "title": "Froude number",
+            },
+            yaxis={
+                "autorange": False,
+                "linewidth": 1,
+                "showgrid": True,
+                "showline": True,
+                "mirror": True,
+                "title": "Resitance [N]",
+                "range": [0, max(max(resistance1), max(resistance2))*1.1],
+            },
+        legend=dict(x=0.0, y=1),
+        font=dict(size=12),
+        )
+    }
 
 
 @app.callback(Output('loa-ft', 'children'), [Input('loa', 'value')])
 def loa_ft(loa):
     return ': {} ft'.format(loa)
-
-@app.callback(Output('main-dimensions', 'children'), [Input('loa', 'value')])
-def main_dimensions(loa):
-    lwl = loa*0.3048*0.85
-    bwl = 0.115*lwl+2.1667
-    if lwl < 10:
-        bwl = 0.155*lwl+2.1667
-    tc = lwl/18
-    lcb = (50-3.29)/100*lwl
-    lcf = (50-6.25)/100*lwl
-    return html.Details([
-        html.Summary('Main Dimensions'),
-        html.Div([
-            dbc.Label('Waterline Length [m]'),
-            dbc.Input(type='text', id='lwl', bs_size='sm', value='{}'.format(round(lwl,2))),
-            html.Div(id='limits-lwl', className='limits'),
-            dbc.Label('Waterline Beam [m]'),
-            dbc.Input(type='text', id='bwl', bs_size='sm', value='{}'.format(round(bwl,2))),
-            dbc.Label('Draft Canoe Body [m]'),
-            dbc.Input(type='text', id='tc', bs_size='sm', value='{}'.format(round(tc,2))),
-            html.Div(id='limits-tc', className='limits'),
-            dbc.Label('Longitudinal Centre of Buoyancy (LCB) [m]'),
-            dbc.Input(type='text', id='lcb', bs_size='sm', value='{}'.format(round(lcb,2))),
-            html.Div(id='limits-lcb', className='limits'),
-            dbc.Label('Longitudinal Centre of Flotation (LCF) [m]'),
-            dbc.Input(type='text', id='lcf', bs_size='sm', value='{}'.format(round(lcf,2))),
-            html.Div(id='limits-lcf', className='limits'),
-            dbc.Label('Beam at the Transom [m]'),
-            dbc.Input(type='text', id='beamtransom', bs_size='sm', value='0'),
-            html.Br(),
-        ], className='regularfont'),
-    ])
 
 # Source: Illuminati
 @app.callback(Output('limits-lwl', 'children'), [Input('loa', 'value')])
@@ -195,21 +268,7 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n, beta_n2):
     tc = np.float(tc)
     lcf = np.float(lcf)
     
-    sac_obj = codecs.open('assets/data/sacsolution.json', 'r', encoding='utf-8').read()
-    sac_solution = json.loads(sac_obj)
-    sac_interpolation_x = np.asarray(sac_solution['x_i_sac'])
-    sac_interpolation_y = np.asarray(sac_solution['y_i_sac'])
-    
-    wl_obj = codecs.open('assets/data/wlsolution.json', 'r', encoding='utf-8').read()
-    wl_solution = json.loads(wl_obj)
-    waterline_interpolation_y = np.asarray(wl_solution['y_i_wl'])
-    waterline_interpolation_x = np.asarray(wl_solution['x_i_wl'])
-
-    keel_obj = codecs.open('assets/data/keelsolution.json', 'r', encoding='utf-8').read()
-    keel_solution = json.loads(keel_obj)
-    keel_interpolation_y = np.asarray(keel_solution['y_i_keel'])
-    keel_interpolation_x = np.asarray(keel_solution['x_i_keel'])
-
+    '''
     awp = cwp*lwl*bwl
     disp = cb*lwl*bwl*tc
     am = cm*bwl*tc # mid section area
@@ -252,8 +311,8 @@ def other_dimensions(lwl, bwl, cb, cwp, lcf, lcb, tc, cm, beta_n, beta_n2):
     alcb_coefficient = alcb/(lwl*tc)
     
     json.dump({'alcb': alcb, 'lwl': lwl, 'disp': disp, 'awp': awp, 'lcf': lcf, 'lcb': lcb, 'tc': tc, 'beta_n': beta_n, 'beta_n2': beta_n2, 'cwp': cwp, 'cb': cb, 'cm': cm, 'cp': cp, 'bwl': bwl, 'scb': scb, 'am': am, 'itwp': itwp, 'bmt': bmt, 'kb': kb, 'kg': kg, 'gmt': gmt, 'gmlong': gmlong, 'alcb_coefficient': alcb_coefficient}, codecs.open('assets/data/dimensions.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
-    
-    data = {'Parameters' : ['Displacement', 'Waterplane Area', 'Canoe Body Lateral Area', 'Wetted Surface Area', 'Transverse Moment of Inertia', 'Metacentric Radius', 'Vertical Centre of Buoyancy (KB)', 'Metacentric Height (GM)'], 'Values' : [round(disp,2), round(awp,2), round(alcb,2), round(scb,2), round(itwp,2), round(bmt,2), round(kg,2), round(gmt,2)], 'Unit' : ['m3', 'm2', 'm2', 'm2', 'm4', 'm', 'm', 'm']}
+    '''
+    data = {'Parameters' : ['Displacement', 'Waterplane Area', 'Canoe Body Lateral Area', 'Wetted Surface Area', 'Transverse Moment of Inertia', 'Metacentric Radius', 'Vertical Centre of Buoyancy (KB)', 'Metacentric Height (GM)'], 'Values' : [round(1,2), round(1,2), round(1,2), round(1,2), round(1,2), round(1,2), round(1,2), round(1,2)], 'Unit' : ['m3', 'm2', 'm2', 'm2', 'm4', 'm', 'm', 'm']}
     df = pd.DataFrame(data)
 
     return dash_table.DataTable(

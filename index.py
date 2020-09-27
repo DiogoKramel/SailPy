@@ -55,7 +55,7 @@ landpage = html.Div([
 ], className='backgroundlanding')
 
 # title at top bar
-title = dcc.Link('SailPy - A preliminary design tool for sailboats', className='navbar-brand', style={'color': 'white'})
+title = dcc.Link('SailPy - A preliminary design tool for sailboats', href='/', className='navbar-brand', style={'color': 'white'})
 
 # top bar itens
 navitems = html.Ul([
@@ -89,11 +89,11 @@ tabs = html.Div([
     dcc.Tabs(id='tabs-styled-with-inline', value='tab-1', children=[
         dcc.Tab(label='Introduction', value='tab-1'),
         dcc.Tab(label='Hull Dimensions', value='tab-2'),
-        dcc.Tab(label='Optimization I', value='tab-3'),
-        dcc.Tab(label='Results I', value='tab-4'),
-        dcc.Tab(label='Appendages & Sail', value='tab-5'),
-        dcc.Tab(label='Optimization II', value='tab-6'),
-        dcc.Tab(label='Results II', value='tab-7'),
+        dcc.Tab(label='Optimization', value='tab-3'),
+        dcc.Tab(label='Optimization Results', value='tab-4'),
+        dcc.Tab(label='Appendages, Sail and Polar diagram', value='tab-5'),
+        #dcc.Tab(label='Optimization II', value='tab-6'),
+        #dcc.Tab(label='Results II', value='tab-7'),
     ], style={'height': '30pt', 'font-size': '11pt', 'line-height': '11pt', 'margin-bottom': '5pt'}),
 ])
 
@@ -146,8 +146,8 @@ def display_page(tab):
         return html.Br(), resultshulll.resultshull, space, footer
     elif tab == 'tab-5':
         return html.Br(), dimensionsappendages.appendages, space, footer
-    elif tab == 'tab-6':
-        return html.Br(), optimizationappendages.optimizationappendages, space, footer
+    #elif tab == 'tab-6':
+        #return html.Br(), optimizationappendages.optimizationappendages, space, footer
     elif tab == 'tab-7':
         return html.Br(), resultsappendages.resultsappendages, space, footer
     else:
