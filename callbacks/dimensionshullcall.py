@@ -10,7 +10,7 @@ import numpy as np
 from scipy.integrate import simps
 import pandas as pd
 import plotly.graph_objs as go
-import plotly.express as px
+#import plotly.express as px
 
 from functions import resistance
 
@@ -48,40 +48,40 @@ def update_output(lwl, lwl2, bwl, bwl2, tc, tc2, cm, cm2, cp, cp2, cwp, cwp2, lc
                 x=froude_number,
                 y=resistance1_tot,
                 name='Total - Boat #1',
-                marker=dict(color=px.colors.qualitative.Dark2[0])
+                #marker=dict(color=px.colors.qualitative.Dark2[0])
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance2_tot,
                 name='Total - Boat #2',
-                marker=dict(color=px.colors.qualitative.Dark2[3])
+                #marker=dict(color=px.colors.qualitative.Dark2[3])
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance1_res,
                 name='Residual - Boat #1',
-                marker=dict(color=px.colors.qualitative.Set2[0]),
+                #marker=dict(color=px.colors.qualitative.Set2[0]),
                 line=dict(dash='dash')
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance2_res,
                 name='Residual - Boat #2',
-                marker=dict(color=px.colors.qualitative.Set2[3]),
+                #marker=dict(color=px.colors.qualitative.Set2[3]),
                 line=dict(dash='dash')
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance1_visc,
                 name='Viscous - Boat #1',
-                marker=dict(color=px.colors.qualitative.Pastel2[0]),
+                #marker=dict(color=px.colors.qualitative.Pastel2[0]),
                 line=dict(dash='dot')
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance2_visc,
                 name='Viscous - Boat #2',
-                marker=dict(color=px.colors.qualitative.Pastel2[3]),
+                #marker=dict(color=px.colors.qualitative.Pastel2[3]),
                 line=dict(dash='dot')
             ),
         ],
