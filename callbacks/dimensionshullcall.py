@@ -48,7 +48,7 @@ def update_output(lwl, lwl2, bwl, bwl2, tc, tc2, cm, cm2, cp, cp2, cwp, cwp2, lc
                 x=froude_number,
                 y=resistance1_tot,
                 name='Total - Boat #1',
-                marker=dict(color=['#3f007d'])
+                #marker=dict(color=['#3f007d'])
             ),
             go.Scatter(
                 x=froude_number,
