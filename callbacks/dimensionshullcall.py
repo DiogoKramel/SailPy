@@ -10,7 +10,7 @@ import numpy as np
 from scipy.integrate import simps
 import pandas as pd
 import plotly.graph_objs as go
-import plotly.express as px
+#import plotly.express as px
 
 from functions import resistance
 
