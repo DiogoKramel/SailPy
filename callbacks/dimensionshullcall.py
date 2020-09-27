@@ -10,7 +10,7 @@ import numpy as np
 from scipy.integrate import simps
 import pandas as pd
 import plotly.graph_objs as go
-#import plotly.express as px
+import plotly.express as px
 
 from functions import resistance
 
@@ -48,7 +48,7 @@ def update_output(lwl, lwl2, bwl, bwl2, tc, tc2, cm, cm2, cp, cp2, cwp, cwp2, lc
                 x=froude_number,
                 y=resistance1_tot,
                 name='Total - Boat #1',
-                #marker=dict(color=px.colors.qualitative.Dark2[0])
+                marker=dict(color=['#3f007d'])
             ),
             go.Scatter(
                 x=froude_number,
