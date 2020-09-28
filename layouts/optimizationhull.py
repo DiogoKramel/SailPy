@@ -89,6 +89,7 @@ optimizationhull = dbc.Container([
                     ),
                 ]),
             ]),
+            html.Br(), html.Br(),
             html.H4("Study case"),
             html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity that"""),
             dbc.Row([
