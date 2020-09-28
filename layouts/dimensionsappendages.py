@@ -44,7 +44,7 @@ appendages = dbc.Container([
         ]),
     ]),
     html.Br(),
-    html.Div(id="save-new-dim", style={'display': 'none'}),
+    #html.Div(id="save-new-dim", style={'display': 'none'}),
     dbc.Row([
         dbc.Col([
             html.H5("Hull"),
