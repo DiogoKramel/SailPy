@@ -261,26 +261,26 @@ def callback_vpp(lwl, bwl):
             '6digit', '6digit', 17, 0.05, 0, 0, 0, 0, 0, 0, 0, \
             velocity[0], velocity[2]+1, true_wind[0], true_wind[5]+1)
     velocities = resultados[2]
-    print(velocities)
-            
+    
     angles = true_wind
+    print(velocities[0], angles, velocities[1], angles)
 
     return {
         'data': [go.Scatterpolar(
             theta=angles,
-            r=velocity[0],
+            r=velocities[0],
             mode='lines',
             name='6 knots'
         ),
         go.Scatterpolar(
             theta=angles,
-            r=velocity[1],
+            r=velocities[1],
             mode='lines',
             name='8 knots'
         ), 
         go.Scatterpolar(
             theta=angles,
-            r=velocity[2],
+            r=velocities[2],
             mode='lines',
             name='10 knots'
         )],
@@ -299,7 +299,6 @@ def callback_vpp(lwl, bwl):
                 sector = [0, 360],
                 radialaxis = dict(
                     angle = 90,
-                    range = [0, 6],
                 ),
                 angularaxis = dict(
                     direction = "clockwise",
