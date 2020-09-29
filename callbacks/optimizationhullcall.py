@@ -282,6 +282,11 @@ def dimensions_limits(value):
                     dbc.Input(value="{}".format(round(displacement,2)), type='text', id='displac', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
                 ]),
 
+                dbc.Row(dbc.Label("Radius of gyration / waterline length [m]")),
+                dbc.Row([
+                    dbc.Input(value="{}".format(round(0.25,2)), type='text', id='gyration', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),
+                ]),
+
                 dbc.Row(dbc.Label("Ballast Ratio [%]")),
                 dbc.Row([
                     dbc.Input(value="{}".format(round(40,2)), type='text', id='ballast-ratio', bs_size="sm", style={'width': '30%', 'display': 'inline-block'}),

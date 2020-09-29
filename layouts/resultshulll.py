@@ -26,8 +26,8 @@ resultshull = dbc.Container([
                 dcc.Dropdown(
                     id='resultshullaxisy',
                     options=[
-                        {'label': 'Resistance', 'value': 'Resistance'},
-                        {'label': 'Comfort Ratio', 'value': 'Comfort'},
+                        {'label': 'Still water resistance', 'value': 'Resistance'},
+                        {'label': 'Added resistance', 'value': 'Comfort'},
                         {'label': 'Waterline length', 'value': 'LWL'},
                         {'label': 'Waterline beam', 'value': 'BWL'},
                         {'label': 'Draft', 'value': 'Draft'},
@@ -45,8 +45,8 @@ resultshull = dbc.Container([
                 dcc.Dropdown(
                     id='resultshullaxisx',
                     options=[
-                        {'label': 'Resistance', 'value': 'Resistance'},
-                        {'label': 'Comfort Ratio', 'value': 'Comfort'},
+                        {'label': 'Still water resistance', 'value': 'Resistance'},
+                        {'label': 'Added resistance', 'value': 'Comfort'},
                         {'label': 'Waterline length', 'value': 'LWL'},
                         {'label': 'Waterline beam', 'value': 'BWL'},
                         {'label': 'Draft', 'value': 'Draft'},

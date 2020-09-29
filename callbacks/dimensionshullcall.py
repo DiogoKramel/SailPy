@@ -48,41 +48,43 @@ def update_output(lwl, lwl2, bwl, bwl2, tc, tc2, cm, cm2, cp, cp2, cwp, cwp2, lc
                 x=froude_number,
                 y=resistance1_tot,
                 name='Total - Boat #1',
-                #marker=dict(color=['#3f007d'])
+                marker=dict(color="rgb(128,0,38)"),
+                line=dict(color="rgb(128,0,38)")
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance2_tot,
                 name='Total - Boat #2',
-                #marker=dict(color=px.colors.qualitative.Dark2[3])
+                marker=dict(color="rgb(8,29,88)"),
+                line=dict(color="rgb(8,29,88)")
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance1_res,
                 name='Residual - Boat #1',
-                #marker=dict(color=px.colors.qualitative.Set2[0]),
-                line=dict(dash='dash')
+                marker=dict(color="rgb(227,26,28)"),
+                line=dict(dash='dash', color="rgb(227,26,28)")
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance2_res,
                 name='Residual - Boat #2',
-                #marker=dict(color=px.colors.qualitative.Set2[3]),
-                line=dict(dash='dash')
+                marker=dict(color="rgb(34,94,168)"),
+                line=dict(dash='dash', color="rgb(34,94,168)")
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance1_visc,
                 name='Viscous - Boat #1',
-                #marker=dict(color=px.colors.qualitative.Pastel2[0]),
-                line=dict(dash='dot')
+                marker=dict(color="rgb(253,141,60)"),
+                line=dict(dash='dot', color="rgb(253,141,60)")
             ),
             go.Scatter(
                 x=froude_number,
                 y=resistance2_visc,
                 name='Viscous - Boat #2',
-                #marker=dict(color=px.colors.qualitative.Pastel2[3]),
-                line=dict(dash='dot')
+                marker=dict(color="rgb(65,182,196)"),
+                line=dict(dash='dot', color="rgb(65,182,196)")
             ),
         ],
         'layout': go.Layout(

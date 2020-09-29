@@ -3706,7 +3706,7 @@ def calc_added_resistance(disp, lwl, bwl, tc, cp, wave_angle, froude_number, kyy
 # for run_value in [10/10.02, 15/10.02, 20/10.02, 25/10.02, 30/10.02, 35/10.02]:
 # for wave_angle in [100, 120, 140, 160, 180]:
 # for kyy in [0.2, 0.25, 0.3]:
-    for run_value2 in [0.2, 0.25, 0.3, 0.35, 0.4, 0.45]:
+    #for run_value2 in [0.2, 0.25, 0.3, 0.35, 0.4, 0.45]:
         # disp, lwl, bwl, tc, cp, wave_angle, froude_number, kyy, wl_sl, wave_height
-        x = calc_added_resistance(8.71, 10.02, 3.17, 0.57, 0.8, 180, run_value2, kyy, 20 / 10.02, wave_height)
+        # x = calc_added_resistance(8.71, 10.02, 3.17, 0.57, 0.8, 180, run_value2, kyy, 20 / 10.02, wave_height)
         # print(kyy, run_value2, x)

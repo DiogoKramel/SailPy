@@ -122,11 +122,37 @@ optimizationhull = dbc.Container([
                 dbc.Col([
                     dbc.Label("Wave height"),
                     dcc.RangeSlider(
-                        id='height-range',
+                        id='height_range',
                         marks={i: '{} m'.format(i) for i in range(0, 6)},
                         min=0,
                         max=5,
                         value=[1, 3],
+                    ),
+                    html.Br(),html.Br(),
+                ])
+            ]),
+            dbc.Row([
+                dbc.Col([
+                    dbc.Label("Wave angle"),
+                    dcc.RangeSlider(
+                        id='angle_range',
+                        marks={i: '{} deg'.format(i) for i in range(100, 181, 20)},
+                        min=100,
+                        max=180,
+                        value=[120, 160],
+                    ),
+                    html.Br(),html.Br(),
+                ])
+            ]),
+            dbc.Row([
+                dbc.Col([
+                    dbc.Label("Wave length as fraction of ship length"),
+                    dcc.RangeSlider(
+                        id='length_range',
+                        marks={0.5: '0.5', 1.0: '1.0', 1.5: '1.5', 2.0: '2.0', 2.5: '2.5', 3.0: '3.0', 3.5: '3.5', 4.0: '4.0'},
+                        min=0.5,
+                        max=4,
+                        value=[1, 1.5],
                     ),
                     html.Br(),html.Br(),
                 ])
