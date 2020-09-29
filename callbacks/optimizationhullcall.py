@@ -390,7 +390,13 @@ def update_output(n_clicks, offspringsplatypus, gamethod, weight1, weight2, velo
         #if typeoptimization == 'default':
         json.dump({'displac': displac, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, }, codecs.open('assets/data/dimensions_hull_limits.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
         json.dump({'velocityrange': velocityrange, 'heelrange': heelrange, 'weight1': weight1, 'weight2': weight2, 'gamethod': gamethod}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
-        result = optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus)
+        
+        gyration = 0.2
+        wave_angle = 140
+        wl_sl = 0.5
+        wave_height = 2
+
+        result = optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus, gyration, wave_angle, wl_sl, wave_height)
         #elif typeoptimization == 'custom':
         #    json.dump({'displac': displac, 'cwpmin': cwpmin, 'cwpmax': cwpmax, 'cpmin': cpmin, 'cpmax': cpmax, 'cmmin': cmmin, 'cmmax': cmmax, 'popsize': popsize, 'childrensize': childrensize, 'maxgeneration': maxgeneration, 'mutprob': mutprob, 'halloffamenumber': halloffamenumber, 'indpb': indpb, 'eta': eta, 'weight1': weight1, 'weight2': weight2, 'velocityrange': velocityrange, 'heelrange': heelrange, 'lwlmin': lwlmin, 'lwlmax': lwlmax, 'bwlmin': bwlmin, 'bwlmax': bwlmax, 'tcmin': tcmin, 'tcmax': tcmax, 'lcbmin': lcbmin, 'lcbmax': lcbmax, 'lcfmin': lcfmin, 'lcfmax': lcfmax, 'crossovermethod': crossovermethod, 'mutationmethod': mutationmethod, 'selectionmethod': selectionmethod, 'capsize-factor': capsizefactor, 'gamethod': 'NSGA II'}, codecs.open('assets/data/parametersga.json', 'w', encoding='utf-8'), separators=(', ', ': '), sort_keys=True)
         #    result = optimization_deap_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax)

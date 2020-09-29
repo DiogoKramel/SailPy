@@ -7,8 +7,7 @@ from functions.resistance_added import calc_added_resistance
 
 # more information here: https://platypus.readthedocs.io/en/latest/_modules/platypus/algorithms.html
 
-def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus, gyration, height_range):
-    print(height_range)
+def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcmax, lcfmin, lcfmax, lcbmin, lcbmax, displac, cwpmin, cwpmax, cpmin, cpmax, cmmin, cmmax, gamethod, offspringsplatypus, gyration, wave_angle, wl_sl, wave_height):
     def function_platypus(vars):
         # each vars[i] give one random number between the minimum and maximum limit for each parameter
         lwl, bwl, tc, lcf, lcb, cwp, cp, cm = vars[0], vars[1], vars[2], vars[3], vars[4], vars[5], vars[6], vars[7]
@@ -36,9 +35,11 @@ def optimization_platypus_resistance(lwlmin, lwlmax, bwlmin, bwlmax, tcmin, tcma
             for heel in range (heelrange[0], heelrange[1], 5):
                 froude_number = velocity/(9.81 * lwl) ** 0.5
                 result = resistance(lwl, bwl, tc, cp, cm, cwp, disp, lcb, lcf, velocity, heel)
+                froude_number = 0.3
                 result2 = calc_added_resistance(disp, lwl, bwl, tc, cp, wave_angle, froude_number, gyration, wl_sl, wave_height)
-                Rt, Rv, Ri, Rr, Rincli, CR, count, Radd = Rt+result[0], Rv+result[1], Ri+result[2], Rr+result[3], Rincli+result[4], CR+result[5], count+1, abs(result2[0])
-        Rt, CR, Rv, Ri, Rr, Rincli = Rt/count, CR/count, Rv/count, Ri/count, Rr/count, Rincli/count
+                Rt, Rv, Ri, Rr, Rincli, CR, count,  = Rt+result[0], Rv+result[1], Ri+result[2], Rr+result[3], Rincli+result[4], CR+result[5], count+1
+                Radd = Radd + abs(result2)
+        Rt, CR, Rv, Ri, Rr, Rincli, Radd = Rt/count, CR/count, Rv/count, Ri/count, Rr/count, Rincli/count, Radd/count
 
         # count the number of lines to set the index number
         rows = []

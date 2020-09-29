@@ -10,11 +10,11 @@ import json, codecs
 from scipy.integrate import simps
 import pandas as pd
 
-#@app.callback(Output('save-new-dim', 'figure'),
-#    [Input('tc-new', 'value'), Input('lwl-new', 'value'), Input('disp-new', 'value'), Input('bwl-new', 'value'), Input('lcb-new', 'value'), Input('lcf-new', 'value'), Input('sailset', 'value')])
-#def create(tcnew, lwlnew, dispnew, bwlnew, lcbnew, lcfnew, sailset):
-#    json.dump({'tc': tcnew, 'lwl': lwlnew, 'bwl': bwlnew, 'disp': dispnew, 'lcb': lcbnew, 'lcf': lcfnew, 'sailset': sailset}, codecs.open('assets/data/dimensions-basic.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
-#    return "ok"
+@app.callback(Output('save-new-dim', 'figure'),
+    [Input('tc-new', 'value'), Input('lwl-new', 'value'), Input('disp-new', 'value'), Input('bwl-new', 'value'), Input('lcb-new', 'value'), Input('lcf-new', 'value'), Input('sailset', 'value')])
+def create(tcnew, lwlnew, dispnew, bwlnew, lcbnew, lcfnew, sailset):
+    json.dump({'tc': tcnew, 'lwl': lwlnew, 'bwl': bwlnew, 'disp': dispnew, 'lcb': lcbnew, 'lcf': lcfnew, 'sailset': sailset}, codecs.open('assets/data/dimensions-basic.json', 'w', encoding='utf-8'), separators=(', ',': '), sort_keys=True)
+    return "ok"
 
 @app.callback(Output('plot-appendages', 'figure'),
     [Input('sailset', 'value'), Input('tc-new', 'value'), Input('lwl-new', 'value'), Input('disp-new', 'value'), Input('bwl-new', 'value'), Input('lcb-new', 'value'), Input('lcf-new', 'value'), Input('overhang', 'value'), Input('bowangle', 'value'), Input('freeboard', 'value'), Input('pos-keel', 'value'), Input('sweep-keel', 'value'), Input('span-keel', 'value'), Input('tipchord-keel', 'value'), Input('rootchord-keel', 'value'), Input('heightsurface-rudder', 'value'), Input('span-rudder', 'value'), Input('rootchord-rudder', 'value'), Input('tipchord-rudder', 'value'), Input('sweep-rudder', 'value'), Input('pos-rudder', 'value'), Input('mast-diameter', 'value'), Input('mast-height', 'value'), Input('boom-height', 'value'), Input('psail', 'value'), Input('esail', 'value'), Input('isail', 'value'), Input('jsail', 'value'), Input('mastpos', 'value'), Input('boa', 'value'), Input('rootchord-keel-tcks', 'value'), Input('tipchord-keel-tcks', 'value'), Input('rootchord-rudder-tcks', 'value'), Input('tipchord-rudder-tcks', 'value'), Input('mzn-check', 'value'), Input('pmz', 'value'), Input('emz', 'value'), Input('badmz', 'value'), Input('spl', 'value'), Input('lpg', 'value'), Input('crewmass', 'value'), Input('keel-naca', 'value'), Input('rudder-naca', 'value')])
@@ -24,6 +24,9 @@ def create(sailset, tc, lwl, disp, bwl, lcb, lcf, overhang, bowangle, freeboard,
     for item in dimensions:
         item = str(item)
         globals()[item] = np.float(dimensions[item])
+    lwl = np.float(lwl)
+    tc = np.float(tc)
+    sailset = np.int(sailset)
     overhang = np.float(overhang)
     bowangle = np.radians(np.float(bowangle))
     freeboard = np.float(freeboard)
@@ -57,12 +60,12 @@ def create(sailset, tc, lwl, disp, bwl, lcb, lcf, overhang, bowangle, freeboard,
     mzncheck = np.float(mzncheck)
 
     deckx1 = -overhang
-    decky1 = overhang*(tc/(lwl/5))
+    decky1 = np.float(overhang)*(np.float(tc)/(np.float(lwl)/5))
     deckx2 = deckx1*0.9
     decky2 = freeboard*0.6
     deckx3 = 0
     decky3 = freeboard*0.9
-    deckx4 = (np.tan(bowangle)*freeboard)+lwl
+    deckx4 = (np.tan(bowangle)*freeboard)+np.float(lwl)
     decky4 = freeboard*1.1
     deckx5 = lwl
     decky5 = 0

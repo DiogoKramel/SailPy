@@ -248,46 +248,41 @@ def dimensionloa(rootrudder, tiprudder, spanrudder, rootkeel, tipkeel, spankeel,
         ),
     ]),
 
-@app.callback(Output('polar-diagram2', 'figure'), [Input('lwl-new', 'value')])
-def callback_vpp(lwl):
+@app.callback(Output('polar-diagram2', 'figure'), [Input('lwl-new', 'value'), Input('bwl-new', 'value')])
+def callback_vpp(lwl, bwl):
 
-    velocity = [2, 4, 6, 8, 10]
+    velocity = [6, 8, 10]
     true_wind = [30, 60, 90, 120, 150, 180]
     # velocities = [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]
-    resultados = vpp_solve('main+genoa', loa, np.float(lwl), boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, 4.5, 0.8, free_board, 5.674, lead_sail, \
-            mass_crew, height_mainsail, base_mainsail, height_foretriangle, base_foretriangle, boom_heigth_deck, length_spinnaker, \
-            perpendicular_jib, span_rudder, tip_chord_rudder, root_chord_rudder, tip_thickness_rudder, root_thickness_rudder, \
-            sweep_rudder_deg, span_keel, tip_chord_keel, root_chord_keel, tip_thickness_keel, root_thickness_keel, sweep_keel_deg, \
-            '6digit', '6digit', height_mast, diameter_mast, height_surface_rudder, height_mizzen, base_mizzen, boom_height_mizzen, 0, 0, 0, \
-            velocity[0], velocity[4], true_wind[0], true_wind[5])
+    resultados = vpp_solve('main+genoa', np.float(lwl)*1.1, np.float(lwl), np.float(bwl)*1.1, np.float(bwl), 0.57, 0, 0, 0.35, 0.5, 0.7, 0.79, 4.5, 0.8, 1, 5.674, 1, \
+            280, 16, 4, 14, 4, 1, 17, \
+            33, 1.34, 0.38, 0.6, 0.1, 0.17, \
+            15, 1.11, 1.58, 2.37, 0.1, 0.17, 0.6, \
+            '6digit', '6digit', 17, 0.05, 0, 0, 0, 0, 0, 0, 0, \
+            velocity[0], velocity[2]+1, true_wind[0], true_wind[5]+1)
     velocities = resultados[2]
+    print(velocities)
             
-
+    angles = true_wind
 
     return {
         'data': [go.Scatterpolar(
             theta=angles,
-            r=velocities[0],
+            r=velocity[0],
             mode='lines',
             name='6 knots'
         ),
         go.Scatterpolar(
             theta=angles,
-            r=velocities[1],
+            r=velocity[1],
             mode='lines',
             name='8 knots'
         ), 
         go.Scatterpolar(
             theta=angles,
-            r=velocities[2],
+            r=velocity[2],
             mode='lines',
             name='10 knots'
-        ),
-        go.Scatterpolar(
-            theta=angles,
-            r=velocities[3],
-            mode='lines',
-            name='12 knots'
         )],
         # https://plot.ly/python/polar-chart/
         'layout': go.Layout(
@@ -304,7 +299,7 @@ def callback_vpp(lwl):
                 sector = [0, 360],
                 radialaxis = dict(
                     angle = 90,
-                    range = [0, ymax],
+                    range = [0, 6],
                 ),
                 angularaxis = dict(
                     direction = "clockwise",

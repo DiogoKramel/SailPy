@@ -31,7 +31,6 @@ def update_output(lwl, lwl2, bwl, bwl2, tc, tc2, cm, cm2, cp, cp2, cwp, cwp2, lc
     for i in [0, 1, 2, 3, 4, 5]:
         resistance1 = resistance(np.float(lwl), np.float(bwl), np.float(tc), np.float(cm), np.float(cp), np.float(cwp), np.float(disp), np.float(lcb), np.float(lcf), froude_number[i]*(np.float(lwl)*9.81)**0.5, 0)
         resistance2 = resistance(np.float(lwl2), np.float(bwl2), np.float(tc2), np.float(cm2), np.float(cp2), np.float(cwp2), np.float(disp2), np.float(lcb2), np.float(lcf2), froude_number[i]*(np.float(lwl2)*9.81)**0.5, 0)
-        print(resistance1)
         resistance1_tot[i] = resistance1[0]
         resistance1_visc[i] = resistance1[1]
         resistance1_res[i] = resistance1[2]

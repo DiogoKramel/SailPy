@@ -147,7 +147,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_su
     
     # B) True wind angle and velocity range 
     pi = np.pi                                       # pi number
-    step_angle = 15                                   # true wind angle step [degrees] 
+    step_angle = 30                                   # true wind angle step [degrees] 
     step_velocity = 1.02889                          # true wind speed step [m/s] equivalent to 2 knots 
     minimum_tw = minimum_tw_knots*0.514444           # true wind speed range [m/s]
     maximum_tw = maximum_tw_knots*0.514444
@@ -852,7 +852,7 @@ def vpp_solve(sailset, loa, lwl, boa, bwl, tc, lcb, lcf, cb, cm, cp, cwp, lat_su
     #    json.dump(data_struct, fp, cls = MyEncoder, sort_keys = True, indent = 4)
 
     
-    return average_velocity, CR, vmg_matrix#, average_velocity_upwind, CR # velocity_boat_matrix, velocity_boat_matrix_upwind, angle_tw_matrix_upwind
+    return average_velocity, CR, velocity_boat_matrix#, average_velocity_upwind, CR # velocity_boat_matrix, velocity_boat_matrix_upwind, angle_tw_matrix_upwind
 
 
 # Functions to build the JSON file

@@ -137,7 +137,7 @@ appendages = dbc.Container([
             html.H5("Side plan view"),
             html.Div(dcc.Graph(id='plot-appendages', style={'width': 'inherit'})),
             html.Br(), html.Br(),
-            #html.Div(dcc.Graph(id='polar-diagram2')),
+            html.Div(dcc.Graph(id='polar-diagram2')),
             html.Div(id="dimension-loa"),
 			html.Br(), html.Br(),
             html.Div(id="dimension-area", style = {'width': '50%'} ),
