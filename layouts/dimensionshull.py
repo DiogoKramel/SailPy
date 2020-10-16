@@ -11,7 +11,8 @@ hull = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H4('Main parameters'),
-            html.P("Set the category and overall length that will serve to build the regressions for each of the dimensions below. First, the main linear dimensions can be set, later the form coefficients can be adjusted, and lastly refinements on the curvature are performed. Following how the plots behave, you can understand how your choices affect the hull."),
+            html.P("The first stage of the analysis is setting the main dimensions of the hull. The boat #1 dimensions will be used \
+					further in the analysis, whereas the boat #2 can be used to investigate new solutions to reduce resitance."),
             #dbc.FormGroup([
             #    dbc.Label('Overall length'),
             #    html.Div(id='loa-ft', style={'display': 'inline-block'}),
@@ -31,7 +32,7 @@ hull = dbc.Container([
 			html.Div([
 				dbc.Row([
 					dbc.Col([
-						html.H5('Boat #1'),
+						html.H5('Hull #1'),
 						dbc.Label('Waterline Length [m]'),
 						dbc.Input(type='text', id='lwl', bs_size='sm', value='{}'.format(round(10,2))),
 						#html.Div(id='limits-lwl', className='limits'),
@@ -52,7 +53,7 @@ hull = dbc.Container([
 					], className = 'justify', md=5),
 					dbc.Col([], className = 'justify', md=2),
 					dbc.Col([
-						html.H5('Boat #2 [Reference dimensions]'),
+						html.H5('Hull #2 [Experiment]'),
 						dbc.Label('Waterline Length [m]'),
 						dbc.Input(type='text', id='lwl2', bs_size='sm', value='{}'.format(round(10,2))),
 						#html.Div(id='limits-lwl', className='limits'),

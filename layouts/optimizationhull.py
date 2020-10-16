@@ -11,7 +11,11 @@ optimizationhull = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H4('Genetic Algorithm Configuration'),
-            html.P("The optimizaton method can be choosen between a default method, in which all the parameters are automatically set based on the literature best recommendations, and a custom method. The latter applies the algorithm NSGA II - Nondominated Sorting Genetic Algorithm developed by Professor Kalyanmoy Deb. It needs seven parameters to be configured. In case you are not familiar with them, more details are provided when hoving the parameters or reading the documentation in the link below. In any case, the standard configuration will provide satisfactory results."),
+            html.P("The optimizaton method can be choosen between a default method, in which all the parameters are automatically\
+                 set based on the literature best recommendations, and a custom method. The latter applies the algorithm NSGA II \
+                 - Nondominated Sorting Genetic Algorithm developed by Professor Kalyanmoy Deb. It needs seven parameters to\
+                 be configured. In case you are not familiar with them, more details are provided when hoving the parameters \
+                 or reading the documentation in the link below. In any case, the standard configuration will provide satisfactory results."),
             #dcc.Dropdown(
             #    id='type-optimization',
             #    options=[
@@ -66,7 +70,9 @@ optimizationhull = dbc.Container([
         ], className = "justify mt-4", md=6),
         dbc.Col([
             html.H4("Weighted Objectives"),
-            html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity that the user can set through the sliders below. The second is translated as a ratio between displacement, beam, and length. The objectives can be distinguished in terms of importance, which is proportional to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
+            html.P("""Two objectives will be analyzed for the bare hull: resistance and added resistance in waves. They are determined under different conditions of \
+                heel and velocity that the user can set through the sliders below. The objectives can be distinguished in terms of importance, which is proportional \
+                to its value. Besides that, in case you want to ignore an objective, set its value to zero."""),
             dbc.Row([
                 dbc.Col([
                     html.Div(id='resistance-weight', style={'display': 'block', 'text-align': 'center'}),
@@ -91,7 +97,7 @@ optimizationhull = dbc.Container([
             ]),
             html.Br(), html.Br(),
             html.H4("Study case"),
-            html.P("""Two objectives will be analyzed for the bare hull: resistance and comfort. The first is determined under different conditions of heel and velocity that"""),
+            html.P("""THe parameters below describe the expected operational profile of the boat and the expected sea conditions."""),
             dbc.Row([
                 dbc.Col([
                     dbc.Label("Velocities analyzed"),
@@ -159,7 +165,10 @@ optimizationhull = dbc.Container([
             ]),
 			html.Br(),
             html.H4("Dimensions optimized"),
-            html.P("""The limits of each dimension optimized at this stage can be set below. Standard values are recommended, but they can be stretched to explore more widely the dimensions space. The algorithm will evaluate which solutions are feasible and automatically exclude the ones that do not fit the criteria. Bear in mind that the values of minimum and maximum may affect performance and convergence. """),
+            html.P("""The limits of each dimension optimized at this stage can be set below. Standard values are recommended, \
+                but they can be stretched to explore more widely the dimensions space. The algorithm will evaluate which \
+                solutions are feasible and automatically exclude the ones that do not fit the criteria. Bear in mind that \
+                the values of minimum and maximum may affect performance and convergence. """),
             html.Div(id="dimensions-limits")
         ], className = "justify mt-4", md=6),
     ]),
