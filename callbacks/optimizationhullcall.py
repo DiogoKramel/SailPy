@@ -237,7 +237,7 @@ def estimative_offspring(popsize, childrensize, maxgeneration, mutprob):
     Output('resistance-weight', 'children'),
     [Input('weight1', 'value')])
 def resistance_weight(value):
-    return dbc.Label('Resistance Weight: {}'.format(value))
+    return dbc.Label('Still wateter resistance: {}'.format(value))
 
 @app.callback(
     Output('added-weight', 'children'),
